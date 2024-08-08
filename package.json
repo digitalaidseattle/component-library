@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A library of common components for DAS ventures.",
   "repository": "git@github.com:digitalaidseattle/component-library.git",
-  "author": "Misty Becker <mistyb140@gmail.com>",
+  "author": "Misty Becker <misty.becker@digitalaidseattle.com>",
   "license": "MIT",
   "private": true,
   "workspaces": [
