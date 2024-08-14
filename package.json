@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A library of common components for DAS ventures.",
   "repository": "git@github.com:digitalaidseattle/component-library.git",
-  "author": "Misty Becker <misty.becker@digitalaidseattle.com>",
+  "author": "Misty Becker <misty.becker@digitalaidseattle.org>",
   "license": "MIT",
   "private": true,
   "workspaces": [
@@ -34,7 +34,8 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^1.19.1",
-    "ts-jest": "^29.2.4"
+    "ts-jest": "^29.2.4",
+    "react-test-renderer": "^18.3.1"
   },
   "preconstruct": {
     "packages": [
