@@ -18,8 +18,10 @@ The steps below are a condensed version that more directly applies to the DAS co
 2. Add the dependencies you need with `yarn add`. 
 	- example: `yarn add react react-dom typescript`
 
-3. Create a `src` directory, which at least needs a file to be the entry point: this is the file that programs will access first when interacting with your library. Typically, this file has all the exports for the functions and/or components your library contains.
-	- To keep things tidy, it's a common practice to use a nested folder structure, especially if the package will potentially have multiple components. There's an example in the `material` package.
+3. Create a `src` directory, where the package's source code will be put.
+	- At minimum, `src` needs an entry point: this is the file that programs will access first when interacting with your library. Typically, this file has all the exports for the functions and/or components your library contains.
+	- The entry point must be indicated in `package.json` with the `main` field. It will need to follow this format: `"main": "dist/<package name>.cjs.js"`
+	- Folder structure: to keep things tidy, it's a common practice to use a nested folder structure, where each folder exports its contents. 
 
 ### Configuring typescript 
 - In the specific package directory:
@@ -32,15 +34,14 @@ The steps below are a condensed version that more directly applies to the DAS co
 	- In `babel.config`, make sure to add `@babel/preset-typescript` as a preset
 
 ## Building and publishing
-Once you have some library code written and ready to test or publish, you can run `yarn build`, which runs the preconstruct tool to build all of the packages in the `packages` directory. 
+Once you have some library code written and ready to test or publish, you can run `yarn build`, which runs the preconstruct tool to build all of the packages in the `packages` directory. If there are no errors, you can proceed to publishing!
 
-The changeset tool is what is used to document individual changes, then combine them all in a release. [monorepo.guide](https://monorepo.guide/getting-started#a-brief-explanation-of-changesets) explains this part well, but basically:
-- run `yarn changeset add` and follow the prompts to document changes
-- then run `yarn changeset version` to combine the changesets
-
-If you want to publish the package:
-- First, make sure you have access to the digitalaidseattle organization on npm!
+To publish the package:
+- First, make sure you have access to the digitalaidseattle organization on npm.
 - In your terminal, run `npm login` to connect your machine to npm.
 - Finally run `yarn release`. If it was a success, you should be able to see the package listed in our npm organization.
 
-
+To document changes to the package (after the package has already been published), you can use the changeset tool.
+Changeset is what is used to document individual changes, then combines them all in a release. [monorepo.guide](https://monorepo.guide/getting-started#a-brief-explanation-of-changesets) explains this part well, but basically:
+- run `yarn changeset add` and follow the prompts to document changes
+- then run `yarn changeset version` to combine the changesets
