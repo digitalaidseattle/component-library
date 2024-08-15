@@ -1,11 +1,12 @@
 {
   "name": "@digitalaidseattle/auth",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "Common services for implementing auth",
   "repository": "git@github.com:digitalaidseattle/component-library.git",
   "main": "dist/auth.cjs.js",
   "types": "dist/index.d.ts",
   "dependencies": {
+    "@babel/runtime": "^7.25.0",
     "@supabase/supabase-js": "^2.45.1",
     "typescript": "^5.5.4"
   }

@@ -1,9 +1,9 @@
-type PageInfo<T> = {
+export type PageInfo<T> = {
     totalRowCount: number
     rows: T[]
 }
 
-type QueryModel = {
+export type QueryModel = {
     page: number
     pageSize: number,
     sortField: string,
@@ -11,5 +11,3 @@ type QueryModel = {
 }
 
 // TODO: define supabaseClient
-
-export type { PageInfo, QueryModel }
