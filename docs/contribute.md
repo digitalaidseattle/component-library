@@ -1,10 +1,14 @@
 # Contributing to the library
 
-A **monorepo** is what component libraries like [mantine](https://github.com/mantinedev) use to break their library into smaller packages, while keeping it all maintained under one github repository.
+This library is being built in a **monorepo**, a type of repository that holds multiple projects. Component libraries like [mantine](https://github.com/mantinedev) use a monorepo to break their library into smaller packages, while keeping it all maintained under one repository. 
 
-I found [monorepo.guide - getting started](https://monorepo.guide/getting-started) to be a helpful resource, and using the [starter kit](https://github.com/zhenyuluo/monorepo-starter) as a template saved time. The technology used in their starter kit is pretty simple too- mainly yarn and a build tool called preconstruct. 
+For learning about monorepos, [monorepo.guide - getting started](https://monorepo.guide/getting-started) was a helpful resource. I also used this [starter kit](https://github.com/zhenyuluo/monorepo-starter) as a template for this repo.
 
 The steps below are a condensed version that more directly applies to the DAS component library. I recommend reading the linked resource above for more details.
+
+## Prerequisites
+- [yarn classic](https://classic.yarnpkg.com/en/docs/install)
+- npm account + access to our npm organization, if publishing
 
 ## Setting up a new package
 1. Make a directory inside packages, along with a `package.json`. Make sure the name is scoped to `@digitalaidseattle`.
@@ -41,7 +45,7 @@ To publish the package:
 - In your terminal, run `npm login` to connect your machine to npm.
 - Finally run `yarn release`. If it was a success, you should be able to see the package listed in our npm organization.
 
-To document changes to the package (after the package has already been published), you can use the changeset tool.
+To document changes to the package (after the package has already been published!), you can use the changeset tool.
 Changeset is what is used to document individual changes, then combines them all in a release. [monorepo.guide](https://monorepo.guide/getting-started#a-brief-explanation-of-changesets) explains this part well, but basically:
 - run `yarn changeset add` and follow the prompts to document changes
 - then run `yarn changeset version` to combine the changesets
