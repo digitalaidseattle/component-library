@@ -1,4 +1,10 @@
-
+/**
+ *  BoardSection.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import React, { ReactNode } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -8,7 +14,6 @@ import Box from '@mui/material/Box';
 import DDItem from './DDItem';
 import SortableDDItem from './SortableDDItem';
 import { DDType } from './types';
-import { ReactNode } from 'react';
 
 type BoardSectionProps<T extends DDType> = {
   id: string
