@@ -2,7 +2,8 @@
 import { ReactNode } from 'react';
 import { Button, Card, CardContent, Typography } from '@mui/material';
 import { LoadingContextProvider } from '@digitalaidseattle/core';
-import { DDType, DDCategory, DragAndDrop } from '@digitalaidseattle/draganddrop';
+import { DragAndDrop } from '@digitalaidseattle/draganddrop';
+import { DDType, DDCategory } from '@digitalaidseattle/draganddrop/dist/declarations/src/components/types';
 import './App.css';
 
 

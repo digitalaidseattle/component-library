@@ -4,7 +4,6 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import React, { ReactNode, useEffect, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -20,11 +19,12 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import React, { ReactNode, useEffect, useState } from 'react';
 import BoardSection from './BoardSection';
 import DDItem from './DDItem';
-import { findBoardSectionContainer } from './utils/board';
 import { BoardSectionType, DDCategory, DDType } from './types';
+import { findBoardSectionContainer } from './utils/board';
 
 type DragAndDropProps<T extends DDType> = {
   categories: DDCategory<string>[];

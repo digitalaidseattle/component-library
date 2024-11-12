@@ -1,11 +1,11 @@
 {
   "name": "@digitalaidseattle/root",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library of common components for DAS ventures.",
   "repository": "null//github.com/null/github.com",
   "author": "Misty Becker <misty.becker@digitalaidseattle.org>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "workspaces": [
     "packages/*", "apps/*"
   ],

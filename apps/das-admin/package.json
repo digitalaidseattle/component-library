@@ -1,6 +1,6 @@
 {
   "name": "das-admin",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "repository": "null//github.com/null/github.com/tree/master/apps/das-admin",
