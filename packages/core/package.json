@@ -2,13 +2,18 @@
     "name": "@digitalaidseattle/core",
     "version": "1.0.0",
     "description": "Core react components commonly used in DAS ventures",
-    "repository": "git@github.com:digitalaidseattle/component-library.git",
-    "main": "dist/core.cjs.js",
+    "repository": "null//github.com/null/github.com/tree/master/packages/core",
+    "main": "dist/digitalaidseattle-core.cjs.js",
+    "module": "dist/digitalaidseattle-core.esm.js",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@babel/runtime": "^7.25.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "typescript": "^5.5.4"
-    }
+    },
+    "scripts": {
+      "build": "tsc --project tsconfig.json"
+    },
+    "files": ["dist"]
 }

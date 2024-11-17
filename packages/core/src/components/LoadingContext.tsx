@@ -6,7 +6,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 interface LoadingContextType {
     loading: boolean,
@@ -15,15 +15,19 @@ interface LoadingContextType {
 
 export const LoadingContext = createContext<LoadingContextType>({
     loading: false,
-    setLoading: () => {}
+    setLoading: () => { }
 });
 
-export const LoadingContextProvider = (props: { children: ReactNode }) => {
+interface Props {
+    children: React.ReactNode;
+}
+
+export const LoadingContextProvider: React.FC<Props> = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
     return (
         <LoadingContext.Provider value={{ loading, setLoading }}>
-            {props.children}
+            {children}
         </LoadingContext.Provider>
     );
 };
