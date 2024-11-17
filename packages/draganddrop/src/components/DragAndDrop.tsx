@@ -1,3 +1,9 @@
+/**
+ *  DragAndDrop.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import {
   DndContext,
   DragEndEvent,
@@ -14,7 +20,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import BoardSection from './BoardSection';
 import DDItem from './DDItem';
 import { BoardSectionType, DDCategory, DDType } from './types';
@@ -28,7 +34,7 @@ type DragAndDropProps<T extends DDType> = {
   cardRenderer?: (item: T) => ReactNode;
 };
 
-const DragAndDrop = <T extends DDType,>({ items, onChange, categories, isCategory, cardRenderer }: DragAndDropProps<T>) => {
+const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items, onChange, categories, isCategory, cardRenderer }: DragAndDropProps<T>) => {
   const [boardSections, setBoardSections] = useState<BoardSectionType<T>>();
 
   useEffect(() => {
@@ -42,7 +48,11 @@ const DragAndDrop = <T extends DDType,>({ items, onChange, categories, isCategor
   const [changes, setChanges] = useState<Map<string, unknown>>(new Map());
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Enable sort function when dragging 5px   💡 here!!!
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -182,13 +192,20 @@ const DragAndDrop = <T extends DDType,>({ items, onChange, categories, isCategor
       <Table size="small">
         <TableHead>
           <TableRow>
-            {categories.map((cat) => <TableCell sx={{ border: 1, width: columnWidth }}>{cat.label}</TableCell>)}
+            {categories.map((cat) =>
+              <TableCell
+                key={cat.value}
+                sx={{ border: 1, width: columnWidth }}>{
+                  cat.label}
+              </TableCell>)}
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             {categories.map((cat) =>
-              <TableCell sx={{ verticalAlign: 'top', padding: 0, border: 1, backgroundColor: '#eee', }} >
+              <TableCell
+                key={cat.value}
+                sx={{ verticalAlign: 'top', padding: 0, border: 1, backgroundColor: '#eee', }} >
                 <BoardSection id={cat.value}
                   items={boardSections[cat.value]}
                   cardRenderer={cardRenderer} />
