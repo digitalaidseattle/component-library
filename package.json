@@ -8,7 +8,7 @@
   },
   "author": "Misty Becker <misty.becker@digitalaidseattle.org>",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "workspaces": [
     "packages/*",
     "apps/*"
