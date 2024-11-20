@@ -2845,11 +2845,6 @@ babel-plugin-polyfill-regenerator@^0.6.1:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.6.3"
 
-babel-plugin-react-svg@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-svg/-/babel-plugin-react-svg-3.0.3.tgz#7da46a0bd8319f49ac85523d259f145ce5d78321"
-  integrity sha512-Pst1RWjUIiV0Ykv1ODSeceCBsFOP2Y4dusjq7/XkjuzJdvS9CjpkPMUIoO4MLlvp5PiLCeMlsOC7faEUA0gm3Q==
-
 babel-preset-current-node-syntax@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-1.1.0.tgz#9a929eafece419612ef4ae4f60b1862ebad8ef30"

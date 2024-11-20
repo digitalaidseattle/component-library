@@ -24,9 +24,8 @@ const MinimalFooter: React.FC = () => {
         textAlign={matchDownSM ? 'center' : 'inherit'}
       >
         <Typography variant="subtitle2" color="secondary" component="span">
-          &copy;  {import.meta.env.VITE_APPLICATION_NAME}&nbsp;
           <Typography component={Link} variant="subtitle2" href="https://digitalaidseattle.org" target="_blank" underline="hover">
-            Digital Aid Seattle
+            &copy; Digital Aid Seattle
           </Typography>
         </Typography>
 
@@ -35,7 +34,7 @@ const MinimalFooter: React.FC = () => {
             variant="subtitle2"
             color="secondary"
             component={Link}
-            href="https://material-ui.com/store/contributors/codedthemes/"
+            href="https://github.com/digitalaidseattle"
             target="_blank"
             underline="hover"
           >
