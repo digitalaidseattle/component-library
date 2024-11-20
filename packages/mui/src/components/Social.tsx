@@ -22,19 +22,17 @@ import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
 const Social: React.FC = () => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
-  // const authService = useAuthService();
+  const authService = useAuthService();
   const loggingService = useLoggingService();
 
   const googleHandler = async () => {
-    alert('googleHandler')
-    // authService.signInWithGoogle()
-    //   .then((resp: OAuthResponse) => loggingService.info('Logged in with Google: ' + resp.data.url))
+    authService.signInWithGoogle()
+      .then((resp: OAuthResponse) => loggingService.info('Logged in with Google: ' + resp.data.url))
   };
 
   const microsoftHandler = async () => {
-    alert('microsoftHandler')
-    // authService.signInWithAzure()
-    //   .then((resp: OAuthResponse) => loggingService.info('Logged in with Azure: ' + resp.data.url))
+    authService.signInWithAzure()
+      .then((resp: OAuthResponse) => loggingService.info('Logged in with Azure: ' + resp.data.url))
   };
 
   return (

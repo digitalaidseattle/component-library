@@ -5,12 +5,14 @@
  *
  */
 // project import
-import { RefreshContextProvider } from "@digitalaidseattle/core";
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { routes } from './pages/routes';
 
+import { AuthServiceProvider, RefreshContextProvider } from "@digitalaidseattle/core";
+
 import "./App.css"
+import { SupabaseAuthService } from "./supabase/authService";
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const router = createBrowserRouter(routes);
@@ -18,9 +20,11 @@ const router = createBrowserRouter(routes);
 const App: React.FC = () => {
   return (
     <>
+      <AuthServiceProvider authService={new SupabaseAuthService()} >
         <RefreshContextProvider>
           <RouterProvider router={router} />
         </RefreshContextProvider>
+      </AuthServiceProvider>
     </>
   );
 }

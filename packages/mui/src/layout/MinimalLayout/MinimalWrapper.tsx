@@ -24,7 +24,7 @@ const MinimalWrapper = (props: { children: ReactNode }) => (
       direction="column"
       justifyContent="space-between"
       sx={{
-        minHeight: '100vh'
+        minHeight: '90vh'
       }}
     >
       <Grid item xs={12}></Grid>
