@@ -6,14 +6,14 @@
  */
 // material-ui
 
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { useLayoutConfiguration } from './LayoutConfigurationContext';
+import { LayoutConfigurationContext } from '../../components/LayoutConfigurationContext';
 
 // ==============================|| LOGO SVG ||============================== //
 
 const Logo = () => {
-  const configuration = useLayoutConfiguration();
+  const {configuration} = useContext(LayoutConfigurationContext);
 
   return (
     <img src={configuration.logoUrl} alt={configuration.appName} width="50" />

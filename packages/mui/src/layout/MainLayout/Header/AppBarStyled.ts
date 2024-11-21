@@ -6,9 +6,9 @@ import AppBar from '@mui/material/AppBar';
 
 type AppBarStyledProps = {
   open: boolean,
-  drawerWidth: number
+  drawerwidth: number
 }
-const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(({ theme, open, drawerWidth }) =>
+const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(({ theme, open, drawerwidth }) =>
 ({
 
   zIndex: theme.zIndex.drawer + 1,
@@ -17,8 +17,8 @@ const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
     duration: theme.transitions.duration.leavingScreen
   }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerwidth,
+    width: `calc(100% - ${drawerwidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen

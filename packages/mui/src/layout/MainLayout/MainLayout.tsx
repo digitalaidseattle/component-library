@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 // material-ui
-import { Box, Breadcrumbs, Toolbar, useMediaQuery } from '@mui/material';
+import { Box, Toolbar, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // project import
@@ -16,11 +16,10 @@ import Drawer from './Drawer';
 import Header from './Header';
 
 // types
-import { User } from '@supabase/supabase-js';
-import { DrawerOpenContext } from '../../components/DrawerOpenContext';
-import { UserContext, useAuthService, LoadingContextProvider, RefreshContextProvider } from '@digitalaidseattle/core';
-import { useLayoutConfiguration } from './LayoutConfigurationContext';
+import { LoadingContextProvider, RefreshContextProvider, UserContext, useAuthService } from '@digitalaidseattle/core';
+import { User } from '@digitalaidseattle/core/src/api/AuthService';
 import ScrollTop from '../../components/ScrollTop';
+import { DrawerOpenContext } from './DrawerOpenContext';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -30,8 +29,8 @@ const MainLayout: React.FC = () => {
   const [user, setUser] = useState<User>(null as unknown as User);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
-  
-  const authService= useAuthService();
+
+  const authService = useAuthService();
 
   useEffect(() => {
     authService.getUser()

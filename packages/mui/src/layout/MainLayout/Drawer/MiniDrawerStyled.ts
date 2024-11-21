@@ -1,12 +1,12 @@
 // material-ui
 import { Theme, styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
-import { useLayoutConfiguration } from '../LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
 
 // project import
 
-const openedMixin = (theme: Theme, drawerWidth: number) => ({
-  width: drawerWidth,
+const openedMixin = (theme: Theme, drawerwidth: number) => ({
+  width: drawerwidth,
   borderRight: `1px solid ${theme.palette.divider}`,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -30,16 +30,16 @@ const closedMixin = (theme: Theme) => ({
 // ==============================|| DRAWER - MINI STYLED ||============================== //
 type MiniDrawerStyledProps = {
   open: boolean,
-  drawerWidth: number
+  drawerwidth: number
 }
 const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })<MiniDrawerStyledProps>(
-  ({ theme, open, drawerWidth }) => ({
-    width: drawerWidth,
+  ({ theme, open, drawerwidth }) => ({
+    width: drawerwidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
     ...(open && {
-      width: drawerWidth,
+      width: drawerwidth,
       borderRight: `1px solid ${theme.palette.divider}`,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -47,7 +47,7 @@ const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 
       }),
       overflowX: 'hidden',
       boxShadow: 'none',
-      '& .MuiDrawer-paper': openedMixin(theme, drawerWidth)
+      '& .MuiDrawer-paper': openedMixin(theme, drawerwidth)
     }),
     ...(!open && {
       transition: theme.transitions.create('width', {

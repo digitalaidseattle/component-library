@@ -6,7 +6,7 @@ import { AppBar, Box, ClickAwayListener, IconButton, Paper, Popper, Toolbar } fr
 
 // project import
 import Search from './Search';
-import Profile from './Profile';
+import Profile from './Profile/Profile';
 
 // assets
 import { MoreOutlined } from '@ant-design/icons';

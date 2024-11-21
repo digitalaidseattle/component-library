@@ -1,3 +1,4 @@
+import React from 'react';
 
 // material-ui
 import { Box, List, Typography } from '@mui/material';
@@ -6,7 +7,7 @@ import { Box, List, Typography } from '@mui/material';
 import { useContext } from 'react';
 import NavItem from './NavItem';
 import { DrawerOpenContext } from '../../../DrawerOpenContext';
-import { MenuItem } from '../../../ActiveMenuItemContext';
+import { MenuItem } from '../../../../../components';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
 

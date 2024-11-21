@@ -5,16 +5,16 @@ import { Box, useMediaQuery, useTheme } from '@mui/material';
 
 // project import
 import MobileSection from './MobileSection';
-import Profile from './Profile';
+import Profile from './Profile/Profile';
 import Search from './Search';
-import { useLayoutConfiguration } from '../../LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../../components/LayoutConfigurationContext';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const HeaderContent = () => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
-  const configuration = useLayoutConfiguration();
+  const { configuration } = useLayoutConfiguration();
 
   return (
     <>

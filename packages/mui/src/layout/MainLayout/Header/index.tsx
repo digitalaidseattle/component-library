@@ -17,7 +17,7 @@ import HeaderContent from './HeaderContent';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import AppBarStyled from './AppBarStyled';
 import { LoadingIndicator } from './LoadingIndicator';
-import { useLayoutConfiguration } from '../LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
@@ -27,7 +27,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ open, handleDrawerToggle }) => {
-  const configuration = useLayoutConfiguration();
+  const { configuration } = useLayoutConfiguration();
 
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -74,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ open, handleDrawerToggle }) => {
   return (
     <>
       {!matchDownMD ? (
-        <AppBarStyled open={open} drawerWidth={configuration.drawerWidth} {...appBar}>
+        <AppBarStyled open={open} drawerwidth={configuration.drawerWidth} {...appBar}>
           {mainHeader}
         </AppBarStyled>
       ) : (

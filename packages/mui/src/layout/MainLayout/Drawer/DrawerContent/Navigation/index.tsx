@@ -8,13 +8,13 @@ import { Box, Typography } from '@mui/material';
 import NavGroup from './NavGroup';
 import { useState } from 'react';
 import { ActiveMenuItemContext } from '../../../ActiveMenuItemContext';
-import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../../../components/LayoutConfigurationContext';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
-  const configuration = useLayoutConfiguration();
+  const { configuration } = useLayoutConfiguration();
 
   // FIXME
   // eslint-disable-next-line 
