@@ -5,11 +5,10 @@
  *
  */
 // project import
+import { AuthServiceProvider, RefreshContextProvider } from "@digitalaidseattle/core";
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { routes } from './pages/routes';
-
-import { AuthServiceProvider, RefreshContextProvider } from "@digitalaidseattle/core";
 
 import "./App.css"
 import { SupabaseAuthService } from "./supabase/authService";
