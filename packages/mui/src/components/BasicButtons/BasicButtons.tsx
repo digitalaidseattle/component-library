@@ -1,10 +1,10 @@
 // a placeholder MUI component, from docs. 
 
-import * as React from 'react';
+import React from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-const BasicButtons = () => {
+const BasicButtons: React.FC = () => {
   return (
     <Stack spacing={2} direction="row">
       <Button variant="text">Text</Button>
