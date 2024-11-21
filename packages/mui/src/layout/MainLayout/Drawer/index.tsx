@@ -1,4 +1,10 @@
-import { useMemo } from 'react';
+/**
+ *  MainLayout/index.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import React, { useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';

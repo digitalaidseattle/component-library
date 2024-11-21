@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-
+import React from 'react';
 // material-ui
 import { Box, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';

@@ -6,6 +6,7 @@
  */
 // material-ui
 
+import React from 'react';
 
 import { useLayoutConfiguration } from './LayoutConfigurationContext';
 

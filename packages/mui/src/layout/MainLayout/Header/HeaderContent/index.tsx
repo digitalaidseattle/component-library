@@ -1,3 +1,5 @@
+import React from 'react';
+
 // material-ui
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 

@@ -1,5 +1,5 @@
 /**
- *  MainLayout/index.tsx
+ *  MainLayout.tsx
  *
  *  @copyright 2024 Digital Aid Seattle
  *

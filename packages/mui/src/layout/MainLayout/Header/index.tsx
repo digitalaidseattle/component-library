@@ -4,6 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+import React from 'react';
 
 // material-ui
 import { AppBar, IconButton, Toolbar, useMediaQuery } from '@mui/material';
