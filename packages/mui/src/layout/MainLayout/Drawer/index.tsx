@@ -1,4 +1,10 @@
-import { useMemo } from 'react';
+/**
+ *  MainLayout/index.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import React, { useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -9,7 +15,7 @@ import DrawerContent from './DrawerContent';
 import DrawerHeader from './DrawerHeader';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import DrawerFooter from './DrawerFooter';
-import { useLayoutConfiguration } from '../LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
 
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 
@@ -21,7 +27,7 @@ interface MainDrawerProps {
 const MainDrawer: React.FC<MainDrawerProps> = ({ open, handleDrawerToggle }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-  const configuration = useLayoutConfiguration();
+  const { configuration } = useLayoutConfiguration();
 
   // responsive drawer container
   // const container = un
@@ -34,7 +40,7 @@ const MainDrawer: React.FC<MainDrawerProps> = ({ open, handleDrawerToggle }) => 
   return (
     <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
       {!matchDownMD ? (
-        <MiniDrawerStyled variant="permanent" open={open} drawerWidth={configuration.drawerWidth}>
+        <MiniDrawerStyled variant="permanent" open={open} drawerwidth={configuration.drawerWidth}>
           {drawerHeader}
           {drawerContent}
           {drawerFooter}

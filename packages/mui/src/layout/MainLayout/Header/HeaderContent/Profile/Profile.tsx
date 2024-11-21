@@ -12,23 +12,19 @@ import {
   Paper,
   Popper,
   Stack,
-  Tab,
-  Tabs,
   Typography
 } from '@mui/material';
 import { Direction, useTheme } from '@mui/material/styles';
 
+import { LogoutOutlined } from '@ant-design/icons';
 import { useAuthService, UserContext } from '@digitalaidseattle/core';
-
-// project import
-import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
-
-// assets
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
+
 import MainCard from '../../../../../components/cards/MainCard';
 import Transitions from '../../../../../components/Transitions';
+// import ProfileTab from './ProfileTab';
+// import SettingTab from './SettingTab';
+
 
 interface TabPanelProps {
   children: ReactNode,
@@ -166,9 +162,9 @@ const Profile = () => {
                             <Avatar alt="profile user" src={avatar} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">{username}</Typography>
-                              <Typography variant="body2" color="textSecondary">
-                                Dude
-                              </Typography>
+                              {/* <Typography variant="body2" color="textSecondary">
+                                {role}
+                              </Typography> */}
                             </Stack>
                           </Stack>
                         </Grid>
@@ -179,7 +175,7 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </CardContent>
-                    {open && (
+                    {/* {open && (
                       <>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                           <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
@@ -216,7 +212,7 @@ const Profile = () => {
                           <SettingTab />
                         </TabPanel>
                       </>
-                    )}
+                    )} */}
                   </MainCard>
                 </ClickAwayListener>
               </Paper>

@@ -4,9 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 // material-ui
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { DrawerOpenContext } from '../../../DrawerOpenContext';
 import { ActiveMenuItemContext } from '../../../ActiveMenuItemContext';
-import { MenuItem } from '../../../LayoutConfiguration';
+import { DrawerOpenContext } from '../../../DrawerOpenContext';
+import { MenuItem } from '../../../../../components';
 
 // project import
 

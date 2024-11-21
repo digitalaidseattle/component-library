@@ -8,6 +8,14 @@ const routes = [
       {
         path: "",
         element: <div >TEST</div>,
+      },
+      {
+        path: "test",
+        element: <div >TEST</div>,
+      },
+      {
+        path: "draganddrop",
+        element: <div >Drag And Drop</div>,
       }
     ]
   },
@@ -15,7 +23,6 @@ const routes = [
     path: "/",
     element: <MinimalLayout />,
     children: [
-     
       {
         path: 'login',
         element: <Login />

@@ -1,3 +1,6 @@
+
+import React from 'react';
+
 // project import
 import Navigation from './Navigation';
 
