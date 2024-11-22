@@ -7,7 +7,7 @@ import { Box, useMediaQuery, useTheme } from '@mui/material';
 import MobileSection from './MobileSection';
 import Profile from './Profile/Profile';
 import Search from './Search';
-import { useLayoutConfiguration } from '../../../../components/LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 

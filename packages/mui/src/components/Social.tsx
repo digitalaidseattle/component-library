@@ -37,7 +37,6 @@ const Social: React.FC = () => {
 
   return (
     <Stack
-      direction="row"
       spacing={matchDownSM ? 1 : 2}
       justifyContent={matchDownSM ? 'space-around' : 'space-between'}
       sx={{ '& .MuiButton-startIcon': { mr: matchDownSM ? 0 : 1, ml: matchDownSM ? 0 : -0.5 } }}

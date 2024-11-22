@@ -8,7 +8,7 @@
 
 import React, { useContext } from 'react';
 
-import { LayoutConfigurationContext } from '../../components/LayoutConfigurationContext';
+import { LayoutConfigurationContext } from '../LayoutConfigurationContext';
 
 // ==============================|| LOGO SVG ||============================== //
 

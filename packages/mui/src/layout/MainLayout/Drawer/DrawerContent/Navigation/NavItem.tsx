@@ -6,7 +6,7 @@ import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } 
 import { useTheme } from '@mui/material/styles';
 import { ActiveMenuItemContext } from '../../../ActiveMenuItemContext';
 import { DrawerOpenContext } from '../../../DrawerOpenContext';
-import { MenuItem } from '../../../../../components';
+import { MenuItem } from '../../../../types';
 
 // project import
 

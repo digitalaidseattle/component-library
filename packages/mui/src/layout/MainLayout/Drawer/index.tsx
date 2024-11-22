@@ -15,7 +15,7 @@ import DrawerContent from './DrawerContent';
 import DrawerHeader from './DrawerHeader';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import DrawerFooter from './DrawerFooter';
-import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../LayoutConfigurationContext';
 
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 

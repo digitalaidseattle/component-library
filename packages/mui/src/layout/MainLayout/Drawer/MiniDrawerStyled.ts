@@ -1,7 +1,7 @@
 // material-ui
 import { Theme, styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
-import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../LayoutConfigurationContext';
 
 // project import
 

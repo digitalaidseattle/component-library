@@ -8,47 +8,46 @@
 import React, { ReactNode } from 'react';
 
 // material-ui
-import { Grid, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, CardMedia, Container, Grid, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // das
-import CenteredCard from '../components/cards/CenteredCard';
 import Social from '../components/Social';
-import MinimalWrapper from '../layout/MinimalLayout/MinimalWrapper';
+import { useLayoutConfiguration } from '../layout';
 
 // ================================|| 404 ||================================ //
 
-const Login: React.FC = (props: { logo?: ReactNode }) => {
+const Login: React.FC = () => {
   const theme = useTheme();
-
-  return (<MinimalWrapper>
-    <Grid
-      container
-      sx={{
-        backgroundColor: theme.palette.primary.main
-      }}
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center">
-      <Grid item xs={3}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          {props.logo}
-        </Stack>
-      </Grid>
-      <CenteredCard>
-        <Grid container spacing={3} >
-          <Grid item xs={12} >
-            <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
-              <Typography variant="h3">Please login</Typography>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <Social />
-          </Grid>
-        </Grid>
-      </CenteredCard>
-    </Grid>
-  </MinimalWrapper>)
+  const { configuration } = useLayoutConfiguration();
+  return (
+    <Container id="cont" sx={{ width: "33%" }}>
+      <Card id="card" sx={{ gap: 2 }}>
+        <CardContent sx={{ textAlign: 'center', alignItems: 'center'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <CardMedia
+              component="img"
+              sx={{
+                objectFit: "cover",
+                width: "150px"
+              }}
+              image={configuration.logoUrl}
+              alt={configuration.appName + ' Logo'}
+            />
+          </Box>
+          <Typography variant="h4">{configuration.appName}</Typography>
+          <Typography variant="h6">Please login</Typography>
+          <Social />
+        </CardContent>
+      </Card>
+    </Container>
+  )
 };
 export default Login;

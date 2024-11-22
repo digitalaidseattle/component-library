@@ -17,7 +17,7 @@ import HeaderContent from './HeaderContent';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import AppBarStyled from './AppBarStyled';
 import { LoadingIndicator } from './LoadingIndicator';
-import { useLayoutConfiguration } from '../../../components/LayoutConfigurationContext';
+import { useLayoutConfiguration } from '../../LayoutConfigurationContext';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 

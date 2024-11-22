@@ -1,5 +1,6 @@
 import { Login, MainLayout, MinimalLayout } from "@digitalaidseattle/mui";
 import { DragAndDropExample } from "./pages/DragAndDropExample";
+import { Test } from "./pages/Test";
 
 const routes = [
   {
@@ -8,11 +9,11 @@ const routes = [
     children: [
       {
         path: "",
-        element: <div >TEST</div>,
+        element: <div>Home</div>,
       },
       {
         path: "test",
-        element: <div >TEST</div>,
+        element: <Test />,
       },
       {
         path: "draganddrop",

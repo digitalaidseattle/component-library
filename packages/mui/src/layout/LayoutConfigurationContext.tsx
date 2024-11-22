@@ -5,32 +5,12 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { LayoutConfiguration } from './types';
+// TODO library need ability to improt CSS, PNG,  & SVG
 // import {logo} from '../../assets/das-dark.png';
 
-import { ChipProps } from "@mui/material";
-import { ReactNode } from "react";
-export type MenuItem = {
-    id: string,
-    title: string,
-    type: string,
-    children: MenuItem[],
-    url: string,
-    target: string,
-    icon: ReactNode,
-    breadcrumbs: boolean,
-    disabled: boolean,
-    chip: ChipProps
-}
 
-
-export interface LayoutConfiguration {
-    appName: string;
-    logoUrl: string;
-    drawerWidth: number;
-    menuItems: MenuItem[];
-    toolbarItems: ReactNode[];
-}
 interface LayoutConfigurationContextType {
     configuration: LayoutConfiguration,
     setConfiguration: (c: LayoutConfiguration) => void
