@@ -35,7 +35,7 @@ const MainDrawer: React.FC<MainDrawerProps> = ({ open, handleDrawerToggle }) => 
   // header content
   const drawerContent = useMemo(() => <DrawerContent />, []);
   const drawerHeader = useMemo(() => <DrawerHeader open={open} />, [open]);
-  const drawerFooter = useMemo(() => <DrawerFooter />, [open]);
+  const drawerFooter = useMemo(() => <DrawerFooter open={open} />, [open]);
 
   return (
     <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">

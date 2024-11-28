@@ -14,16 +14,18 @@ import { Link } from 'react-router-dom';
 
 // ==============================|| DRAWER HEADER ||============================== //
 
-const DrawerFooter = () => {
+const DrawerFooter = (props: { open: boolean }) => {
 
   return (
-    <ListItemButton style={{ position: 'fixed', bottom: 0, paddingBottom: 10 }}>
-      <Link
-        style={{ 'textDecoration': 'none' }}
-        color="secondary" to={`/privacy`}>
-        Privacy Policy
-      </Link>
-    </ListItemButton>
+    <>{props.open &&
+      <ListItemButton style={{ position: 'absolute', bottom: 0, paddingBottom: 10 }}>
+        <Link
+          style={{ 'textDecoration': 'none' }}
+          color="secondary" to={`/privacy`}>
+          Privacy Policy
+        </Link>
+      </ListItemButton>
+    }</>
   );
 };
 
