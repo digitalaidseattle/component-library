@@ -10,12 +10,13 @@
  * </ul>
  *
  */
-import { User } from '@supabase/supabase-js'
 import { describe, expect, it, vitest } from 'vitest'
-import { loggingService } from './LoggingService'
+import { ConsoleLoggingService } from './LoggingService'
+import { User } from './AuthService';
 
 describe('loggingService tests', () => {
-
+    
+    const loggingService = new ConsoleLoggingService();
 
     it('info', async () => {
         const user = { email: 'test@test.com' } as User;

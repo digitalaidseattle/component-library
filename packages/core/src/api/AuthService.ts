@@ -4,6 +4,7 @@ export interface AuthError {
 }
 
 export interface User {
+    email : string;
 }
 
 export type OAuthResponse = {

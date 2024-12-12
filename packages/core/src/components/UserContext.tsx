@@ -10,19 +10,22 @@
 import React, { createContext, useState } from 'react';
 import { User } from '../api/AuthService';
 
-// Create a context for the dependency
-export const UserContext = createContext<User | null>(null);
-
-interface Props {
-    children: React.ReactNode;
+export interface UserContextType {
+    user: User | undefined,
+    setUser: (user: User) => void
 }
 
-export const UserContextProvider: React.FC<Props> = ({ children }) => {
-    const [user, setUser] = useState<User | undefined>();
+export const UserContext = createContext<UserContextType>({
+    user: undefined,
+    setUser: () => { }
+});
+
+export const UserContextProvider = (props: { children: React.ReactNode }) => {
+    const [user, setUser] = useState<User>();
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
-            {children}
+            {props.children}
         </UserContext.Provider>
     );
 };

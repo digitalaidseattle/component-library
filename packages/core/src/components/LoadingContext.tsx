@@ -8,9 +8,9 @@
  */
 import React, { createContext, useState } from 'react';
 
-interface LoadingContextType {
+export interface LoadingContextType {
     loading: boolean,
-    setLoading: (loading: boolean) => void
+    setLoading: (l: boolean) => void
 }
 
 export const LoadingContext = createContext<LoadingContextType>({
@@ -18,16 +18,12 @@ export const LoadingContext = createContext<LoadingContextType>({
     setLoading: () => { }
 });
 
-interface Props {
-    children: React.ReactNode;
-}
-
-export const LoadingContextProvider: React.FC<Props> = ({ children }) => {
-    const [loading, setLoading] = useState(false);
+export const LoadingContextProvider = (props: { children: React.ReactNode }) => {
+    const [loading, setLoading] = useState<boolean>(false);
 
     return (
         <LoadingContext.Provider value={{ loading, setLoading }}>
-            {children}
+            {props.children}
         </LoadingContext.Provider>
     );
 };
