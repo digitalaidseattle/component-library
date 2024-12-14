@@ -17,7 +17,7 @@ export interface UserContextType {
 
 export const UserContext = createContext<UserContextType>({
     user: undefined,
-    setUser: () => { }
+    setUser: (_user: User) => { }
 });
 
 export const UserContextProvider = (props: { children: React.ReactNode }) => {

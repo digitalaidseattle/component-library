@@ -4,12 +4,11 @@
 
 */
 // material-ui
-import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 
 import { useStorageService } from '@digitalaidseattle/core';
-import { MainCard } from '../components';
 
 export interface MarkdownPageProps {
     filepath: string
