@@ -1,4 +1,4 @@
-import { ChipProps } from "@mui/material";
+import { ChipProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
 
 export type MenuItem = {
@@ -19,4 +19,5 @@ export interface LayoutConfiguration {
     drawerWidth: number;
     menuItems: MenuItem[];
     toolbarItems: ReactNode[];
+    theme?: Theme;
 }

@@ -1,9 +1,10 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 // material-ui
 import {
   CssBaseline,
   StyledEngineProvider,
+  Theme,
   ThemeOptions,
   ThemeProvider,
   createTheme
@@ -15,9 +16,7 @@ import CustomShadows from './shadows';
 import Typography from './typography';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
-
-export default function ThemeCustomization(props: { children: ReactNode }) {
-  // const theme = Palette('light', 'default');
+const defaultTheme = () => {
   const theme = Palette('light');
 
   const themeTypography = Typography(`'Public Sans', sans-serif`);
@@ -49,7 +48,11 @@ export default function ThemeCustomization(props: { children: ReactNode }) {
     [theme, themeTypography, themeCustomShadows]
   );
 
-  const themes = createTheme(themeOptions as ThemeOptions);
+  return createTheme(themeOptions as ThemeOptions);
+}
+
+export const ThemeCustomization = (props: { theme?: Theme, children: React.ReactNode }) => {
+  const themes = props.theme ?? defaultTheme();
 
   return (
     <>

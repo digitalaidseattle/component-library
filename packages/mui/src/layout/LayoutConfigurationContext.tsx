@@ -7,9 +7,10 @@
  */
 import React, { createContext, useContext, useState } from 'react';
 import { LayoutConfiguration } from './types';
-// TODO library need ability to improt CSS, PNG,  & SVG
-// import {logo} from '../../assets/das-dark.png';
+import { ThemeCustomization } from '../themes';
 
+// TODO library need ability to import CSS, PNG,  & SVG
+// import {logo} from '../../assets/das-dark.png';
 
 interface LayoutConfigurationContextType {
     configuration: LayoutConfiguration,
@@ -39,9 +40,13 @@ export const LayoutConfigurationProvider = (props: { configuration?: LayoutConfi
         }
     )
 
-    return <LayoutConfigurationContext.Provider value={{ configuration, setConfiguration }}>
-        {props.children}
-    </LayoutConfigurationContext.Provider>
+    return (
+        <ThemeCustomization theme={configuration.theme!} >
+            <LayoutConfigurationContext.Provider value={{ configuration, setConfiguration }}>
+                {props.children}
+            </LayoutConfigurationContext.Provider>
+        </ThemeCustomization>
+    )
 };
 
 // Hook to use the dependency
