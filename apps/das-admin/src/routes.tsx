@@ -1,4 +1,9 @@
-import { Login, MainLayout, MinimalLayout } from "@digitalaidseattle/mui";
+import {
+  Login,
+  MainLayout,
+  MarkdownPage,
+  MinimalLayout,
+} from "@digitalaidseattle/mui";
 import { DragAndDropExample } from "./pages/DragAndDropExample";
 import { Test } from "./pages/Test";
 
@@ -18,6 +23,10 @@ const routes = [
       {
         path: "draganddrop",
         element: <DragAndDropExample />,
+      },
+      {
+        path: "privacy",
+        element: <MarkdownPage  filepath='privacy.md'/>,
       }
     ]
   },

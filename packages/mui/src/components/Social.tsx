@@ -14,8 +14,8 @@ import { useTheme } from '@mui/material/styles';
 // assets
 // import Google from '../assets/google.svg';
 // import Microsoft from '../assets/microsoft.svg';
-import { OAuthResponse } from '../../../core/src/api/AuthService';
 import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
+import { OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
 
 // ==============================|| FIREBASE - SOCIAL BUTTON ||============================== //
 

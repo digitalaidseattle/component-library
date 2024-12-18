@@ -58,7 +58,7 @@ function a11yProps(index: number) {
 
 const Profile = () => {
   const theme = useTheme();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [username, setUsername] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ const Profile = () => {
           p: 0.25,
           bgcolor: open ? iconBackColorOpen : theme.palette.background.default,
           borderRadius: 1,
-          '&:hover': { bgcolor:  theme.palette.secondary.light },
+          '&:hover': { bgcolor: theme.palette.secondary.light },
           paddingRight: '15px'
         }}
         aria-label="open profile"

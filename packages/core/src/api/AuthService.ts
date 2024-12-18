@@ -4,6 +4,12 @@ export interface AuthError {
 }
 
 export interface User {
+    email: string;
+    user_metadata: {
+        name: string;
+        avatar_url: string;
+        email: string;
+    }
 }
 
 export type OAuthResponse = {

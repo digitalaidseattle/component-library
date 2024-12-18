@@ -42,6 +42,9 @@
     "ts-jest": "^29.2.4"
   },
   "preconstruct": {
+    "apps": [
+      "apps/*"
+    ],
     "packages": [
       "packages/*"
     ]

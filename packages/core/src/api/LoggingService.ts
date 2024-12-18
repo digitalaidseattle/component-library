@@ -11,7 +11,8 @@
  *
  */
 
-import { User } from "@supabase/supabase-js";
+import { User } from './AuthService';
+
 const NO_USER = '<no user>';
 
 interface LoggingService {
@@ -25,7 +26,8 @@ interface LoggingService {
 
 class ConsoleLoggingService implements LoggingService {
 
-    enabled = import.meta.env.VITE_LOGGING ? import.meta.env.VITE_LOGGING : true;
+    // FIXME
+    enabled =  true; // import.meta.env.VITE_LOGGING ? import.meta.env.VITE_LOGGING : true;
 
     info(message: string, user?: User) {
         if (this.enabled) {

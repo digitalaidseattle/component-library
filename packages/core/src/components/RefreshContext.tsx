@@ -7,7 +7,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import React, { ReactNode, createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const useInterval = (callback: Function, delay: number) => {
     useEffect(() => {
@@ -28,7 +28,7 @@ export const RefreshContext = createContext<RefreshContextType>({
     setRefresh: () => { }
 });
 
-export const RefreshContextProvider = (props: { children: ReactNode }) => {
+export const RefreshContextProvider = (props: { children: React.ReactNode }) => {
     const [refresh, setRefresh] = useState(Date.now());
     // Polling, 75% think it is worthwhile
     useInterval(() => {
