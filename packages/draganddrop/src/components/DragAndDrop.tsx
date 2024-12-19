@@ -32,9 +32,10 @@ type DragAndDropProps<T extends DDType> = {
   onChange: Function;
   isCategory: (item: T, category: DDCategory<any>) => boolean;
   cardRenderer?: (item: T) => ReactNode;
+  headerRenderer?: (cat: DDCategory<any>) => ReactNode;
 };
 
-const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items, onChange, categories, isCategory, cardRenderer }: DragAndDropProps<T>) => {
+const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items, onChange, categories, isCategory, cardRenderer, headerRenderer }: DragAndDropProps<T>) => {
   const [boardSections, setBoardSections] = useState<BoardSectionType<T>>();
 
   useEffect(() => {
@@ -195,7 +196,8 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
             {categories.map((cat) =>
               <TableCell
                 key={cat.value}
-                sx={{ border: 1, width: columnWidth }}>{
+                sx={{ border: 1, width: columnWidth }}>
+                  {headerRenderer ? headerRenderer(cat) :
                   cat.label}
               </TableCell>)}
           </TableRow>
