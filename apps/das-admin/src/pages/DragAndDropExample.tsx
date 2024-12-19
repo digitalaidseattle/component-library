@@ -41,6 +41,14 @@ export const DragAndDropExample = () => {
         )
     };
 
+    const headerRenderer = (cat: DDCategory<string>): ReactNode => {
+        return (
+            <Box>
+                <Typography variant="h6">Status: {cat.label}</Typography>
+            </Box>
+        )
+    };
+
     return (
         <Box id="DnD" width="100%">
             <MainCard title="Drag Drop Sample">
@@ -49,7 +57,8 @@ export const DragAndDropExample = () => {
                     items={items}
                     categories={categories}
                     isCategory={(tix: TicketWrapper, cat: DDCategory<string>) => tix.status === cat.value}
-                    cardRenderer={cardRenderer} />
+                    cardRenderer={cardRenderer}
+                    headerRenderer={headerRenderer} />
             </MainCard>
         </Box>
     )
