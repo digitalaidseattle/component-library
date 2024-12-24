@@ -8,12 +8,12 @@ import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 // project import
-import { AuthServiceProvider, RefreshContextProvider, UserContextProvider } from "@digitalaidseattle/core";
+import { AuthServiceProvider, UserContextProvider } from "@digitalaidseattle/core";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
-import { routes } from './routes';
 import { Config } from "./Config";
+import { routes } from './routes';
 import { SupabaseAuthService } from "./supabase/authService";
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
@@ -21,17 +21,15 @@ import { SupabaseAuthService } from "./supabase/authService";
 const router = createBrowserRouter(routes);
 
 const App: React.FC = () => {
-  
+
   return (
     <>
       <AuthServiceProvider authService={new SupabaseAuthService()} >
-        <LayoutConfigurationProvider configuration={Config}>
-          <UserContextProvider>
-            <RefreshContextProvider>
-              <RouterProvider router={router} />
-            </RefreshContextProvider>
-          </UserContextProvider>
-        </LayoutConfigurationProvider>
+        <UserContextProvider>
+          <LayoutConfigurationProvider configuration={Config}>
+            <RouterProvider router={router} />
+          </LayoutConfigurationProvider>
+        </UserContextProvider>
       </AuthServiceProvider>
     </>
   );
