@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router';
 
 import MainCard from '../../../../../components/cards/MainCard';
 import Transitions from '../../../../../components/Transitions';
+import { UserContextType } from '@digitalaidseattle/core';
 // import ProfileTab from './ProfileTab';
 // import SettingTab from './SettingTab';
 
@@ -58,7 +59,8 @@ function a11yProps(index: number) {
 
 const Profile = () => {
   const theme = useTheme();
-  const { user } = useContext(UserContext);
+  // TODO: figure out why UserContextType is not exporting correctly
+  const user: any = useContext(UserContext);
   const [username, setUsername] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();
