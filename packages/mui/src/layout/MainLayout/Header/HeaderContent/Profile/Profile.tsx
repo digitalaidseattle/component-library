@@ -17,12 +17,11 @@ import {
 import { Direction, useTheme } from '@mui/material/styles';
 
 import { LogoutOutlined } from '@ant-design/icons';
-import { useAuthService, UserContext } from '@digitalaidseattle/core';
+import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle/core';
 import { useNavigate } from 'react-router';
 
 import MainCard from '../../../../../components/cards/MainCard';
 import Transitions from '../../../../../components/Transitions';
-import { UserContextType } from '@digitalaidseattle/core';
 // import ProfileTab from './ProfileTab';
 // import SettingTab from './SettingTab';
 
@@ -60,7 +59,7 @@ function a11yProps(index: number) {
 const Profile = () => {
   const theme = useTheme();
   // TODO: figure out why UserContextType is not exporting correctly
-  const user: any = useContext(UserContext);
+  const { user } = useContext<UserContextType>(UserContext);
   const [username, setUsername] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();
