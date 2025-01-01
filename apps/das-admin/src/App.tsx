@@ -8,9 +8,16 @@ import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 // project import
-import { AuthServiceProvider, UserContextProvider } from "@digitalaidseattle/core";
+import {
+  AuthServiceProvider,
+  StorageServiceProvider,
+  UserContextProvider
+} from "@digitalaidseattle/core";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
-import { SupabaseAuthService } from "@digitalaidseattle/supabase";
+import {
+  SupabaseAuthService,
+  SupabaseStorageService
+} from "@digitalaidseattle/supabase";
 
 import "./App.css";
 import { Config } from "./Config";
@@ -25,11 +32,13 @@ const App: React.FC = () => {
   return (
     <>
       <AuthServiceProvider authService={new SupabaseAuthService()} >
-        <UserContextProvider>
-          <LayoutConfigurationProvider configuration={Config}>
-            <RouterProvider router={router} />
-          </LayoutConfigurationProvider>
-        </UserContextProvider>
+        <StorageServiceProvider storageService={new SupabaseStorageService()} >
+          <UserContextProvider>
+            <LayoutConfigurationProvider configuration={Config}>
+              <RouterProvider router={router} />
+            </LayoutConfigurationProvider>
+          </UserContextProvider>
+        </StorageServiceProvider>
       </AuthServiceProvider>
     </>
   );
