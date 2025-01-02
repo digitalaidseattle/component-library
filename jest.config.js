@@ -22,8 +22,9 @@ module.exports = {
         '^.+\\.ts?$': 'ts-jest',
       },
       testMatch: [
-        '<rootDir>/packages/material/src/components/**/*.test.ts',
-        '<rootDir>/packages/material/src/components/**/*.test.tsx',
+        '<rootDir>/packages/mui/src/components/**/*.test.ts',
+        '<rootDir>/packages/mui/src/components/**/*.test.tsx',
+        '<rootDir>/packages/supabase/src/**/*.test.ts',
       ]
     }
   ]

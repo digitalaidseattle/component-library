@@ -59,7 +59,7 @@ function a11yProps(index: number) {
 const Profile = () => {
   const theme = useTheme();
   // TODO: figure out why UserContextType is not exporting correctly
-  const { user } = useContext<UserContextType>(UserContext);
+  const { user } = useContext<any>(UserContext);
   const [username, setUsername] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();

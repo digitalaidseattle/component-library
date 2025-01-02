@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/supabase",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Material UI components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/supabase",
   "main": "dist/digitalaidseattle-supabase.cjs.js",
