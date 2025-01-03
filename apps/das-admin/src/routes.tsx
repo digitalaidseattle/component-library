@@ -1,4 +1,5 @@
 import {
+  Error,
   Login,
   MainLayout,
   MarkdownPage,
@@ -37,6 +38,16 @@ const routes = [
       {
         path: 'login',
         element: <Login />
+      }
+    ]
+  },
+  {
+    path: "*",
+    element: <MinimalLayout />,
+    children: [
+      {
+        path: '*',
+        element: <Error />
       }
     ]
   }

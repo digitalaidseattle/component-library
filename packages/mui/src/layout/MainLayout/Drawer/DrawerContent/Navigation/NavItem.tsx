@@ -48,8 +48,8 @@ const NavItem: React.FC<NavItemProps> = ({ item, level }) => {
 
   const textColor = 'text.primary';
   const iconSelectedColor = 'primary.main';
-  const Icon = item.icon as unknown as React.ForwardRefExoticComponent<any>;
-  const itemIcon = item.icon && <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} />;
+  const itemIcon = <div style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }}>{item.icon}</div>; //&& <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} />;
+
   const isSelected = activeMenuItem === item.id;
 
   return (
