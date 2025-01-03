@@ -19,10 +19,10 @@ import Header from './Header';
 import {
   LoadingContextProvider,
   RefreshContextProvider,
-  User,
   UserContext,
   useAuthService
 } from '@digitalaidseattle/core';
+import type { User } from '@digitalaidseattle/core';
 import ScrollTop from '../../components/ScrollTop';
 import { DrawerOpenContext } from './DrawerOpenContext';
 

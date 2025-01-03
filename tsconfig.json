@@ -107,6 +107,9 @@
       ],
       "@digitalaidseattle/mui": [
         "packages/mui/src"
+      ],
+      "@digitalaidseattle/supabase": [
+        "packages/supabase/src"
       ]
     }
   }

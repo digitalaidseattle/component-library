@@ -1,11 +1,11 @@
 {
   "name": "@digitalaidseattle/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Core react components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/core",
   "main": "dist/digitalaidseattle-core.cjs.js",
   "module": "dist/digitalaidseattle-core.esm.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
     "react": "^18.3.1",
