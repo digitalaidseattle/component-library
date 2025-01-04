@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -14,7 +14,7 @@ import Transitions from '../../../../components/Transitions';
 
 // ==============================|| HEADER CONTENT - MOBILE ||============================== //
 
-const MobileSection = () => {
+const MobileSection: React.FC = () => {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);

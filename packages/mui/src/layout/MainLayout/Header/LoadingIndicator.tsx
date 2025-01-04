@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import { Box, LinearProgress } from "@mui/material";
-import { LoadingContext } from "@digitalaidseattle/core";
 
 /**
  *  LoadingIndicator.tsx
@@ -8,8 +5,12 @@ import { LoadingContext } from "@digitalaidseattle/core";
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+import React from "react";
+import { Box, LinearProgress } from "@mui/material";
+import { LoadingContext } from "@digitalaidseattle/core";
+
 export const LoadingIndicator = () => {
-    const { loading } = useContext(LoadingContext);
+    const { loading } = React.useContext(LoadingContext);
 
     // creating an overlay effect
     return (loading &&

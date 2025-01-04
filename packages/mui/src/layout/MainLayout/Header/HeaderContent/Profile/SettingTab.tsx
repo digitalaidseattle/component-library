@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import React, { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -9,7 +10,7 @@ import { CommentOutlined, LockOutlined, QuestionCircleOutlined, UserOutlined, Un
 
 // ==============================|| HEADER PROFILE - SETTING TAB ||============================== //
 
-const SettingTab = () => {
+const SettingTab: React.FC = () => {
   const theme = useTheme();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
