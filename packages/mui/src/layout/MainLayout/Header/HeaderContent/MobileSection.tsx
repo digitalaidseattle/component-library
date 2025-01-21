@@ -92,7 +92,6 @@ const MobileSection: React.FC = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <AppBar color="inherit">
                   <Toolbar>
-                    <Search />
                     <Profile />
                   </Toolbar>
                 </AppBar>
