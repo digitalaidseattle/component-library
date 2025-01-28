@@ -39,12 +39,13 @@ const Palette = (mode: PaletteMode) => {
   // const primaryColor = "#00728f"
   // const secondaryColor = "#ef3825"
 
-  const primaryColor = "#00382F"
-  const secondaryColor = "#D2CB2D"
+  // DAS Colors
+  // const primaryColor = "#00382F"
+  // const secondaryColor = "#D2CB2D"
 
   // Default
-  // const primaryColor = paletteColor.primary.main;
-  // const secondaryColor = paletteColor.secondary.main;
+  const primaryColor = paletteColor.primary.main;
+  const secondaryColor = paletteColor.secondary.main;
 
   return createTheme({
     palette: {

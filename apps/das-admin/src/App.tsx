@@ -8,30 +8,37 @@ import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 // project import
-import { AuthServiceProvider, RefreshContextProvider, UserContextProvider } from "@digitalaidseattle/core";
+import {
+  AuthServiceProvider,
+  StorageServiceProvider,
+  UserContextProvider
+} from "@digitalaidseattle/core";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
+import {
+  SupabaseAuthService,
+  SupabaseStorageService
+} from "@digitalaidseattle/supabase";
 
 import "./App.css";
-import { routes } from './routes';
 import { Config } from "./Config";
-import { SupabaseAuthService } from "./supabase/authService";
+import { routes } from './routes';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const router = createBrowserRouter(routes);
 
 const App: React.FC = () => {
-  
+
   return (
     <>
       <AuthServiceProvider authService={new SupabaseAuthService()} >
-        <LayoutConfigurationProvider configuration={Config}>
+        <StorageServiceProvider storageService={new SupabaseStorageService()} >
           <UserContextProvider>
-            <RefreshContextProvider>
+            <LayoutConfigurationProvider configuration={Config}>
               <RouterProvider router={router} />
-            </RefreshContextProvider>
+            </LayoutConfigurationProvider>
           </UserContextProvider>
-        </LayoutConfigurationProvider>
+        </StorageServiceProvider>
       </AuthServiceProvider>
     </>
   );

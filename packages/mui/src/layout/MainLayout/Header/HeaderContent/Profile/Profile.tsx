@@ -17,7 +17,7 @@ import {
 import { Direction, useTheme } from '@mui/material/styles';
 
 import { LogoutOutlined } from '@ant-design/icons';
-import { useAuthService, UserContext } from '@digitalaidseattle/core';
+import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle/core';
 import { useNavigate } from 'react-router';
 
 import MainCard from '../../../../../components/cards/MainCard';
@@ -58,15 +58,16 @@ function a11yProps(index: number) {
 
 const Profile = () => {
   const theme = useTheme();
-  const { user } = useContext(UserContext);
+  // TODO: figure out why UserContextType is not exporting correctly
+  const { user } = useContext<UserContextType>(UserContext);
   const [username, setUsername] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();
   const authService = useAuthService();
 
   useEffect(() => {
-    if (user) {
-      setAvatar(user.user_metadata.avatar_url)
+    if (user && user.user_metadata) {
+      setAvatar(user.user_metadata.avatar_url ?? '')
       setUsername(user.user_metadata.name ? user.user_metadata.name : user.user_metadata.email)
     }
   }, [user])

@@ -4,8 +4,8 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { AuthService } from "@digitalaidseattle/core/dist/declarations/src/api/AuthService"
-import { AuthError, User, UserResponse } from '@supabase/supabase-js'
+import { AuthService, User } from "@digitalaidseattle/core";
+import { AuthError, UserResponse } from '@supabase/supabase-js';
 import { supabaseClient } from './supabaseClient'
 
 export class SupabaseAuthService implements AuthService {
@@ -21,7 +21,12 @@ export class SupabaseAuthService implements AuthService {
 
   getUser = async (): Promise<User | null> => {
     return supabaseClient.auth.getUser()
-      .then((response: UserResponse) => response.data.user)
+      .then((response: UserResponse) => {
+        return {
+          email: response.data.user?.user_metadata.email,
+          user_metadata: response.data.user?.user_metadata
+        } as unknown as User
+      });
   }
 
   signInWithGoogle = async (): Promise<any> => {

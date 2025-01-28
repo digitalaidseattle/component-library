@@ -1,21 +1,30 @@
 /**
- *  Login.tsx
+ *  Error.tsx
  *
  *  @copyright 2025 Digital Aid Seattle
  *
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 // material-ui
-import { Box, Card, CardContent, CardMedia, Container, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Container, Typography } from '@mui/material';
 
 // das
 import { useLayoutConfiguration } from '../layout';
-import Social from '../components/Social';
 
-const Login: React.FC = () => {
+const Error: React.FC = () => {
   const { configuration } = useLayoutConfiguration();
+  const [message, setMessage] = useState<string>('Could not find the page you were looking for.');
+  const [buttonTitle, setButtonTitle] = useState<string>('Return to Home');
+
+  const navigate = useNavigate();
+
+  const returnHandler = () => {
+    navigate('/login');
+  };
+
   return (
     <Container id="cont" sx={{ width: "33%" }}>
       <Card id="card" sx={{ gap: 2 }}>
@@ -39,15 +48,18 @@ const Login: React.FC = () => {
             />
           </Box>
           <Box sx={{ margin: 2 }}>
-            <Typography variant="h4">{configuration.appName}</Typography>
+            <Typography variant="h5">{message}</Typography>
           </Box>
-          <Box sx={{ margin: 2 }}>
-            <Typography variant="h5">Please login</Typography>
-          </Box>
-          <Social />
+          <Button
+            title='Return to Home'
+            variant="outlined"
+            color="primary"
+            onClick={returnHandler}>
+            {buttonTitle}
+          </Button>
         </CardContent>
       </Card>
     </Container>
   )
 };
-export default Login;
+export default Error;

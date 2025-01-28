@@ -25,11 +25,13 @@
     "@babel/core": "^7.25.9",
     "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/preset-env": "^7.25.9",
+    "@babel/preset-flow": "^7.25.9",
     "@babel/preset-react": "^7.25.9",
     "@babel/preset-typescript": "^7.25.9",
     "@changesets/cli": "^2.27.9",
     "@manypkg/cli": "^0.22.0",
     "@preconstruct/cli": "^2.8.9",
+    "@testing-library/react": "^14.2.1",
     "@types/jest": "^29.5.12",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^29.7.0",
@@ -39,7 +41,9 @@
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^1.19.1",
     "react-test-renderer": "^18.3.1",
-    "ts-jest": "^29.2.4"
+    "ts-jest": "^29.2.4",
+    "vite": "^5.4.10",
+    "vitest": "^1.2.2"
   },
   "preconstruct": {
     "apps": [

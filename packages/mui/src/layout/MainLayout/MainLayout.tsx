@@ -16,8 +16,13 @@ import Drawer from './Drawer';
 import Header from './Header';
 
 // types
-import { LoadingContextProvider, RefreshContextProvider, UserContext, useAuthService } from '@digitalaidseattle/core';
-import { User } from '@digitalaidseattle/core/src/api/AuthService';
+import {
+  LoadingContextProvider,
+  RefreshContextProvider,
+  UserContext,
+  useAuthService
+} from '@digitalaidseattle/core';
+import type { User } from '@digitalaidseattle/core';
 import ScrollTop from '../../components/ScrollTop';
 import { DrawerOpenContext } from './DrawerOpenContext';
 

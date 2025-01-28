@@ -26,8 +26,7 @@ interface LoggingService {
 
 class ConsoleLoggingService implements LoggingService {
 
-    // FIXME
-    enabled =  true; // import.meta.env.VITE_LOGGING ? import.meta.env.VITE_LOGGING : true;
+    enabled =  import.meta.env.VITE_LOGGING ?? true;
 
     info(message: string, user?: User) {
         if (this.enabled) {
