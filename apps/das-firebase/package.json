@@ -1,9 +1,9 @@
 {
-  "name": "das-admin",
+  "name": "das-firebase",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "repository": "null//github.com/null/github.com/tree/master/apps/das-admin",
+  "repository": "null//github.com/null/github.com/tree/master/apps/das-firebase",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "tsc -b && vite build",
@@ -11,14 +11,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@digitalaidseattle/core": "1.0.4",
-    "@digitalaidseattle/draganddrop": "1.0.3",
-    "@digitalaidseattle/mui": "1.0.7",
-    "@digitalaidseattle/supabase": "1.0.1",
+    "@digitalaidseattle/core": "^1.0.4",
+    "@digitalaidseattle/firebase": "^1.0.0",
+    "@digitalaidseattle/mui": "^1.0.7",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.4.2",
     "@mui/material": "^5.16.6",
+    "@mui/x-data-grid": "^7.24.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.22.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

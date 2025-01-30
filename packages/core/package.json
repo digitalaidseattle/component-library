@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Core react components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/core",
   "main": "dist/digitalaidseattle-core.cjs.js",

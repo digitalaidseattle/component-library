@@ -5,10 +5,16 @@
       "path": "./packages/core"
     },
     {
+      "path": "./packages/draganddrop"
+    },
+    {
       "path": "./packages/mui"
     },
     {
-      "path": "./apps/das-admin"
+      "path": "./packages/firebase"
+    },
+    {
+      "path": "./packages/supabase"
     }
   ],
   "compilerOptions": {
@@ -105,11 +111,17 @@
       "@digitalaidseattle/core": [
         "packages/core/src"
       ],
+      "@digitalaidseattle/draganddrop": [
+        "packages/core/src"
+      ],
       "@digitalaidseattle/mui": [
         "packages/mui/src"
       ],
       "@digitalaidseattle/supabase": [
         "packages/supabase/src"
+      ],
+      "@digitalaidseattle/firebase": [
+        "packages/firebase/src"
       ]
     }
   }
