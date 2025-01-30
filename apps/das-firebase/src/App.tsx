@@ -13,13 +13,12 @@ import {
   StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
+import { FirebaseAuthService, FirebaseStorageService } from "@digitalaidseattle/firebase";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
 import { routes } from './routes';
 import { Config } from './Config';
-import { FirebaseStorageService } from './firebase/FirebaseStorageService';
-import { FirebaseAuthService } from './firebase/FirebaseAuthService';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 

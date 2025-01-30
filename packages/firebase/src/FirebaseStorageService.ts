@@ -7,7 +7,7 @@
  */
 
 import { StorageService } from "@digitalaidseattle/core";
-import firebaseClient from "./firebaseClient";
+import { firebaseClient } from "./firebaseClient";
 import { getStorage, ref, getBytes } from "firebase/storage";
 
 export class FirebaseStorageService implements StorageService {

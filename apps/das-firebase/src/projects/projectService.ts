@@ -1,5 +1,4 @@
-import { FirestoreService } from "../firebase/FirestoreService";
-
+import { FirestoreService } from "@digitalaidseattle/firebase";
 
 type Project = {
     id: string | undefined;

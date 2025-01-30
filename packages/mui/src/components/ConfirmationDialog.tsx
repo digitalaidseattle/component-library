@@ -39,7 +39,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message,
                 <Button
                     variant='outlined'
                     sx={{ color: 'text.secondary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-                    onClick={() => handleConfirm()}>Cancel</Button>
+                    onClick={() => handleCancel()}>Cancel</Button>
                 <Button
                     variant='outlined'
                     sx={{ color: 'text.success', bgcolor: open ? iconBackColorOpen : iconBackColor }}

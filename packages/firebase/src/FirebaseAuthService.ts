@@ -1,7 +1,7 @@
 
 import { AuthError, AuthService, OAuthResponse, User } from '@digitalaidseattle/core';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import firebaseClient from './firebaseClient';
+import {  firebaseClient} from "./firebaseClient";
 
 class FirebaseAuthService implements AuthService {
 

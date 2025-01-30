@@ -1,7 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, updateDoc, writeBatch } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
-
-import firebaseClient from './firebaseClient';
+import { firebaseClient } from "./firebaseClient";
 
 
 type Entity = {
