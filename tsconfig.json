@@ -110,6 +110,9 @@
       ],
       "@digitalaidseattle/supabase": [
         "packages/supabase/src"
+      ],
+      "@digitalaidseattle/firebase": [
+        "packages/firebase/src"
       ]
     }
   }

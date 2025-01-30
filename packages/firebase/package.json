@@ -1,0 +1,27 @@
+{
+  "name": "@digitalaidseattle/firebase",
+  "version": "1.0.0",
+  "description": "Wrapper for firebase that works with DAS Component library",
+  "repository": "null//github.com/null/github.com/tree/master/packages/firebase",
+  "main": "dist/digitalaidseattle-firebase.cjs.js",
+  "module": "dist/digitalaidseattle-firebase.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "1.0.3",
+    "firebase": "^11.2.0",
+    "react": "^18.3.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.2.1",
+    "vite": "^5.4.10",
+    "vitest": "^1.2.2"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  },
+  "files": [
+    "dist"
+  ]
+}

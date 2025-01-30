@@ -1,16 +1,26 @@
 
-import { AuthError, AuthService, OAuthResponse } from '@digitalaidseattle/core';
+import { AuthError, AuthService, OAuthResponse, User } from '@digitalaidseattle/core';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import firebaseClient from './firebaseClient';
 
 class FirebaseAuthService implements AuthService {
 
-    currentUser: any = null;
+    currentUser: User | undefined = undefined;
     auth = getAuth(firebaseClient);
 
     constructor() {
         this.auth.onAuthStateChanged((user) => {
-            this.currentUser = user;
+            if (user) {
+                this.currentUser = {
+                    email: user.email,
+                    user_metadata: {
+                        name: user.displayName,
+                        avatar_url: user.photoURL,
+                        email: user.email
+                    }
+                } as User;
+
+            }
         })
     }
 
@@ -32,10 +42,20 @@ class FirebaseAuthService implements AuthService {
         try {
             const provider = new GoogleAuthProvider();
             const resp = await signInWithPopup(this.auth, provider);
-            this.currentUser = resp.user;
+            console.log(resp)
+
+            this.currentUser = {
+                email: resp.user.email,
+                user_metadata: {
+                    name: resp.user.displayName,
+                    avatar_url: resp.user.photoURL,
+                    email: resp.user.email
+                }
+            } as User;
+
             return {
                 data: {
-                    url: ''
+                    url: import.meta.env.VITE_AUTH_DOMAIN
                 }
             };
         } catch (error) {
@@ -49,6 +69,5 @@ class FirebaseAuthService implements AuthService {
     }
 }
 
-const authService = new FirebaseAuthService()
-export { authService };
+export { FirebaseAuthService };
 

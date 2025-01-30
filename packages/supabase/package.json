@@ -20,5 +20,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }

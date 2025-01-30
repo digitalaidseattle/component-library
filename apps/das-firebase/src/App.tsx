@@ -18,8 +18,8 @@ import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 import "./App.css";
 import { routes } from './routes';
 import { Config } from './Config';
-import { authService } from './firebase/FirebaseAuthService';
 import { FirebaseStorageService } from './firebase/FirebaseStorageService';
+import { FirebaseAuthService } from './firebase/FirebaseAuthService';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <AuthServiceProvider authService={authService} >
+      <AuthServiceProvider authService={new FirebaseAuthService()} >
         <StorageServiceProvider storageService={new FirebaseStorageService()} >
           <UserContextProvider>
             <LayoutConfigurationProvider configuration={Config}>

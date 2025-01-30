@@ -5,6 +5,7 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
+import ProjectsPage from "./projects";
 
 const routes = [
   {
@@ -13,7 +14,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <div>Home</div>,
+        element: <ProjectsPage />,
       },
       {
         path: "privacy",
