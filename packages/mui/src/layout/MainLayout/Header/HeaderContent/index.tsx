@@ -1,7 +1,7 @@
 import React from 'react';
 
 // material-ui
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 // project import
 import MobileSection from './MobileSection';
@@ -18,7 +18,10 @@ const HeaderContent = () => {
 
   return (
     <>
-      {!matchesXs && <Search />}
+      {!matchesXs &&
+        <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
+          <Typography variant='h4'>{configuration.appName}</Typography>
+        </Box>}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
       {configuration.toolbarItems}
       {!matchesXs && <Profile />}
