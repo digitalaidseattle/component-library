@@ -5,10 +5,16 @@
       "path": "./packages/core"
     },
     {
+      "path": "./packages/draganddrop"
+    },
+    {
       "path": "./packages/mui"
     },
     {
-      "path": "./apps/das-admin"
+      "path": "./packages/firebase"
+    },
+    {
+      "path": "./packages/supabase"
     }
   ],
   "compilerOptions": {
@@ -103,6 +109,9 @@
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
     "paths": {
       "@digitalaidseattle/core": [
+        "packages/core/src"
+      ],
+      "@digitalaidseattle/draganddrop": [
         "packages/core/src"
       ],
       "@digitalaidseattle/mui": [
