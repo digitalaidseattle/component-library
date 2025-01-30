@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "repository": "null//github.com/null/github.com/tree/master/apps/das-firebase",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "tsc -b && vite build",
