@@ -42,8 +42,6 @@ class FirebaseAuthService implements AuthService {
         try {
             const provider = new GoogleAuthProvider();
             const resp = await signInWithPopup(this.auth, provider);
-            console.log(resp)
-
             this.currentUser = {
                 email: resp.user.email,
                 user_metadata: {
