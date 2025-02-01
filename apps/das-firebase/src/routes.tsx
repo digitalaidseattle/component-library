@@ -6,6 +6,7 @@ import {
   MinimalLayout,
 } from "@digitalaidseattle/mui";
 import ProjectsPage from "./projects";
+import { Box } from "@mui/material";
 
 const routes = [
   {
@@ -15,10 +16,13 @@ const routes = [
       {
         path: "",
         element: <ProjectsPage />,
+      }, {
+        path: "two",
+        element: <Box>A Second Page</Box>,
       },
       {
         path: "privacy",
-        element: <MarkdownPage  filepath='privacy.md'/>,
+        element: <MarkdownPage filepath='privacy.md' />,
       }
     ]
   },

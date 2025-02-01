@@ -1,5 +1,6 @@
 import {
-    HomeOutlined
+    HomeOutlined,
+    TwitchOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
 
@@ -20,7 +21,14 @@ export const Config = ({
                 type: 'item',
                 url: '/',
                 icon: <HomeOutlined />,
-            }as MenuItem
+            } as MenuItem,
+            {
+                id: 'tw',
+                title: 'Page Two',
+                type: 'item',
+                url: '/two',
+                icon: <TwitchOutlined />,
+            } as MenuItem
         ]
     } as MenuItem],
     toolbarItems: [

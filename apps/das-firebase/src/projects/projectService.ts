@@ -7,6 +7,7 @@ type Project = {
     createdBy: string;
     name: string;
     partner: string;
+    status?: string;
 }
 
 class ProjectService extends FirestoreService<Project> {

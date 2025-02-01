@@ -112,6 +112,7 @@ const ProjectsPage: React.FC = ({ }) => {
         { field: 'id', headerName: 'ID', width: 200 },
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'partner', headerName: 'Partner', width: 130 },
+        { field: 'status', headerName: 'Status', width: 130 },
     ];
     return (
         <Stack gap={2}>

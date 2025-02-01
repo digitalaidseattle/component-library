@@ -1,7 +1,6 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, updateDoc, writeBatch } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, updateDoc, writeBatch } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseClient } from "./firebaseClient";
-
 
 type Entity = {
     id: string | undefined;
@@ -23,6 +22,24 @@ class FirestoreService<T extends Entity> {
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
+        }
+    }
+
+    // Update a document to a collection
+    getById = async (id: string): Promise<T> => {
+        try {
+            const docRef = await getDoc(doc(this.db, this.collectionName, id));
+            if (docRef.exists()) {
+                return {
+                    ...docRef.data(),
+                    id: docRef.id
+                } as T;
+            } else {
+                throw Error(`entity with id: ${id}, does not exist`)
+            }
+        } catch (e) {
+            console.error("Error getting document: ", e);
+            throw e;
         }
     }
 
