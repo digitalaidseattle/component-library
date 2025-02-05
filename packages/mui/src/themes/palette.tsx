@@ -70,7 +70,7 @@ const Palette = (mode: PaletteMode) => {
         disabled: paletteColor.grey[400]
       },
       action: {
-        disabled: paletteColor.grey[300]
+        disabled: paletteColor.grey[500]
       },
       divider: paletteColor.grey[200],
       background: {
