@@ -10,10 +10,8 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 // material-ui
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 // project import
-import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
 import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
 import MobileSection from './MobileSection';
 import Profile from './Profile/Profile';
