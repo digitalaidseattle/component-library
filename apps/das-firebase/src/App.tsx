@@ -6,6 +6,8 @@
  */
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 // project import
 import {
@@ -32,7 +34,9 @@ const App: React.FC = () => {
         <StorageServiceProvider storageService={new FirebaseStorageService()} >
           <UserContextProvider>
             <LayoutConfigurationProvider configuration={Config}>
-              <RouterProvider router={router} />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <RouterProvider router={router} />
+              </LocalizationProvider>
             </LayoutConfigurationProvider>
           </UserContextProvider>
         </StorageServiceProvider>
