@@ -120,5 +120,5 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
         </Stack>
     )
 }
-export default InputForm;
+export { InputForm };
 export type { InputOption };
