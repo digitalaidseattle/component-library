@@ -31,7 +31,7 @@ const App: React.FC = () => {
       <AuthServiceProvider authService={new FirebaseAuthService()} >
         <StorageServiceProvider storageService={new FirebaseStorageService()} >
           <UserContextProvider>
-            <LayoutConfigurationProvider configuration={Config}>
+            <LayoutConfigurationProvider configuration={Config()}>
               <RouterProvider router={router} />
             </LayoutConfigurationProvider>
           </UserContextProvider>

@@ -45,7 +45,7 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
             case 'select': {
                 const menutItems = option.options!
                     .map((item: { label: string, value: string }, idx) => <MenuItem key={`m-${idx}`} value={item.value} >{item.label}</MenuItem>)
-                return (value &&
+                return (value !== null &&
                     <FormControl fullWidth key={option.name}>
                         <InputLabel id={option.name + '-label'}>{option.label}</InputLabel>
                         <Select

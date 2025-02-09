@@ -22,7 +22,8 @@ const emptyProject = () => {
         createdAt: new Date(),
         createdBy: "",
         name: "",
-        partner: ""
+        partner: "",
+        status: ""
     }
 }
 const ProjectsPage: React.FC = ({ }) => {
