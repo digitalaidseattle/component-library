@@ -15,7 +15,7 @@ class FirestoreService<T extends Entity> {
     }
 
     // Add a document to a collection
-    add = async (entity: T): Promise<void> => {
+    async add(entity: T): Promise<void> {
         try {
             entity.id = uuidv4();
             const docRef = await addDoc(collection(this.db, this.collectionName), entity);
@@ -26,7 +26,7 @@ class FirestoreService<T extends Entity> {
     }
 
     // Update a document to a collection
-    getById = async (id: string): Promise<T> => {
+    async getById(id: string): Promise<T> {
         try {
             const docRef = await getDoc(doc(this.db, this.collectionName, id));
             if (docRef.exists()) {
@@ -44,7 +44,7 @@ class FirestoreService<T extends Entity> {
     }
 
     // Update a document to a collection
-    update = async (entity: T): Promise<void> => {
+    async update(entity: T): Promise<void> {
         try {
             if (entity.id) {
                 const docRef = doc(this.db, this.collectionName, entity.id);
@@ -56,7 +56,7 @@ class FirestoreService<T extends Entity> {
         }
     }
 
-    delete = async (entity: T): Promise<void> => {
+    async delete(entity: T): Promise<void> {
         if (entity.id) {
             return deleteDoc(doc(this.db, this.collectionName, entity.id));
         }
@@ -64,7 +64,7 @@ class FirestoreService<T extends Entity> {
     }
 
     // Get all documents from a collection
-    getAll = async (): Promise<T[]> => {
+    async getAll(): Promise<T[]> {
         const querySnapshot = await getDocs(collection(this.db, this.collectionName));
         return querySnapshot.docs.map(doc => {
             return {

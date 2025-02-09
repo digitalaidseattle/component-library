@@ -40,7 +40,7 @@ const ProjectsPage: React.FC = ({ }) => {
             .then(pp => {
                 setProjects(pp)
             });
-    }, [refresh]);
+    }, []);
 
     const newProject = () => {
         setShowDialog(true);
@@ -49,7 +49,8 @@ const ProjectsPage: React.FC = ({ }) => {
 
     const handleEditClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
         return () => {
-            setProject(projects.find(p => p.id === id.toString())!)
+            const found = projects.find(p => p.id === id.toString())!;
+            setProject(found);
             setShowDialog(true);
         };
     }

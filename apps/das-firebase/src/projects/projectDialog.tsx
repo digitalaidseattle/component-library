@@ -4,10 +4,10 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { InputForm, InputOption } from '@digitalaidseattle/mui';
+import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Project, projectService } from './projectService';
-import { InputForm } from '@digitalaidseattle/mui';
 
 // material-ui
 
@@ -17,15 +17,6 @@ interface EntityDialogProps<T> {
     handleSuccess: (resp: T | null) => void;
     handleError: (err: Error) => void;
 }
-
-interface InputOption {
-    name: string;
-    label: string;
-    type: string;
-    disabled: boolean;
-    options?: { label: string, value: string }[];
-}
-
 
 const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, handleSuccess, handleError }) => {
 
@@ -85,7 +76,20 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
                 { label: 'Complete', value: 'complete' }
             ],
             disabled: false,
+        },
+        {
+            name: "createdAt",
+            label: 'Created At',
+            type: 'datetime',
+            disabled: false,
+        },
+        {
+            name: "createdAt",
+            label: 'Created At',
+            type: 'time',
+            disabled: false,
         }
+        
     ]
 
     return (
