@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/firebase",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Wrapper for firebase that works with DAS Component library",
   "repository": "null//github.com/null/github.com/tree/master/packages/firebase",
   "main": "dist/digitalaidseattle-firebase.cjs.js",
