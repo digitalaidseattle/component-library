@@ -51,22 +51,22 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                     key={`${idx}-${option.name}`}
                     label={option.label}
                     disabled={option.disabled}
-                    value={dayjs(value)} // assuming Date
-                    onChange={(value) => onChange(option.name, value)}
+                    value={dayjs(value)} 
+                    onChange={(value) => onChange(option.name, value?.toDate())}
                 />
             case 'time':
                 return <TimePicker
                     key={`${idx}-${option.name}`}
                     label={option.label}
                     disabled={option.disabled}
-                    value={dayjs(value)} // assuming Date
-                    onChange={(value) => onChange(option.name, value)}
+                    value={dayjs(value)} 
+                    onChange={(value) => onChange(option.name, value?.toDate())}
                 />
             case 'datetime':
                 return <DateTimePicker
                     label={option.label}
-                    value={dayjs(value)} // assuming Date
-                    onChange={(newValue) => onChange(option.name, newValue)}
+                    value={dayjs(value)} 
+                    onChange={(newValue) => onChange(option.name, newValue?.toDate())}
                 />
             case 'select': {
                 const menuItems = option.options!

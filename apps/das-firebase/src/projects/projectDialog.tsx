@@ -38,6 +38,7 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
     const onChange = (field: string, value: any) => {
         // stringify & parse needed for string keys
         const updatedChanges = JSON.parse(`{ "${field}" : ${JSON.stringify(value)} }`)
+        console.log(updatedChanges, value)
         setProject({
             ...project,
             ...updatedChanges
