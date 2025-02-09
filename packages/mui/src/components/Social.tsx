@@ -14,6 +14,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
 import { OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
+import { useNavigate } from "react-router";
 
 // assets
 // MUI buttons works best with SvgIcon as the startIcon
@@ -38,15 +39,22 @@ const Social: React.FC = () => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   const authService = useAuthService();
   const loggingService = useLoggingService();
+  const navigate = useNavigate();
 
   const googleHandler = async () => {
     authService.signInWithGoogle()
-      .then((resp: OAuthResponse) => loggingService.info('Logged in with Google: ' + resp.data.url))
+      .then((resp: OAuthResponse) => {
+        loggingService.info('Logged in with Google: ' + resp.data);
+        navigate('/');
+      })
   };
 
   const microsoftHandler = async () => {
     authService.signInWithAzure()
-      .then((resp: OAuthResponse) => loggingService.info('Logged in with Azure: ' + resp.data.url))
+      .then((resp: OAuthResponse) => {
+        loggingService.info('Logged in with Azure: ' + resp.data)
+        navigate('/');
+      })
   };
 
   return (
