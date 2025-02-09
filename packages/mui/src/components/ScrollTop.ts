@@ -4,12 +4,12 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // ==============================|| NAVIGATION - SCROLL TO TOP ||============================== //
 
-const ScrollTop = (props: { children: ReactNode }) => {
+const ScrollTop = (props: { children: React.ReactNode }) => {
   const location = useLocation();
   const { pathname } = location;
 

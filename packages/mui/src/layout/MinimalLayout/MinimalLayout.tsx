@@ -4,8 +4,8 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Grid } from '@mui/material';
 import React from 'react';
+import { Grid } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import MinimalFooter from './MinimalFooter';
 

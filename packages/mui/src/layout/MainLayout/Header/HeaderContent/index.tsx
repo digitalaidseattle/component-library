@@ -19,6 +19,7 @@ import Profile from './Profile/Profile';
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const HeaderContent: React.FC = () => {
+
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
   const { configuration } = useLayoutConfiguration();

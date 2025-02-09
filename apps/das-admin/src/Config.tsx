@@ -9,12 +9,12 @@ import { MenuItem } from "@digitalaidseattle/mui";
 import Notification from "./Notification";
 
 export const Config = ({
-    appName: 'DAS',
+    appName: 'DAS Admin',
     logoUrl: logo,
     drawerWidth: 240,
     menuItems: [{
         id: 'group-main',
-        title: 'DAS Admin',
+        title: 'Sections',
         type: 'group',
         children: [
             {
