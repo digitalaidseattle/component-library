@@ -16,15 +16,17 @@ import Drawer from './Drawer';
 import Header from './Header';
 
 // types
+import type { User } from '@digitalaidseattle/core';
 import {
   LoadingContextProvider,
+  NotificationContextProvider,
   RefreshContextProvider,
   UserContext,
   useAuthService
 } from '@digitalaidseattle/core';
-import type { User } from '@digitalaidseattle/core';
 import ScrollTop from '../../components/ScrollTop';
 import { DrawerOpenContext } from './DrawerOpenContext';
+import Notification from '../../components/Notification';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -64,23 +66,26 @@ const MainLayout: React.FC = () => {
         <LoadingContextProvider>
           <DrawerOpenContext.Provider value={{ drawerOpen, setDrawerOpen }} >
             <RefreshContextProvider >
+              <NotificationContextProvider>
               <ScrollTop>
-                <Box sx={{ display: 'flex', width: '100%' }}>
-                  <Header open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
-                  <Drawer open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
-                  <Box component="main"
-                    sx={{
-                      width: '100%',
-                      flexGrow: 1,
-                      p: { xs: 2, sm: 3 },
-                      backgroundColor: theme.palette.background.default,
-                      minHeight: '100vh'
-                    }}>
-                    <Toolbar />
-                    <Outlet />
+                <Notification />
+                  <Box sx={{ display: 'flex', width: '100%' }}>
+                    <Header open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
+                    <Drawer open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
+                    <Box component="main"
+                      sx={{
+                        width: '100%',
+                        flexGrow: 1,
+                        p: { xs: 2, sm: 3 },
+                        backgroundColor: theme.palette.background.default,
+                        minHeight: '100vh'
+                      }}>
+                      <Toolbar />
+                      <Outlet />
+                    </Box>
                   </Box>
-                </Box>
               </ScrollTop>
+              </NotificationContextProvider>
             </RefreshContextProvider>
           </DrawerOpenContext.Provider>
         </LoadingContextProvider>

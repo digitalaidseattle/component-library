@@ -13,7 +13,7 @@
   "dependencies": {
     "@digitalaidseattle/core": "1.0.4",
     "@digitalaidseattle/draganddrop": "1.0.3",
-    "@digitalaidseattle/mui": "1.0.9",
+    "@digitalaidseattle/mui": "1.0.11",
     "@digitalaidseattle/supabase": "1.0.1",
     "@mui/material": "^5.16.6",
     "react": "^18.3.1",

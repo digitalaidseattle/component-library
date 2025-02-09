@@ -4,15 +4,15 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { createContext } from "react";
+import React from "react";
 
 interface DrawerOpenContextType {
     drawerOpen: boolean,
     setDrawerOpen: (open: boolean) => void
 }
 
-export const DrawerOpenContext = createContext<DrawerOpenContextType>({
+export const DrawerOpenContext = React.createContext<DrawerOpenContextType>({
     drawerOpen: false,
-    setDrawerOpen: () => {}
+    setDrawerOpen: () => { }
 });
 

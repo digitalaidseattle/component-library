@@ -16,7 +16,7 @@ import CustomShadows from './shadows';
 import Typography from './typography';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
-const defaultTheme = () => {
+export const defaultTheme = () => {
   const theme = Palette('light');
 
   const themeTypography = Typography(`'Public Sans', sans-serif`);

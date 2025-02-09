@@ -9,12 +9,11 @@ import { Box, Button, Paper, Stack } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, useContext, useEffect, useState } from "react";
 
-import { RefreshContext } from "@digitalaidseattle/core";
+import { RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
 
 import ProjectDialog from "./projectDialog";
 import { Project, projectService } from "./projectService";
-
 
 const emptyProject = () => {
     return {
@@ -24,11 +23,12 @@ const emptyProject = () => {
         createdBy: "",
         name: "",
         partner: "",
-        status: ''
+        status: ""
     }
 }
 const ProjectsPage: React.FC = ({ }) => {
     const { refresh, setRefresh } = useContext(RefreshContext);
+    const { success } = useNotifications();
 
     const [projects, setProjects] = useState<Project[]>([]);
     const [project, setProject] = useState<Project>(emptyProject());
@@ -59,8 +59,10 @@ const ProjectsPage: React.FC = ({ }) => {
         if (changed) {
             if (changed.id) {
                 projectService.update(changed)
+                success('Project updated!')
             } else {
                 projectService.add(changed)
+                success('Project added!')
             }
         }
         setRefresh(refresh + 1);
@@ -68,8 +70,8 @@ const ProjectsPage: React.FC = ({ }) => {
     }
 
     const handleError = (err: Error): void => {
-        console.log('error: ' + err.message);
         setShowDialog(false);
+        success('Sorry there was an error: ' + err.message)
     }
 
     const handleDeleteClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {

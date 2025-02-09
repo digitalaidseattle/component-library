@@ -19,8 +19,14 @@ interface EntityDialogProps<T> {
     handleError: (err: Error) => void;
 }
 
-const iconBackColorOpen = 'grey.300';
-const iconBackColor = 'grey.100';
+interface InputOption {
+    name: string;
+    label: string;
+    type: string;
+    disabled: boolean;
+    options?: { label: string, value: string }[];
+}
+
 
 const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, handleSuccess, handleError }) => {
 
@@ -29,6 +35,7 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
     const [project, setProject] = useState<Project>({} as Project);
 
     useEffect(() => {
+        setDirty(false);
         setProject(Object.assign({}, entity));
     }, [entity]);
 
@@ -113,11 +120,11 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.secondary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
+                    sx={{ color: 'text.secondary'}}
                     onClick={() => handleSuccess(null)}>Cancel</Button>
                 <Button
-                    variant='outlined'
-                    sx={{ color: 'text.success', bgcolor: open ? iconBackColorOpen : iconBackColor }}
+                    variant='contained'
+                    sx={{ color: 'text.success'}}
                     onClick={handleSubmit}
                     disabled={!dirty}>OK</Button>
             </DialogActions>
