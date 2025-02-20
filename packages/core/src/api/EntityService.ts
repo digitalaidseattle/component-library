@@ -1,14 +1,23 @@
 import { User } from "./AuthService";
 
+export type Identifier = string | number;
 
-export interface EntityService<T> {
+export interface Entity {
+    id: Identifier;
+}
 
-    getAll(count?: number): Promise<T[]>;
+export interface EntityService<T extends Entity> {
 
-    getById(id: string): Promise<T>;
+    getAll(count?: number, select?: string): Promise<T[]>;
 
-    create(user: User, entity: T): Promise<T>;
+    getById(id: Identifier, select?: string): Promise<T | null>;
 
-    update(user: User, entity: T, changes: Map<string, unknown>): Promise<T>;
+    batchInsert(entities: T[], select?: string, user?: User): Promise<T[]>;
+
+    insert(entity: T, select?: string, user?: User): Promise<T>;
+
+    update(id: Identifier, changes: Partial<T>, select?: string, user?: User): Promise<T>;
+
+    delete(id: Identifier, user?: User): Promise<void>;
 
 }
