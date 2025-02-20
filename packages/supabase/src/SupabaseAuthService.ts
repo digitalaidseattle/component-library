@@ -24,7 +24,8 @@ export class SupabaseAuthService implements AuthService {
       .then((response: UserResponse) => {
         return {
           email: response.data.user?.user_metadata.email,
-          user_metadata: response.data.user?.user_metadata
+          user_metadata: response.data.user?.user_metadata,
+          app_metadata: response.data.user?.app_metadata
         } as unknown as User
       });
   }

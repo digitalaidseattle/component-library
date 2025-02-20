@@ -53,6 +53,28 @@ function a11yProps(index: number) {
     'aria-controls': `profile-tabpanel-${index}`
   };
 }
+// Custom claims
+function getAssignedRoles(user) {
+
+    console.log("Get assigned roles ", user);
+
+    const rolestr = user?.app_metadata?.das_data?.custom_roles;
+    let rolesArray = [];
+
+    if (rolestr) {
+        try {
+            rolesArray = rolestr;
+        } catch (error) {
+            console.error("Invalid JSON string:", error);
+        }
+    }
+
+    if (Array.isArray(rolesArray) && rolesArray.length > 0) {
+        return `Assigned roles: ${rolesArray.join(', ')}`;
+    } else {
+        return 'Assigned roles: None';
+    }
+}
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
@@ -61,6 +83,7 @@ const Profile = () => {
   // TODO: figure out why UserContextType is not exporting correctly
   const { user } = useContext<UserContextType>(UserContext);
   const [username, setUsername] = useState<string>("")
+  const [userRoles, setUserRoles] = useState<string>("")
   const [avatar, setAvatar] = useState<string>("")
   const navigate = useNavigate();
   const authService = useAuthService();
@@ -69,6 +92,7 @@ const Profile = () => {
     if (user && user.user_metadata) {
       setAvatar(user.user_metadata.avatar_url ?? '')
       setUsername(user.user_metadata.name ? user.user_metadata.name : user.user_metadata.email)
+      setUserRoles(getAssignedRoles(user))
     }
   }, [user])
 
@@ -120,6 +144,7 @@ const Profile = () => {
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src={avatar} sx={{ width: 32, height: 32 }} />
           <Typography variant="subtitle1">{username}</Typography>
+          <Typography variant="body2">{userRoles}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
