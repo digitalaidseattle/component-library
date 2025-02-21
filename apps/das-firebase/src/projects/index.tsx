@@ -15,23 +15,13 @@ import { ConfirmationDialog } from "@digitalaidseattle/mui";
 import ProjectDialog from "./projectDialog";
 import { Project, projectService } from "./projectService";
 
-const emptyProject = () => {
-    return {
-        id: undefined,
-        airtableId: "",
-        createdAt: new Date(),
-        createdBy: "",
-        name: "",
-        partner: "",
-        status: ""
-    }
-}
+
 const ProjectsPage: React.FC = ({ }) => {
     const { refresh, setRefresh } = useContext(RefreshContext);
     const { success } = useNotifications();
 
     const [projects, setProjects] = useState<Project[]>([]);
-    const [project, setProject] = useState<Project>(emptyProject());
+    const [project, setProject] = useState<Project>(projectService.empty());
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
@@ -40,11 +30,11 @@ const ProjectsPage: React.FC = ({ }) => {
             .then(pp => {
                 setProjects(pp)
             });
-    }, []);
+    }, [refresh]);
 
     const newProject = () => {
+        setProject(projectService.empty());
         setShowDialog(true);
-        setProject(emptyProject());
     }
 
     const handleEditClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
@@ -58,10 +48,10 @@ const ProjectsPage: React.FC = ({ }) => {
     const handleSuccess = (changed: Project | null): void => {
         if (changed) {
             if (changed.id) {
-                projectService.update(changed)
+                projectService.update(changed.id, changed)
                 success('Project updated!')
             } else {
-                projectService.add(changed)
+                projectService.insert(changed)
                 success('Project added!')
             }
         }
@@ -82,7 +72,7 @@ const ProjectsPage: React.FC = ({ }) => {
     }
 
     const handleDelete = (): void => {
-        projectService.delete(project)
+        projectService.delete(project.id!)
         setRefresh(refresh + 1);
         setShowDeleteDialog(false);
     }

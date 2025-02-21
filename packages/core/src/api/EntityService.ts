@@ -1,9 +1,15 @@
+/**
+ *  EntityService.ts
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
 import { User } from "./AuthService";
 
 export type Identifier = string | number;
 
 export interface Entity {
-    id: Identifier;
+    id: Identifier | undefined;
 }
 
 export interface EntityService<T extends Entity> {

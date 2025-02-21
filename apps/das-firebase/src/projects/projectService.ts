@@ -1,7 +1,6 @@
-import { FirestoreService } from "@digitalaidseattle/firebase";
+import { Entity, FirestoreService } from "@digitalaidseattle/firebase";
 
-type Project = {
-    id: string | undefined;
+type Project = Entity & {
     airtableId: string;
     createdAt: Date;
     createdBy: string;
@@ -15,7 +14,18 @@ class ProjectService extends FirestoreService<Project> {
     constructor() {
         super("PROJECTS");
     }
- 
+
+    empty() {
+        return {
+            id: undefined,
+            airtableId: "",
+            createdAt: new Date(),
+            createdBy: "",
+            name: "",
+            partner: "",
+            status: ""
+        }
+    }
 }
 
 const projectService = new ProjectService();

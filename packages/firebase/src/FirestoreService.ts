@@ -1,12 +1,20 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, updateDoc, writeBatch } from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    getFirestore,
+    updateDoc,
+    writeBatch
+} from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
+import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
+
 import { firebaseClient } from "./firebaseClient";
 
-type Entity = {
-    id: string | undefined;
-}
-
-class FirestoreService<T extends Entity> {
+class FirestoreService<T extends Entity> implements EntityService<T> {
     collectionName = "player";
     db = getFirestore(firebaseClient);
 
@@ -14,19 +22,20 @@ class FirestoreService<T extends Entity> {
         this.collectionName = collectionName;
     }
 
-    // Add a document to a collection
-    async add(entity: T): Promise<void> {
-        try {
-            entity.id = uuidv4();
-            const docRef = await addDoc(collection(this.db, this.collectionName), entity);
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("Error adding document: ", e);
-        }
+
+    // Get all documents from a collection
+    async getAll(count?: number, select?: string): Promise<T[]> {
+        const querySnapshot = await getDocs(collection(this.db, this.collectionName));
+        return querySnapshot.docs.map(doc => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            } as T;
+        });
     }
 
     // Update a document to a collection
-    async getById(id: string): Promise<T> {
+    async getById(id: string, select?: string): Promise<T> {
         try {
             const docRef = await getDoc(doc(this.db, this.collectionName, id));
             if (docRef.exists()) {
@@ -43,35 +52,50 @@ class FirestoreService<T extends Entity> {
         }
     }
 
-    // Update a document to a collection
-    async update(entity: T): Promise<void> {
+    // Add a document to a collection
+    async batchInsert(entities: T[], select?: string, user?: User): Promise<T[]> {
         try {
-            if (entity.id) {
-                const docRef = doc(this.db, this.collectionName, entity.id);
-                return updateDoc(docRef, entity);
-            }
-            throw new Error('Entity does not have an id.')
+            entities.forEach(entity => entity.id = uuidv4());
+            const docRef = await addDoc(collection(this.db, this.collectionName), entities);
+            return entities
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            throw e;
+        }
+    }
+
+
+    // Add a document to a collection
+    async insert(entity: T, select?: string, user?: User): Promise<T> {
+        try {
+            entity.id = uuidv4();
+            const docRef = await addDoc(collection(this.db, this.collectionName), entity);
+            return entity
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            throw e;
+        }
+    }
+
+    // Update a document to a collection
+    async update(
+        entityId: Identifier,
+        updatedFields: T,
+        select?: string,
+        user?: User): Promise<T> {
+        try {
+            const docRef = doc(this.db, this.collectionName, entityId as string);
+            updateDoc(docRef, updatedFields as any);
+            return updatedFields as T
         } catch (e) {
             console.error("Error updating document: ", e);
+            throw e;
         }
     }
 
-    async delete(entity: T): Promise<void> {
-        if (entity.id) {
-            return deleteDoc(doc(this.db, this.collectionName, entity.id));
-        }
-        throw new Error('Entity does not have an id.')
-    }
-
-    // Get all documents from a collection
-    async getAll(): Promise<T[]> {
-        const querySnapshot = await getDocs(collection(this.db, this.collectionName));
-        return querySnapshot.docs.map(doc => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            } as T;
-        });
+    async delete(entityId: Identifier): Promise<void> {
+        console.log('delete', entityId)
+        return deleteDoc(doc(this.db, this.collectionName, entityId as string));
     }
 
     addBatch = (entities: T[]) => {

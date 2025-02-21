@@ -38,19 +38,25 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
     const onChange = (field: string, value: any) => {
         // stringify & parse needed for string keys
         const updatedChanges = JSON.parse(`{ "${field}" : ${JSON.stringify(value)} }`)
-        console.log(updatedChanges, value)
         setProject({
             ...project,
             ...updatedChanges
         });
         setDirty(true);
     }
-    
+
     const handleSubmit = () => {
-        return projectService
-            .update(project)
-            .then(() => handleSuccess(project))
-            .catch(e => handleError(e))
+        if (project.id) {
+            return projectService
+                .update(project.id, project)
+                .then(() => handleSuccess(project))
+                .catch(e => handleError(e))
+        } else {
+            return projectService
+                .insert(project)
+                .then(() => handleSuccess(project))
+                .catch(e => handleError(e))
+        }
     }
 
     const inputFields: InputOption[] = [
@@ -90,7 +96,7 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
             type: 'time',
             disabled: false,
         }
-        
+
     ]
 
     return (
@@ -111,11 +117,11 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.secondary'}}
+                    sx={{ color: 'text.secondary' }}
                     onClick={() => handleSuccess(null)}>Cancel</Button>
                 <Button
                     variant='contained'
-                    sx={{ color: 'text.success'}}
+                    sx={{ color: 'text.success' }}
                     onClick={handleSubmit}
                     disabled={!dirty}>OK</Button>
             </DialogActions>
