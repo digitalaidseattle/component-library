@@ -122,6 +122,9 @@
       ],
       "@digitalaidseattle/firebase": [
         "packages/firebase/src"
+      ],
+      "@digitalaidseattle/airtable": [
+        "packages/airtable/src"
       ]
     }
   }

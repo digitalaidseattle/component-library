@@ -7,6 +7,7 @@ import {
 } from "@digitalaidseattle/mui";
 import { DragAndDropExample } from "./pages/DragAndDropExample";
 import { Test } from "./pages/Test";
+import MapPage from "./pages/maps/MapPage";
 
 const routes = [
   {
@@ -24,6 +25,10 @@ const routes = [
       {
         path: "draganddrop",
         element: <DragAndDropExample />,
+      },
+      {
+        path: "maps",
+        element: <MapPage />,
       },
       {
         path: "privacy",

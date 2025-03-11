@@ -1,5 +1,6 @@
 import {
     CalendarOutlined,
+    GlobalOutlined,
     HomeOutlined,
     UserOutlined
 } from '@ant-design/icons';
@@ -37,6 +38,13 @@ export const Config = ({
                 type: 'item',
                 url: '/draganddrop',
                 icon: <UserOutlined />
+            } as MenuItem,
+            {
+                id: 'maps',
+                title: 'Maps',
+                type: 'item',
+                url: '/maps',
+                icon: <GlobalOutlined />
             } as MenuItem
         ]
     } as MenuItem],
