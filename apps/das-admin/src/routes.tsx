@@ -6,8 +6,12 @@ import {
   MinimalLayout,
 } from "@digitalaidseattle/mui";
 import { DragAndDropExample } from "./pages/DragAndDropExample";
-import { Test } from "./pages/Test";
+import CalendarPage from "./pages/calendar/CalendarPage";
+import ExcelPage from "./pages/excel/ExcelPage";
 import MapPage from "./pages/maps/MapPage";
+import StorageExamplePage from "./pages/storage/StorageExamplePage";
+import TicketsGrid from "./pages/crud/TicketsPage";
+import TicketPage from "./pages/crud/TicketPage";
 
 const routes = [
   {
@@ -19,10 +23,6 @@ const routes = [
         element: <div>Home</div>,
       },
       {
-        path: "test",
-        element: <Test />,
-      },
-      {
         path: "draganddrop",
         element: <DragAndDropExample />,
       },
@@ -32,8 +32,28 @@ const routes = [
       },
       {
         path: "privacy",
-        element: <MarkdownPage  filepath='privacy.md'/>,
-      }
+        element: <MarkdownPage filepath='privacy.md' />,
+      },
+      {
+        path: "calendar-example",
+        element: <CalendarPage />
+      },
+      {
+        path: "excel-example",
+        element: <ExcelPage />
+      },
+      {
+        path: "storage-example",
+        element: <StorageExamplePage />,
+      },
+      {
+        path: "crud-example",
+        element: <TicketsGrid />,
+      },
+      {
+        path: "crud-example/ticket/:id",
+        element: <TicketPage />,
+      },
     ]
   },
   {

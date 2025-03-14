@@ -1,8 +1,11 @@
 import {
     CalendarOutlined,
+    DatabaseOutlined,
+    DragOutlined,
     GlobalOutlined,
     HomeOutlined,
-    UserOutlined
+    TableOutlined,
+    UploadOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
 
@@ -26,25 +29,47 @@ export const Config = ({
                 icon: <HomeOutlined />,
             } as MenuItem,
             {
-                id: 'test',
-                title: 'Test',
-                type: 'item',
-                url: '/test',
-                icon: <CalendarOutlined />
-            } as MenuItem,
-            {
                 id: 'drapanddrop',
-                title: 'Drag And Drop',
+                title: 'Drag And Drop Example',
                 type: 'item',
                 url: '/draganddrop',
-                icon: <UserOutlined />
+                icon: <DragOutlined />
             } as MenuItem,
             {
                 id: 'maps',
-                title: 'Maps',
+                title: 'Maps Example',
                 type: 'item',
                 url: '/maps',
                 icon: <GlobalOutlined />
+            } as MenuItem,
+            {
+                id: 'calendar-example-page',
+                title: 'Calendar Example',
+                type: 'item',
+                url: '/calendar-example',
+                icon: <CalendarOutlined />
+            } as MenuItem,
+            {
+                id: 'excel-example-page',
+                title: 'Excel Example',
+                type: 'item',
+                url: '/excel-example',
+                icon: <TableOutlined />
+            } as MenuItem,
+            {
+                id: 'storage-example-page',
+                title: 'Storage Example',
+                type: 'item',
+                url: '/storage-example',
+                icon: <UploadOutlined />
+            } as MenuItem
+            ,
+            {
+                id: 'crud-example-page',
+                title: 'CRUD Example',
+                type: 'item',
+                url: '/crud-example',
+                icon: <DatabaseOutlined />
             } as MenuItem
         ]
     } as MenuItem],
