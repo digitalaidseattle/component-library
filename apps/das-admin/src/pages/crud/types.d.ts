@@ -29,8 +29,3 @@ enum TicketStatus {
     New = 'new'
 };
 
-enum TicketSource {
-    Email = {value: 'email', label: 'email'},
-    WalkIn = {value: 'walkin', label: 'Walk-In'},
-    Phone = {value: 'phone', label: 'Phone'}
-};

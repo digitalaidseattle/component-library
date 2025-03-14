@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { TicketProps } from "./TicketProps";
 
 const TicketStatus: React.FC<TicketProps> = ({ ticket }) => {
@@ -25,9 +25,7 @@ const TicketStatus: React.FC<TicketProps> = ({ ticket }) => {
     }
 
     return (
-        <Stack direction="row" spacing={1} alignItems="center">
-            <Typography color={color}>{title}</Typography>
-        </Stack>
+        <Typography color={color}>{title}</Typography>
     );
 };
 

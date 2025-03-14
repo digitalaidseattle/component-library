@@ -23,12 +23,14 @@ import {
 // third-party
 
 // project import
-import { RefreshContext } from '@digitalaidseattle/core';
+import { Identifier, RefreshContext, useNotifications } from '@digitalaidseattle/core';
 import { PageInfo, QueryModel } from '@digitalaidseattle/supabase';
 import { ticketService } from './ticketService';
 import TicketLink from './components/TicketLink';
 import TicketStatus from './components/TicketStatus';
 import TicketContact from './components/TicketContact';
+import TicketDialog from './components/TicketDialog';
+import { ConfirmationDialog } from '@digitalaidseattle/mui';
 
 // ==============================|| Tickets Grid ||============================== //
 
@@ -62,8 +64,6 @@ const getColumns = (): GridColDef[] => {
             renderCell: (params: GridRenderCellParams<Ticket, string>) => (
                 <TicketStatus ticket={params.row!} />
             ),
-            type: "singleSelect",
-            valueOptions: Object.values(TicketStatus)
         },
         {
             field: 'assignee',
@@ -85,7 +85,12 @@ export default function TicketsPage() {
     const [pageInfo, setPageInfo] = useState<PageInfo<Ticket>>({ rows: [], totalRowCount: 0 });
     const [rowCountState, setRowCountState] = useState(pageInfo?.totalRowCount || 0,);
     const apiRef = useGridApiRef();
-    const { refresh } = useContext(RefreshContext);
+    const { refresh, setRefresh } = useContext(RefreshContext);
+
+    const [openTicketDialog, setOpenTicketDialog] = useState<boolean>(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
+    const nofications = useNotifications();
 
     useEffect(() => {
         setRowCountState((prevRowCountState: number) =>
@@ -119,15 +124,54 @@ export default function TicketsPage() {
             .then((pi) => setPageInfo(pi))
     }, [refresh])
 
+    // Delete Ticket
     const applyAction = () => {
-        alert(`Apply some action to ${rowSelectionModel ? rowSelectionModel.length : 0} items.`)
+        setShowConfirmation(true);
     }
+
+    function handleDelete(): void {
+        if (rowSelectionModel) {
+            const promises = [];
+            const iterator = rowSelectionModel.entries();
+            let result = iterator.next();
+            while (!result.done) {
+                promises.push(ticketService.delete(result.value[1]))
+                result = iterator.next();
+            }
+
+            Promise
+                .all(promises)
+                .then(() => {
+                    nofications.success('Tickets deleted');
+                    apiRef.current.setRowSelectionModel([]);
+                    setShowConfirmation(false);
+                    setRefresh(refresh + 1)
+                })
+        }
+        // ticketService.delete()
+    }
+    // End Delete Ticket
+
+    // New Ticket
     const newTicket = () => {
-        alert(`New Clicked`)
+        setOpenTicketDialog(true);
     }
+
+    function handleSuccess(resp: Ticket | null): void {
+        setOpenTicketDialog(false);
+        throw new Error('Function not implemented.');
+    }
+
+    function handleError(err: Error): void {
+        setOpenTicketDialog(false);
+        throw new Error('Function not implemented.');
+    }
+
+    // End New Ticket
+
     return (
         <Box>
-            <Stack direction="row" spacing={'1rem'}>
+            <Stack direction="row" spacing={1} marginBottom={1}>
                 <Button
                     title='Action'
                     variant="contained"
@@ -136,15 +180,16 @@ export default function TicketsPage() {
                     {'New'}
                 </Button>
                 <Button
-                    title='Action'
+                    title='Delete'
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     disabled={!(rowSelectionModel && rowSelectionModel.length > 0)}
                     onClick={applyAction}>
-                    {'Action'}
+                    {'Delete'}
                 </Button>
             </Stack>
             <DataGrid
+
                 apiRef={apiRef}
                 rows={pageInfo.rows}
                 columns={getColumns()}
@@ -163,6 +208,12 @@ export default function TicketsPage() {
                 onRowSelectionModelChange={setRowSelectionModel}
                 disableRowSelectionOnClick
             />
+            <TicketDialog open={openTicketDialog} handleSuccess={handleSuccess} handleError={handleError} />
+            <ConfirmationDialog
+                message={`Delete selected tickets?`}
+                open={showConfirmation}
+                handleConfirm={handleDelete}
+                handleCancel={() => setShowConfirmation(false)} />
         </Box>
     );
 }

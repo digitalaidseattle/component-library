@@ -8,6 +8,12 @@
 import { Identifier } from "@digitalaidseattle/core";
 import { supabaseClient, SupabaseEntityService } from "@digitalaidseattle/supabase";
 
+const TicketSource = {
+    Email: { value: 'email', label: 'Email' },
+    WalkIn: { value: 'walkin', label: 'Walk-In' },
+    Phone: { value: 'phone', label: 'Phone' }
+};
+
 
 const TABLE_SERVICE_TICKET = 'service_ticket';
 
@@ -74,5 +80,4 @@ class TicketService extends SupabaseEntityService<Ticket> {
 }
 
 const ticketService = new TicketService(TABLE_SERVICE_TICKET)
-export { ticketService };
-
+export { ticketService, TicketSource };
