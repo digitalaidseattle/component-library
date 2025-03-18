@@ -1,7 +1,4 @@
 
-export enum AUTH_PROVIDER {
-    google, microsoft
-}
 export interface AuthError {
 }
 
@@ -27,6 +24,8 @@ export interface AuthService {
     hasUser(): Promise<boolean>;
 
     getUser(): Promise<User | null>;
+
+    signInWith(provider: string): Promise<OAuthResponse>;
 
     signInWithGoogle(): Promise<OAuthResponse>;
 

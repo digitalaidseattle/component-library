@@ -11,7 +11,6 @@ import logo from "./assets/logo-light-icon.svg";
 
 import { LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
 import Notification from "./Notification";
-import { AUTH_PROVIDER } from '@digitalaidseattle/core';
 
 export const Config: LayoutConfiguration = ({
     appName: 'DAS Admin',
@@ -77,5 +76,5 @@ export const Config: LayoutConfiguration = ({
     toolbarItems: [
         <Notification key={1} />
     ],
-    authProviders: [AUTH_PROVIDER.google]
+    authProviders: ["google"]
 })

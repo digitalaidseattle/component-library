@@ -13,7 +13,7 @@ import { useTheme } from '@mui/material/styles';
 
 
 import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
-import { AUTH_PROVIDER, OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
+import { OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
 import { useNavigate } from "react-router";
 import { useLayoutConfiguration } from "../layout";
 
@@ -42,7 +42,7 @@ const Social: React.FC = () => {
   const loggingService = useLoggingService();
   const navigate = useNavigate();
   const { configuration } = useLayoutConfiguration();
-  const [authProviders, setAuthProviders] = useState<AUTH_PROVIDER[]>([AUTH_PROVIDER.google, AUTH_PROVIDER.microsoft]);
+  const [authProviders, setAuthProviders] = useState<string[]>(["google"]);
 
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const Social: React.FC = () => {
       justifyContent={matchDownSM ? 'space-around' : 'space-between'}
       sx={{ '& .MuiButton-startIcon': { mr: matchDownSM ? 0 : 1, ml: matchDownSM ? 0 : -0.5 } }}
     >
-      {authProviders.includes(AUTH_PROVIDER.google) &&
+      {authProviders.includes('google') &&
         <Button
           title='Login with Google'
           variant="outlined"
@@ -84,7 +84,7 @@ const Social: React.FC = () => {
           {!matchDownSM && 'Google'}
         </Button>
       }
-      {authProviders.includes(AUTH_PROVIDER.microsoft) &&
+      {authProviders.includes('microsoft') &&
         <Button
           title='Login with Microsoft'
           variant="outlined"

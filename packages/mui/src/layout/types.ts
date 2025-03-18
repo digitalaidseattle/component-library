@@ -1,4 +1,3 @@
-import { AUTH_PROVIDER } from "@digitalaidseattle/core";
 import { ChipProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -21,5 +20,5 @@ export interface LayoutConfiguration {
     menuItems: MenuItem[];
     toolbarItems: ReactNode[];
     theme?: Theme;
-    authProviders?: AUTH_PROVIDER[]
+    authProviders?: string[]
 }
