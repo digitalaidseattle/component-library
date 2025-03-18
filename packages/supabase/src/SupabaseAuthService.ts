@@ -4,11 +4,15 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { AuthService, User } from "@digitalaidseattle/core";
+import { AuthService, OAuthResponse, User } from "@digitalaidseattle/core";
 import { AuthError, UserResponse } from '@supabase/supabase-js';
 import { supabaseClient } from './supabaseClient'
 
 export class SupabaseAuthService implements AuthService {
+
+  getProviders(): string[] {
+    return ["google", "microsoft"];
+  }
 
   signOut = async (): Promise<{ error: AuthError | null }> => {
     return supabaseClient.auth.signOut()
@@ -32,6 +36,17 @@ export class SupabaseAuthService implements AuthService {
           return null;
         }
       });
+  }
+
+  signInWith(provider: string): Promise<OAuthResponse> {
+    switch (provider) {
+      case 'google':
+        return this.signInWithGoogle();
+      case 'microsoft':
+        return this.signInWithAzure();
+      default:
+        throw new Error('Unrecognized provider ' + provider);
+    }
   }
 
   signInWithGoogle = async (): Promise<any> => {

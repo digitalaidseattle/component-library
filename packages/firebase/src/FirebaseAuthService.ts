@@ -1,7 +1,7 @@
 
 import { AuthError, AuthService, OAuthResponse, User } from '@digitalaidseattle/core';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import {  firebaseClient} from "./firebaseClient";
+import { firebaseClient } from "./firebaseClient";
 
 class FirebaseAuthService implements AuthService {
 
@@ -22,6 +22,19 @@ class FirebaseAuthService implements AuthService {
 
             }
         })
+    }
+
+    getProviders(): string[] {
+        return ["google"];
+    }
+
+    signInWith(provider: string): Promise<OAuthResponse> {
+        switch (provider) {
+            case 'google':
+                return this.signInWithGoogle();
+            default:
+                throw new Error('Unrecognized provider ' + provider);
+        }
     }
 
     hasUser(): Promise<boolean> {
@@ -59,11 +72,6 @@ class FirebaseAuthService implements AuthService {
         } catch (error) {
             console.error(error);
         }
-    }
-
-    signInWithAzure(): Promise<OAuthResponse> {
-        // Placeholder implementation, as Azure sign-in is not implemented
-        return Promise.reject(new Error('Method not implemented.'));
     }
 }
 

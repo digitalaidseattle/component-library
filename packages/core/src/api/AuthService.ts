@@ -19,6 +19,8 @@ export type OAuthResponse = {
 
 export interface AuthService {
 
+    getProviders(): string[];
+
     signOut(): Promise<{ error: AuthError | null }>;
 
     hasUser(): Promise<boolean>;
@@ -27,7 +29,4 @@ export interface AuthService {
 
     signInWith(provider: string): Promise<OAuthResponse>;
 
-    signInWithGoogle(): Promise<OAuthResponse>;
-
-    signInWithAzure(): Promise<OAuthResponse>;
 }
