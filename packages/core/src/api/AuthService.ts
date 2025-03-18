@@ -1,5 +1,7 @@
 
-
+export enum AUTH_PROVIDER {
+    google, microsoft
+}
 export interface AuthError {
 }
 

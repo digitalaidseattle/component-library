@@ -5,7 +5,7 @@
  *
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // material-ui
 import { Button, Stack, SvgIcon, useMediaQuery } from '@mui/material';
@@ -13,8 +13,9 @@ import { useTheme } from '@mui/material/styles';
 
 
 import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
-import { OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
+import { AUTH_PROVIDER, OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
 import { useNavigate } from "react-router";
+import { useLayoutConfiguration } from "../layout";
 
 // assets
 // MUI buttons works best with SvgIcon as the startIcon
@@ -40,6 +41,15 @@ const Social: React.FC = () => {
   const authService = useAuthService();
   const loggingService = useLoggingService();
   const navigate = useNavigate();
+  const { configuration } = useLayoutConfiguration();
+  const [authProviders, setAuthProviders] = useState<AUTH_PROVIDER[]>([AUTH_PROVIDER.google, AUTH_PROVIDER.microsoft]);
+
+
+  useEffect(() => {
+    if (configuration.authProviders) {
+      setAuthProviders(configuration.authProviders);
+    }
+  }, [configuration])
 
   const googleHandler = async () => {
     authService.signInWithGoogle()
@@ -63,35 +73,28 @@ const Social: React.FC = () => {
       justifyContent={matchDownSM ? 'space-around' : 'space-between'}
       sx={{ '& .MuiButton-startIcon': { mr: matchDownSM ? 0 : 1, ml: matchDownSM ? 0 : -0.5 } }}
     >
-      <Button
-        title='Login with Google'
-        variant="outlined"
-        color="primary"
-        fullWidth={!matchDownSM}
-        startIcon={<SvgIcon>{Google}</SvgIcon>}
-        onClick={googleHandler}>
-        {!matchDownSM && 'Google'}
-      </Button>
-
-      <Button
-        title='Login with Microsoft'
-        variant="outlined"
-        color="primary"
-        fullWidth={!matchDownSM}
-        startIcon={<SvgIcon>{Microsoft}</SvgIcon>}
-        onClick={microsoftHandler}>
-        {!matchDownSM && 'Microsoft'}
-      </Button>
-
-      {/* <Button
-        title='Login with Facebook'
-        variant="outlined"
-        color="secondary"
-        fullWidth={!matchDownSM}
-        startIcon={<img src={Facebook} alt="Facebook" />}
-        onClick={facebookHandler}>
-        {!matchDownSM && 'Facebook'}
-      </Button> */}
+      {authProviders.includes(AUTH_PROVIDER.google) &&
+        <Button
+          title='Login with Google'
+          variant="outlined"
+          color="primary"
+          fullWidth={!matchDownSM}
+          startIcon={<SvgIcon>{Google}</SvgIcon>}
+          onClick={googleHandler}>
+          {!matchDownSM && 'Google'}
+        </Button>
+      }
+      {authProviders.includes(AUTH_PROVIDER.microsoft) &&
+        <Button
+          title='Login with Microsoft'
+          variant="outlined"
+          color="primary"
+          fullWidth={!matchDownSM}
+          startIcon={<SvgIcon>{Microsoft}</SvgIcon>}
+          onClick={microsoftHandler}>
+          {!matchDownSM && 'Microsoft'}
+        </Button>
+      }
     </Stack>
   );
 };

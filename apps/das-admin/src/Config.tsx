@@ -9,10 +9,11 @@ import {
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
 
-import { MenuItem } from "@digitalaidseattle/mui";
+import { LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
 import Notification from "./Notification";
+import { AUTH_PROVIDER } from '@digitalaidseattle/core';
 
-export const Config = ({
+export const Config: LayoutConfiguration = ({
     appName: 'DAS Admin',
     logoUrl: logo,
     drawerWidth: 240,
@@ -75,5 +76,6 @@ export const Config = ({
     } as MenuItem],
     toolbarItems: [
         <Notification key={1} />
-    ]
+    ],
+    authProviders: [AUTH_PROVIDER.google]
 })
