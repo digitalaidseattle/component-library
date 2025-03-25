@@ -4,23 +4,22 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 // project import
 import {
   AuthServiceProvider,
-  StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
-import { FirebaseAuthService, FirebaseStorageService } from "@digitalaidseattle/firebase";
+import { FirebaseAuthService } from "@digitalaidseattle/firebase";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
-import { routes } from './routes';
 import { Config } from './Config';
+import { routes } from './routes';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 

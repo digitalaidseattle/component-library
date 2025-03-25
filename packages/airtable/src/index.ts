@@ -1,2 +1,1 @@
-export * from "./airtableClient";
-export * from "./airtableService";
+export * from "./airtableEntityService";
