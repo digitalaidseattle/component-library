@@ -8,12 +8,14 @@ import {
     UploadOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
+import packageJson from "../package.json";
 
 import { LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
 import Notification from "./Notification";
 
 export const Config: LayoutConfiguration = ({
     appName: 'DAS Admin',
+    version: packageJson.version,
     logoUrl: logo,
     drawerWidth: 240,
     menuItems: [{

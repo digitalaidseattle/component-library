@@ -15,6 +15,7 @@ export type MenuItem = {
 
 export interface LayoutConfiguration {
     appName: string;
+    version: string | undefined;
     logoUrl: string;
     drawerWidth: number;
     menuItems: MenuItem[];

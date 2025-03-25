@@ -17,27 +17,23 @@ interface LayoutConfigurationContextType {
     setConfiguration: (c: LayoutConfiguration) => void
 }
 
+const EMPTY_CONFIGURATION = {
+    appName: 'Digital Aid Seattle Application',
+    version: undefined,
+    logoUrl: '',
+    drawerWidth: 240,
+    menuItems: [],
+    toolbarItems: []
+}
+
 export const LayoutConfigurationContext = createContext<LayoutConfigurationContextType>({
-    configuration: {
-        appName: 'DAS Admin Context',
-        logoUrl: '',
-        drawerWidth: 240,
-        menuItems: [],
-        toolbarItems: []
-    },
+    configuration: EMPTY_CONFIGURATION,
     setConfiguration: (c: LayoutConfiguration) => { }
 });
 
 export const LayoutConfigurationProvider = (props: { configuration?: LayoutConfiguration, children: React.ReactNode }) => {
     const [configuration, setConfiguration] = useState<LayoutConfiguration>(
-        props.configuration ??
-        {
-            appName: 'DAS Admin',
-            logoUrl: '',
-            drawerWidth: 240,
-            menuItems: [],
-            toolbarItems: []
-        }
+        props.configuration ?? EMPTY_CONFIGURATION
     )
 
     return (

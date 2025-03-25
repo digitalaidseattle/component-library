@@ -1,7 +1,7 @@
 {
   "name": "das-admin",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "repository": "null//github.com/null/github.com/tree/master/apps/das-admin",
   "scripts": {

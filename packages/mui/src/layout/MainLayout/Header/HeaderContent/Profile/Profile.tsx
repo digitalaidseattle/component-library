@@ -22,9 +22,9 @@ import { useNavigate } from 'react-router';
 
 import MainCard from '../../../../../components/cards/MainCard';
 import Transitions from '../../../../../components/Transitions';
+import { useLayoutConfiguration } from '../../../../LayoutConfigurationContext';
 // import ProfileTab from './ProfileTab';
 // import SettingTab from './SettingTab';
-
 
 interface TabPanelProps {
   children: ReactNode,
@@ -60,10 +60,12 @@ const Profile = () => {
   const theme = useTheme();
   // TODO: figure out why UserContextType is not exporting correctly
   const { user } = useContext<UserContextType>(UserContext);
-  const [username, setUsername] = useState<string>("")
-  const [avatar, setAvatar] = useState<string>("")
+  const [username, setUsername] = useState<string>('')
+  const [avatar, setAvatar] = useState<string>('')
+  const [version, setVersion] = useState<string>('')
   const navigate = useNavigate();
   const authService = useAuthService();
+  const { configuration } = useLayoutConfiguration();
 
   useEffect(() => {
     if (user && user.user_metadata) {
@@ -71,6 +73,14 @@ const Profile = () => {
       setUsername(user.user_metadata.name ? user.user_metadata.name : user.user_metadata.email)
     }
   }, [user])
+
+  useEffect(() => {
+    if (user && user.user_metadata) {
+      setAvatar(user.user_metadata.avatar_url ?? '')
+      setVersion(configuration ? configuration.version : '');
+    }
+  }, [configuration])
+
 
   const handleLogout = async () => {
     authService.signOut()
@@ -173,6 +183,11 @@ const Profile = () => {
                           <IconButton size="large" color="secondary" onClick={handleLogout}>
                             <LogoutOutlined />
                           </IconButton>
+                        </Grid>
+                      </Grid>
+                      <Grid container justifyContent="space-between" alignItems="center">
+                        <Grid item>
+                          {version && <Typography>version: {version}</Typography>}
                         </Grid>
                       </Grid>
                     </CardContent>
