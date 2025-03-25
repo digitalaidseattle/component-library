@@ -18,13 +18,15 @@ import {
   ListItemText,
   Paper,
   Stack,
+  Tabs,
   Typography
 } from '@mui/material';
 
-import {FullscreenControl, GeolocateControl, Map, Marker, NavigationControl, Popup, ScaleControl} from '@vis.gl/react-maplibre';
+import { FullscreenControl, GeolocateControl, Map, Marker, NavigationControl, Popup, ScaleControl } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { Location, TeamMember, mappingService } from './mappingService';
+import { Location, mappingService } from './mappingService';
+import { TeamMember, teamMemberService } from './teamMemberService';
 
 const Labels = {
   title: 'Map Example',
@@ -70,12 +72,12 @@ const MapPage = () => {
   const [people, setPeople] = useState<TeamMember[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [pins, setPins] = useState<ReactNode[]>([]);
-  const mapStyle = import.meta.env.VITE_MAP_STYLE + '?key='+ import.meta.env.VITE_MAPTILER_API_KEY;
+  const mapStyle = import.meta.env.VITE_MAP_STYLE + '?key=' + import.meta.env.VITE_MAPTILER_API_KEY;
 
   useEffect(() => {
     Promise
       .all([
-        mappingService.getPeople(),
+        teamMemberService.getAll(),
         mappingService.getLocations()
       ])
       .then(resps => {
@@ -106,7 +108,7 @@ const MapPage = () => {
   }, [locations])
 
   const handleMarkerSelection = (loc: Location) => {
-    const peeps = mappingService.getPeopleAt(people, locations, loc)
+    const peeps = teamMemberService.getPeopleAt(people, locations, loc)
     setPopupInfo({
       location: loc,
       members: peeps
@@ -126,8 +128,14 @@ const MapPage = () => {
         location: loc,
         members: [person],
       });
+    } else {
+      console.error('location not found', person)
     }
   }
+
+  // const handleLocationSelection = (location: Location) => {
+  //   alert(JSON.stringify(location))
+  // }
 
   const reset = () => {
     setViewState(DEFAULT_VIEW);
@@ -164,7 +172,7 @@ const MapPage = () => {
       </Grid>
 
       {/* row 2 */}
-      <Grid item xs={12} lg={2}>
+      <Grid item xs={12} lg={3}>
         <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
           <List >
             {people.map((p, idx) =>
@@ -172,14 +180,14 @@ const MapPage = () => {
                 <ListItemButton
                   onClick={() => handlePeopleSelection(p)}>
                   <ListItemText
-                    primary={p.name} />
+                    primary={p.name} secondary={p.location} />
                 </ListItemButton>
               </ListItem>
             )}
           </List>
         </Paper>
       </Grid>
-      <Grid item xs={12} lg={10}>
+      <Grid item xs={12} lg={9}>
         <Box height={MAP_HEIGHT}>
           <Map
             {...viewState}

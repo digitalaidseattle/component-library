@@ -40,6 +40,18 @@
         "longitude": -118.3090
     },
     {
+        "name": "Claymont, DE, USA", "latitude":  39.801696, "longitude": -75.465319
+    },
+    {
+        "name": "Dallas, TX", "latitude": 32.775568, "longitude": -96.795595
+    },
+    {
+        "name": "Edmonds, WA, USA", "latitude": 47.811242, "longitude":  -122.376842
+    },
+    {
+        "name": "Edmonds, WA", "latitude": 47.811242, "longitude":  -122.376842
+    },
+    {
         "name": "Everett, WA, USA",
         "latitude": 47.9790,
         "longitude": -122.2021
@@ -65,9 +77,20 @@
         "longitude": -122.2348
     },
     {
+        "name": "Killeen, TX but will be moving back to Tacoma, WA after my contract is up",
+        "latitude":  31.121182,
+        "longitude":  -97.732589
+    },
+    {
         "name": "Kirkland, WA",
         "latitude": 47.6769,
         "longitude": -122.2060
+    },
+    {
+        "name": "Lawrence, Kansas", "latitude":  38.967530, "longitude": -95.238272
+    },
+    {
+        "name": "Lynnwood, WA", "latitude":  47.826349,"longitude": -122.292430
     },
     {
         "name": "Mission Viejo, California, USA",
@@ -83,6 +106,9 @@
         "name": "Mountain View, CA",
         "latitude": 37.3861,
         "longitude": -122.0839
+    },
+    {
+        "name": "Nairobi Kenya", "latitude": -1.283030, "longitude":36.817231
     },
     {
         "name": "New York City, NY, USA or Bethesda, Maryland, USA",
@@ -103,6 +129,11 @@
         "name": "Redmond, Washington",
         "latitude": 47.6740,
         "longitude": -122.1215
+    },
+    {
+        "name": "San Francisco, CA, US",
+        "latitude": 37.7749,
+        "longitude": -122.4194
     },
     {
         "name": "San Francisco, CA, USA",
@@ -133,6 +164,14 @@
         "name": "Seattle, Washington",
         "latitude": 47.6205,
         "longitude": -122.3509
+    },
+    {
+     "name": "Shoreline, Washington", "latitude":  47.756360, "longitude":  -122.344330
+    },
+    {
+        "name": "Toronto, Ontario, Canada",
+        "latitude": 43.651605,
+        "longitude": -79.383125
     },
     {
         "name": "Washington, DC",

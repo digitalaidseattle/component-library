@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { TicketProps } from "./TicketProps";
 
 const TicketStatus: React.FC<TicketProps> = ({ ticket }) => {

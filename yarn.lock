@@ -1244,57 +1244,6 @@
     human-id "^1.0.2"
     prettier "^2.7.1"
 
-"@digitalaidseattle/core@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.5.tgz#3ee73641833f7d5bc2a588efb583ebb3dde964e5"
-  integrity sha512-LETCO0cJHEuIBFGz2HyQ0yaT3y0Aqi1Yy1KPg+eDa6+Io0YfCWLIQve/tIObC4wxBKWEn3GduX6CjiFdBUex9w==
-  dependencies:
-    "@babel/runtime" "^7.25.0"
-    react "^18.3.1"
-    react-dom "^18.3.1"
-    typescript "^5.5.4"
-
-"@digitalaidseattle/core@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.6.tgz#63aa6f1d266dc57c2dd369db66f591545f487479"
-  integrity sha512-gLK1RX23/Awtfoksn73LhAjfhBy652WQxaaBSy1JzU8Stpn4fi1h3S784CXQKOYl4bdMmpCej8MtEw+C58Y8iQ==
-  dependencies:
-    "@babel/runtime" "^7.25.0"
-    react "^18.3.1"
-    react-dom "^18.3.1"
-    typescript "^5.5.4"
-
-"@digitalaidseattle/core@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.7.tgz#daee6fdd791a2a675493eacf67fa6b82605b79a4"
-  integrity sha512-m8TDF2gonoovqbufRvsWdxlSL/yMOxg/v1p9P7iXxBf5EY4aNnR3Pr9fFk1EQziDCYJwpQarlQVXgrrqKGutsw==
-  dependencies:
-    "@babel/runtime" "^7.25.0"
-    react "^18.3.1"
-    react-dom "^18.3.1"
-    typescript "^5.5.4"
-
-"@digitalaidseattle/mui@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@digitalaidseattle/mui/-/mui-1.0.13.tgz#21ff6ca7ea2b550004a7d46c00af399e8ff11f4e"
-  integrity sha512-KyrGnJNBZc+PkF1sgSwueKU48ZO2PCrsUf1IjDPWLpJQw+1r+z+0dqP3gNcbpl7OVi3A6G6Obo8eXx4zEDtj3Q==
-  dependencies:
-    "@ant-design/colors" "^7.0.2"
-    "@ant-design/icons" "^5.3.0"
-    "@babel/runtime" "^7.25.0"
-    "@digitalaidseattle/core" "1.0.6"
-    "@emotion/react" "^11.13.0"
-    "@emotion/styled" "^11.13.0"
-    "@mui/material" "^5.16.6"
-    "@mui/x-date-pickers" "^7.26.0"
-    dayjs "^1.11.13"
-    react "^18.3.1"
-    react-dom "^18.3.1"
-    react-markdown "^9.0.1"
-    react-router "^6.22.0"
-    react-router-dom "^6.22.0"
-    typescript "^5.5.4"
-
 "@dnd-kit/accessibility@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"

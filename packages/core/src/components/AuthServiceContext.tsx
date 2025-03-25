@@ -7,7 +7,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, createContext, useContext } from 'react';
 import { AuthService } from '../api/AuthService';
 
 // Create a context for the dependency

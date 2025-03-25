@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/supabase",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Supabase components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/supabase",
   "main": "dist/digitalaidseattle-supabase.cjs.js",
@@ -8,7 +8,7 @@
   "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@digitalaidseattle/core": "1.0.5",
+    "@digitalaidseattle/core": "1.0.8",
     "@supabase/supabase-js": "^2.39.3",
     "react": "^18.3.1"
   },

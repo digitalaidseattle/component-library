@@ -6,10 +6,9 @@
  */
 
 import { AirtableEntityService } from "@digitalaidseattle/airtable";
-import { Partner, partnerService } from "./partnerService";
+import { FieldSet, Record } from "airtable";
 import { dasAirtableClient } from "../../api/airtableClient";
-import { Record, FieldSet } from "airtable";
-import { Identifier } from "@digitalaidseattle/core";
+import { Partner, partnerService } from "./partnerService";
 
 const VENTURES_TABLE = 'tblRpJek5SjacLaen'; // VENTURE SEEDS/PAINPOINTS TABLE
 

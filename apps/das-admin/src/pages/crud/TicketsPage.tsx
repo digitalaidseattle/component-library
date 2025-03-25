@@ -7,6 +7,11 @@ import { useContext, useEffect, useState } from 'react';
 
 // material-ui
 import {
+    Box,
+    Button,
+    Stack
+} from '@mui/material';
+import {
     DataGrid,
     GridColDef,
     GridRenderCellParams,
@@ -14,23 +19,18 @@ import {
     GridSortModel,
     useGridApiRef
 } from '@mui/x-data-grid';
-import {
-    Box,
-    Button,
-    Stack
-} from '@mui/material';
 
 // third-party
 
 // project import
-import { Identifier, RefreshContext, useNotifications } from '@digitalaidseattle/core';
+import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
+import { ConfirmationDialog } from '@digitalaidseattle/mui';
 import { PageInfo, QueryModel } from '@digitalaidseattle/supabase';
-import { ticketService } from './ticketService';
-import TicketLink from './components/TicketLink';
-import TicketStatus from './components/TicketStatus';
 import TicketContact from './components/TicketContact';
 import TicketDialog from './components/TicketDialog';
-import { ConfirmationDialog } from '@digitalaidseattle/mui';
+import TicketLink from './components/TicketLink';
+import TicketStatus from './components/TicketStatus';
+import { ticketService } from './ticketService';
 
 // ==============================|| Tickets Grid ||============================== //
 
@@ -157,12 +157,12 @@ export default function TicketsPage() {
         setOpenTicketDialog(true);
     }
 
-    function handleSuccess(resp: Ticket | null): void {
+    function handleSuccess(_resp: Ticket | null): void {
         setOpenTicketDialog(false);
         throw new Error('Function not implemented.');
     }
 
-    function handleError(err: Error): void {
+    function handleError(_err: Error): void {
         setOpenTicketDialog(false);
         throw new Error('Function not implemented.');
     }

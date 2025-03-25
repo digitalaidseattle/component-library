@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@digitalaidseattle/airtable": "^1.0.0",
+    "@digitalaidseattle/airtable": "^1.0.1",
     "@digitalaidseattle/core": "^1.0.8",
     "@digitalaidseattle/firebase": "^1.0.3",
     "@digitalaidseattle/mui": "^1.0.13",
