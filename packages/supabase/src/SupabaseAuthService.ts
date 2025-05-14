@@ -1,6 +1,16 @@
 /**
  *  authService.ts
  *
+ * <pre>
+ update auth.users
+ set raw_user_meta_data = jsonb_set(
+  coalesce(raw_user_meta_data, '{}'),
+  '{roles}',
+  '["admin"]',
+  true
+)
+where id = '<user-uuid>';
+ *
  *  @copyright 2024 Digital Aid Seattle
  *
  */
@@ -12,6 +22,15 @@ export class SupabaseAuthService implements AuthService {
 
   getProviders(): string[] {
     return ["google", "microsoft"];
+    }
+  
+  isRole(role: string): boolean {
+      const user = this.getUser();
+      if (!user) {
+        return false;
+      }
+      // Check if the user has the specified role
+      return user.roles.includes(role);    
   }
 
   signOut = async (): Promise<{ error: AuthError | null }> => {
@@ -23,13 +42,17 @@ export class SupabaseAuthService implements AuthService {
       then(user => user != null)
   }
 
+
   getUser = async (): Promise<User | null> => {
     return supabaseClient.auth.getUser()
       .then((response: UserResponse) => {
         if (response.data.user) {
           return {
             email: response.data.user?.user_metadata.email,
-            user_metadata: response.data.user?.user_metadata
+            name: response.data.user?.user_metadata.name,
+            avatar_url: response.data.user?.user_metadata.avatar_url,
+            roles: response.data.user?.user_metadata.roles ?? [],
+            user_metadata: response.data.user?.user_metadata 
           } as unknown as User
         }
         else {
