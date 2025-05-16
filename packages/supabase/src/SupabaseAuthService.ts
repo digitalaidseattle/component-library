@@ -22,15 +22,15 @@ export class SupabaseAuthService implements AuthService {
 
   getProviders(): string[] {
     return ["google", "microsoft"];
-    }
-  
+  }
+
   isRole(role: string): boolean {
-      const user = this.getUser();
-      if (!user) {
-        return false;
-      }
-      // Check if the user has the specified role
-      return user.roles.includes(role);    
+    const user = this.getUser();
+    if (!user) {
+      return false;
+    }
+    // Check if the user has the specified role
+    return user.roles.includes(role);
   }
 
   signOut = async (): Promise<{ error: AuthError | null }> => {
@@ -48,12 +48,12 @@ export class SupabaseAuthService implements AuthService {
       .then((response: UserResponse) => {
         if (response.data.user) {
           return {
-            email: response.data.user?.user_metadata.email,
-            name: response.data.user?.user_metadata.name,
-            avatar_url: response.data.user?.user_metadata.avatar_url,
-            roles: response.data.user?.user_metadata.roles ?? [],
-            user_metadata: response.data.user?.user_metadata 
-          } as unknown as User
+            email: response.data.user.user_metadata.email,
+            name: response.data.user.user_metadata.name,
+            avatar_url: response.data.user.user_metadata.avatar_url,
+            roles: response.data.user.user_metadata.roles ?? [],
+            user_metadata: response.data.user.user_metadata
+          } as User
         }
         else {
           return null;
