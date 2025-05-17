@@ -62,23 +62,19 @@ const Profile = () => {
   const { user } = useContext<UserContextType>(UserContext);
   const [username, setUsername] = useState<string>('')
   const [avatar, setAvatar] = useState<string>('')
+  const [roles, setRoles] = useState<string[]>([])
   const [version, setVersion] = useState<string>('')
   const navigate = useNavigate();
   const authService = useAuthService();
   const { configuration } = useLayoutConfiguration();
 
-  useEffect(() => {
-    if (user && user.user_metadata) {
-      setAvatar(user.user_metadata.avatar_url ?? '')
-      setUsername(user.user_metadata.name ? user.user_metadata.name : user.user_metadata.email)
-    }
-  }, [user])
 
   useEffect(() => {
-    if (user && user.user_metadata) {
-      setAvatar(user.user_metadata.avatar_url ?? '')
-      setVersion(configuration ? configuration.version : '');
-    }
+    if (user) {
+      setUsername(user.name ? user.name : user.email)
+      setAvatar(user.avatar_url ?? '')
+      setVersion(configuration && configuration.version ? configuration.version : '');
+      setRoles(user.roles ? user.roles : [])}
   }, [configuration])
 
 
@@ -173,9 +169,7 @@ const Profile = () => {
                             <Avatar alt="profile user" src={avatar} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">{username}</Typography>
-                              {/* <Typography variant="body2" color="textSecondary">
-                                {role}
-                              </Typography> */}
+                              <Typography variant="body2" color="textSecondary">{roles.join(', ')}</Typography>
                             </Stack>
                           </Stack>
                         </Grid>

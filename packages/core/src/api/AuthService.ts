@@ -4,11 +4,15 @@ export interface AuthError {
 
 export interface User {
     email: string;
+    name: string;
+    avatar_url: string;
+    // user_metadata is deprecated, the user object will be flattened
     user_metadata: {
         name: string;
         avatar_url: string;
         email: string;
     }
+    roles: string[];
 }
 
 export type OAuthResponse = {
@@ -28,5 +32,7 @@ export interface AuthService {
     getUser(): Promise<User | null>;
 
     signInWith(provider: string): Promise<OAuthResponse>;
+
+    isRole(role: string): boolean;
 
 }
