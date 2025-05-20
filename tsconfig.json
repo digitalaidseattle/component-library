@@ -112,7 +112,7 @@
         "packages/core/src"
       ],
       "@digitalaidseattle/draganddrop": [
-        "packages/core/src"
+        "packages/draganddrop/src"
       ],
       "@digitalaidseattle/mui": [
         "packages/mui/src"

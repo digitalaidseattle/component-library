@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/draganddrop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Drag And Drop Component used in DAS Ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/draganddrop",
   "main": "dist/digitalaidseattle-draganddrop.cjs.js",
@@ -20,7 +20,7 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "postbuild": "cp src/*.css dist/"
   },
   "files": [
     "dist"

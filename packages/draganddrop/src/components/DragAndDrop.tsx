@@ -195,6 +195,7 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
           <TableRow>
             {categories.map((cat) =>
               <TableCell
+                className="DAS-Header"
                 key={cat.value}
                 sx={{ border: 1, width: columnWidth }}>
                   {headerRenderer ? headerRenderer(cat) :

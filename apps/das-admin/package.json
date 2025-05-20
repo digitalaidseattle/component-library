@@ -13,8 +13,8 @@
   "dependencies": {
     "@digitalaidseattle/airtable": "1.0.1",
     "@digitalaidseattle/core": "1.0.8",
-    "@digitalaidseattle/draganddrop": "1.0.4",
-    "@digitalaidseattle/mui": "1.0.14",
+    "@digitalaidseattle/draganddrop": "1.0.5",
+    "@digitalaidseattle/mui": "1.0.15",
     "@digitalaidseattle/supabase": "1.0.5",
     "@mui/material": "^5.16.6",
     "@vis.gl/react-maplibre": "^8.0.1",

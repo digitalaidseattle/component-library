@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
+    "postbuild": "yarn workspace @digitalaidseattle/draganddrop run postbuild",
     "build": "preconstruct build",
     "release": "yarn build && changeset publish",
     "test": "jest",
