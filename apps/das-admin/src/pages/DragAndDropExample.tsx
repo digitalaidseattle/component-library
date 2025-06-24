@@ -18,10 +18,24 @@ const categories: DDCategory<string>[] = [
     { label: 'Completed', value: 'completed' },
 ]
 
-const items: TicketWrapper[] = [
-    { id: "1", status: 'in-progress', description: 'First Ticket' },
-    { id: "2", status: 'backlog', description: 'Second Ticket' }
-]
+
+
+const items: Map<DDCategory<string>, TicketWrapper[]> = new Map<DDCategory<string>, TicketWrapper[]>([
+    [
+        categories[0], // 'In Progress' category object
+        [
+            { id: "2", status: 'backlog', description: 'Second Ticket' },
+            { id: "3", status: 'backlog', description: 'Third Ticket' },
+            { id: "4", status: 'backlog', description: 'fourth Ticket' },
+            { id: "5", status: 'backlog', description: 'Ticket 5' },
+            { id: "6", status: 'backlog', description: ' Ticket 6' }
+        ]
+    ],
+    [
+        categories[1], // 'In Progress' category object
+        [{ id: "1", status: 'in-progress', description: 'First Ticket' }]
+    ],
+]);
 
 export const DragAndDropExample = () => {
 
@@ -56,7 +70,6 @@ export const DragAndDropExample = () => {
                     onChange={(c: Map<string, unknown>, t: TicketWrapper) => handleChange(c, t)}
                     items={items}
                     categories={categories}
-                    isCategory={(tix: TicketWrapper, cat: DDCategory<string>) => tix.status === cat.value}
                     cardRenderer={cardRenderer}
                     headerRenderer={headerRenderer} />
             </MainCard>

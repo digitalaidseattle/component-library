@@ -28,14 +28,13 @@ import { findBoardSectionContainer } from './utils/board';
 
 type DragAndDropProps<T extends DDType> = {
   categories: DDCategory<string>[];
-  items: T[];
+  items: Map<DDCategory<string>, T[]>;
   onChange: Function;
-  isCategory: (item: T, category: DDCategory<any>) => boolean;
   cardRenderer?: (item: T) => ReactNode;
   headerRenderer?: (cat: DDCategory<any>) => ReactNode;
 };
 
-const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items, onChange, categories, isCategory, cardRenderer, headerRenderer }: DragAndDropProps<T>) => {
+const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items, onChange, categories, cardRenderer, headerRenderer }: DragAndDropProps<T>) => {
   const [boardSections, setBoardSections] = useState<BoardSectionType<T>>();
 
   useEffect(() => {
@@ -145,6 +144,7 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
     }
 
     changes.set("containerId", active.data.current?.sortable.containerId);
+    changes.set("newIndex", overIndex);
     setChanges({ ...changes });
 
     // sends the changes back to be persisted outside drag and drop component
@@ -158,28 +158,27 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
     ...defaultDropAnimation,
   };
 
-  const getItemById = (items: T[], id: number) => {
+  const item = activeItemId ? getItemById(items, activeItemId) : null;
+
+  function getItemById(itemsMap: Map<DDCategory<string>, T[]>, id: number): T | undefined {
+    const items: T[] = Array.from(itemsMap.values()).flat();
     return items.find((item) => item.id === id);
   };
 
-  const item = activeItemId ? getItemById(items, activeItemId) : null;
 
-  const initializeBoard = (items: T[]) => {
+  function initializeBoard(items: Map<DDCategory<string>, T[]>) {
     const boardSections: BoardSectionType<T> = {};
 
     categories.forEach((category) => {
-      boardSections[category.value] = getItemsByCategory(
-        items,
-        category
-      );
+      boardSections[category.value] = items.get(category) ?? []
     });
 
     return boardSections;
   };
 
-  const getItemsByCategory = (items: T[], category: DDCategory<any>) => {
-    return items.filter(t => isCategory(t, category));
-  };
+  // function getItemsByCategory(items: T[], category: DDCategory<any>) {
+  //   return items.filter(t => isCategory(t, category));
+  // };
 
   const columnWidth = 1 / categories.length;
   return (boardSections &&
@@ -198,7 +197,7 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
                 className="DAS-Header"
                 key={cat.value}
                 sx={{ border: 1, width: columnWidth }}>
-                  {headerRenderer ? headerRenderer(cat) :
+                {headerRenderer ? headerRenderer(cat) :
                   cat.label}
               </TableCell>)}
           </TableRow>

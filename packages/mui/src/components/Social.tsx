@@ -52,7 +52,7 @@ const Social: React.FC = () => {
   }, [configuration])
 
   const googleHandler = async () => {
-    authService.signInWithGoogle()
+    authService.signInWith("google")
       .then((resp: OAuthResponse) => {
         loggingService.info('Logged in with Google: ' + resp.data);
         navigate('/');
@@ -60,7 +60,7 @@ const Social: React.FC = () => {
   };
 
   const microsoftHandler = async () => {
-    authService.signInWithAzure()
+    authService.signInWith('microsoft')
       .then((resp: OAuthResponse) => {
         loggingService.info('Logged in with Azure: ' + resp.data)
         navigate('/');
