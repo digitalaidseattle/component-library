@@ -5,8 +5,9 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
-import ProjectsPage from "./projects";
-import { Box } from "@mui/material";
+import GrantsPage from "./pages/grants";
+import InstitutionsPage from "./pages/institutions";
+import ProjectsPage from "./pages/projects";
 
 const routes = [
   {
@@ -16,9 +17,14 @@ const routes = [
       {
         path: "",
         element: <ProjectsPage />,
-      }, {
-        path: "two",
-        element: <Box>A Second Page</Box>,
+      },
+      {
+        path: "instituitions",
+        element: <InstitutionsPage />,
+      },
+      {
+        path: "grant-proposals",
+        element: <GrantsPage />,
       },
       {
         path: "privacy",

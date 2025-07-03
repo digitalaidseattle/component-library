@@ -1,14 +1,16 @@
 import {
-    HomeOutlined,
-    TwitchOutlined
+    BankOutlined,
+    DollarOutlined,
+    HomeOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
 
 import { defaultTheme, MenuItem } from "@digitalaidseattle/mui";
+import packageJson from "../package.json";
 
 export const Config = () => {
 
-     // example of overriding theme
+    // example of overriding theme
     const theme = defaultTheme();
     theme.palette.action.disabled = "rgba(255, 0, 0, 0.5)";
 
@@ -24,21 +26,29 @@ export const Config = () => {
             children: [
                 {
                     id: 'home',
-                    title: 'Home',
+                    title: 'Projects',
                     type: 'item',
                     url: '/',
                     icon: <HomeOutlined />,
                 } as MenuItem,
                 {
-                    id: 'tw',
-                    title: 'Page Two',
+                    id: 'Inst',
+                    title: 'Instituitions',
                     type: 'item',
-                    url: '/two',
-                    icon: <TwitchOutlined />,
+                    url: '/instituitions',
+                    icon: <BankOutlined />,
+                } as MenuItem,
+                {
+                    id: 'GRNT',
+                    title: 'Grant Proposals',
+                    type: 'item',
+                    url: '/grant-proposals',
+                    icon: <DollarOutlined />,
                 } as MenuItem
             ]
         } as MenuItem],
         toolbarItems: [
-        ]
+        ],
+        version: packageJson.version
     })
 }
