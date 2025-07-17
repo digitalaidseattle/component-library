@@ -33,7 +33,7 @@ class InstitutionAiService {
                     properties: {
                         name: Schema.string(),
                         description: Schema.string(),
-                        email: Schema.number(),
+                        email: Schema.string(),
                         phone: Schema.string(),
                         address: Schema.string(),
                         contact: Schema.string(),

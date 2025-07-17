@@ -25,7 +25,7 @@ const InstitutionsPage: React.FC = ({ }) => {
     const [institution, setInstitution] = useState<Institution>(institutionService.empty());
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-    const [prompt, setPrompt] = useState<string>("List five philanthropic institutions near Seattle. Include their name, description, and contact information.");
+    const [prompt, setPrompt] = useState<string>("List five philanthropic institutions near Seattle. Include their name, description, email, and contact information.");
 
     const newInstitution = () => {
         setInstitution(institutionService.empty());

@@ -24,25 +24,6 @@ class GrantAiService {
 
     ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
 
-    // Provide a JSON schema object using a standard format.
-    // Later, pass this schema object into `responseSchema` in the generation config.
-    jsonSchema = Schema.object({
-        properties: {
-            characters: Schema.array({
-                items: Schema.object({
-                    properties: {
-                        name: Schema.string(),
-                        description: Schema.string(),
-                        email: Schema.number(),
-                        phone: Schema.string(),
-                        address: Schema.string(),
-                        contact: Schema.string(),
-                    }
-                }),
-            }),
-        }
-    });
-
     // Create a `GenerativeModel` instance with a model that supports your use case
     model = getGenerativeModel(this.ai, {
         model: "gemini-2.5-flash"
