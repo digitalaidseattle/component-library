@@ -42,6 +42,41 @@ class GrantAiService {
             });
     }
 
+    // Wrap in an async function so you can use await
+    parameterizedQuery(schemaParams: string[], prompt: string): Promise<any> {
+        // Provide a JSON schema object using a standard format.
+        // Later, pass this schema object into `responseSchema` in the generation config.
+        const schema = Schema.object({
+            properties: {
+                characters: Schema.array({
+                    items: Schema.object({
+                        properties: Object.fromEntries(schemaParams.map(field => [field, Schema.string()]))
+                    }),
+                }),
+            }
+        });
+
+        // Create a `GenerativeModel` instance with a model that supports your use case
+        const jModel = getGenerativeModel(this.ai, {
+            model: "gemini-2.5-flash",
+            // In the generation config, set the `responseMimeType` to `application/json`
+            // and pass the JSON schema object into `responseSchema`.
+            generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: schema
+            },
+        });
+
+        // To generate text output, call generateContent with the text input
+        console.log("Querying AI with prompt: ", prompt, this.model);
+        return jModel.generateContent(prompt)
+            .then(result => JSON.parse(result.response.text()).characters[0])
+            .catch(error => {
+                console.error("Error querying AI: ", error);
+                throw new Error("Failed to query AI: " + error.message);
+            });
+    }
+
 }
 
 const grantAiService = new GrantAiService();
