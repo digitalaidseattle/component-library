@@ -26,6 +26,7 @@ interface InputOption {
     disabled: boolean;
     size?: number;
     options?: { label: string, value: string }[];
+    inputRenderer?: (idx: number, option: InputOption, value: any) => ReactNode;
 }
 
 interface InputFormProps<T> {
@@ -46,6 +47,8 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
 
     const inputField = (idx: number, option: InputOption, value: any) => {
         switch (option.type) {
+            case 'custom':
+                return option.inputRenderer!(idx, option, value) 
             case 'date':
                 return <DatePicker
                     key={`${idx}-${option.name}`}

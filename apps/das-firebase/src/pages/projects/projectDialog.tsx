@@ -5,7 +5,7 @@
  *
  */
 import { InputForm, InputOption } from '@digitalaidseattle/mui';
-import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Project, projectService } from './projectService';
 
@@ -66,11 +66,21 @@ const ProjectDialog: React.FC<EntityDialogProps<Project>> = ({ open, entity, han
             type: 'string',
             disabled: false,
         },
+        // This is a custom input field for partner
         {
             name: "partner",
             label: 'Partner',
-            type: 'string',
+            type: 'custom',
             disabled: false,
+            inputRenderer: (idx: number, option: InputOption, value: any) => (
+                <TextField
+                    key={`${idx}-${option.name}`}
+                    label={option.label}
+                    value={value}
+                    onChange={(e) => onChange(option.name, e.target.value)}
+                    fullWidth
+                />
+            )
         },
         {
             name: "status",
