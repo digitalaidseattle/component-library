@@ -1,6 +1,7 @@
 import {
     BankOutlined,
     DollarOutlined,
+    FormOutlined,
     HomeOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
@@ -43,6 +44,13 @@ export const Config = () => {
                     title: 'Grant Proposals',
                     type: 'item',
                     url: '/grant-proposals',
+                    icon: <FormOutlined />,
+                } as MenuItem,
+                {
+                    id: 'DONA',
+                    title: 'Donations',
+                    type: 'item',
+                    url: '/donations',
                     icon: <DollarOutlined />,
                 } as MenuItem
             ]

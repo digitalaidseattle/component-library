@@ -8,6 +8,7 @@ import {
 import GrantsPage from "./pages/grants";
 import InstitutionsPage from "./pages/institutions";
 import ProjectsPage from "./pages/projects";
+import DonationsPage from "./pages/donations";
 
 const routes = [
   {
@@ -25,6 +26,9 @@ const routes = [
       {
         path: "grant-proposals",
         element: <GrantsPage />,
+      }, {
+        path: "donations",
+        element: <DonationsPage />,
       },
       {
         path: "privacy",
