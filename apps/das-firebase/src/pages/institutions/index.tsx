@@ -117,6 +117,7 @@ const InstitutionsPage: React.FC = ({ }) => {
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'description', headerName: 'Description', width: 300 },
         { field: 'address', headerName: 'Address', width: 300 },
+        { field: 'website', headerName: 'Website', width: 300 },
     ];
     return (
         <Stack gap={2}>

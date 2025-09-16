@@ -37,6 +37,7 @@ class InstitutionAiService {
                         phone: Schema.string(),
                         address: Schema.string(),
                         contact: Schema.string(),
+                        website: Schema.string()
                     }
                 }),
             }),
