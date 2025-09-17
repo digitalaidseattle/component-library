@@ -20,7 +20,7 @@ const routes = [
         element: <ProjectsPage />,
       },
       {
-        path: "instituitions",
+        path: "institutions",
         element: <InstitutionsPage />,
       },
       {

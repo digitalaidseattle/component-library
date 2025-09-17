@@ -34,9 +34,9 @@ export const Config = () => {
                 } as MenuItem,
                 {
                     id: 'Inst',
-                    title: 'Instituitions',
+                    title: 'Institutions',
                     type: 'item',
-                    url: '/instituitions',
+                    url: '/institutions',
                     icon: <BankOutlined />,
                 } as MenuItem,
                 {

@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Card, CircularProgress, Paper, Stack, TextField } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, ReactNode, useState } from "react";
 
 import { useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
@@ -117,7 +117,12 @@ const InstitutionsPage: React.FC = ({ }) => {
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'description', headerName: 'Description', width: 300 },
         { field: 'address', headerName: 'Address', width: 300 },
-        { field: 'website', headerName: 'Website', width: 300 },
+        {
+            field: 'website', headerName: 'Website', width: 300,
+            renderCell: (params): ReactNode => {
+                return <a href={`https://${params.row.website}`} target='_blank'>{params.row.website}</a>
+            }
+        },
     ];
     return (
         <Stack gap={2}>
