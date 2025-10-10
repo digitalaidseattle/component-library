@@ -19,21 +19,26 @@
 
 import { firebaseClient } from "@digitalaidseattle/firebase";
 import { getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
+import { AiService } from "./aitypes";
 
-class GeminiService {
+class GeminiService implements AiService {
 
+    modelType = "gemini-2.5-flash";  // "gemini-2.5-pro", "gemini-2.5-flash-lite";
     ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
 
     // Create a `GenerativeModel` instance with a model that supports your use case
     model = getGenerativeModel(this.ai, {
-        model: "gemini-2.5-flash"
+        model: this.modelType
     });
 
+    calcTokenCount(request: string): Promise<number> {
+        return this.model.countTokens(request)
+            .then(response => response.totalTokens)
+    }
 
     // Wrap in an async function so you can use await
-    query(prompt: string): Promise<any> {
+    generateContent(prompt: string): Promise<any> {
         // To generate text output, call generateContent with the text input
-        console.log("Querying AI with prompt: ", prompt, this.model);
         return this.model.generateContent(prompt)
             .then(result => result.response.text())
             .catch(error => {
@@ -43,7 +48,7 @@ class GeminiService {
     }
 
     // Wrap in an async function so you can use await
-    parameterizedQuery(schemaParams: string[], prompt: string): Promise<any> {
+    generateParameterizedContent(prompt: string, schemaParams: string[]): Promise<any> {
         // Provide a JSON schema object using a standard format.
         // Later, pass this schema object into `responseSchema` in the generation config.
         const schema = Schema.object({
@@ -58,7 +63,7 @@ class GeminiService {
 
         // Create a `GenerativeModel` instance with a model that supports your use case
         const jModel = getGenerativeModel(this.ai, {
-            model: "gemini-2.5-flash",
+            model: this.modelType,
             // In the generation config, set the `responseMimeType` to `application/json`
             // and pass the JSON schema object into `responseSchema`.
             generationConfig: {
@@ -68,9 +73,11 @@ class GeminiService {
         });
 
         // To generate text output, call generateContent with the text input
-        console.log("Querying AI with prompt: ", prompt, this.model);
         return jModel.generateContent(prompt)
-            .then(result => JSON.parse(result.response.text()).characters[0])
+            .then(result => {
+                const content = result.response.text();
+                return JSON.parse(content).characters[0]
+            })
             .catch(error => {
                 console.error("Error querying AI: ", error);
                 throw new Error("Failed to query AI: " + error.message);

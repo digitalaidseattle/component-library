@@ -82,7 +82,7 @@ const DonationsPage: React.FC = ({ }) => {
         const obj = Object.fromEntries(parameters);
         const inputs = JSON.stringify(obj);
         const json = `${query} ${inputs}`;
-        geminiService.query(json)
+        geminiService.generateContent(json)
             .then((response: any) => setProposal(response))
             .catch((error: any) => {
                 console.error("Error querying AI: ", error);

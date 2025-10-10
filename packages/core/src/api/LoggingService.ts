@@ -11,41 +11,41 @@
  *
  */
 
-import { User } from './AuthService';
 
 const NO_USER = '<no user>';
 
 interface LoggingService {
 
-    info(message: string, user?: User): void;
+    info(message?: string, ...optionalParams: any[]): void;
 
-    warn(message: string, user?: User): void;
+    warn(message?: string, ...optionalParams: any[]): void;
 
-    error(message: string, user?: User): void;
+    error(message?: string, ...optionalParams: any[]): void;
 }
 
 class ConsoleLoggingService implements LoggingService {
 
-    enabled =  import.meta.env.VITE_LOGGING ?? true;
+    enabled = import.meta.env.VITE_LOGGING ?? true;
 
-    info(message: string, user?: User) {
+    info(message?: string, ...optionalParams: any[]) {
         if (this.enabled) {
-            console.info(user ? user.email : NO_USER, new Date(), message)
+            console.info(message, optionalParams);
         }
     }
 
-    warn(message: string, user?: User) {
+    warn(message?: string, ...optionalParams: any[]) {
         if (this.enabled) {
-            console.warn(user ? user.email : NO_USER, new Date(), message)
+            console.warn(message, optionalParams);
         }
     }
 
-    error(message: string, user?: User) {
+    error(message?: string, ...optionalParams: any[]) {
         if (this.enabled) {
-            console.error(user ? user.email : NO_USER, new Date(), message)
+            console.error(message, optionalParams);
         }
     }
 }
 
 export { ConsoleLoggingService };
 export type { LoggingService };
+

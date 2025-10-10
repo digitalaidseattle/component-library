@@ -8,12 +8,13 @@ import logo from "./assets/logo-light-icon.svg";
 
 import { defaultTheme, MenuItem } from "@digitalaidseattle/mui";
 import packageJson from "../package.json";
+import { IconButton } from '@mui/material';
+import { HelpButton } from './components/HelpButton';
 
 export const Config = () => {
 
     // example of overriding theme
     const theme = defaultTheme();
-    theme.palette.action.disabled = "rgba(255, 0, 0, 0.5)";
 
     return ({
         appName: 'DAS Firebase Example',
@@ -29,7 +30,7 @@ export const Config = () => {
                     id: 'home',
                     title: 'Projects',
                     type: 'item',
-                    url: '/',
+                    url: '/projects',
                     icon: <HomeOutlined />,
                 } as MenuItem,
                 {
@@ -52,10 +53,17 @@ export const Config = () => {
                     type: 'item',
                     url: '/donations',
                     icon: <DollarOutlined />,
+                } as MenuItem,
+                {
+                    id: 'TEST',
+                    title: 'Test Page',
+                    type: 'item',
+                    url: '/testpage'
                 } as MenuItem
             ]
         } as MenuItem],
         toolbarItems: [
+            <HelpButton />
         ],
         version: packageJson.version
     })
