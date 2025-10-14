@@ -1,5 +1,5 @@
 import { FirestoreService } from "@digitalaidseattle/firebase";
-import { GrantRecipe } from "./types";
+import { GrantProposal, GrantRecipe } from "./types";
 
 
 class GrantService extends FirestoreService<GrantRecipe> {
@@ -29,7 +29,7 @@ class GrantService extends FirestoreService<GrantRecipe> {
             tokenString: "",
             tokenCount: 0,
             proposalIds: [],
-            modelType:''
+            modelType: ''
         }
     }
 
