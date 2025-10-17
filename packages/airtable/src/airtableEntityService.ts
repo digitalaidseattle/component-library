@@ -18,20 +18,32 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
     abstract transform(record: Record<FieldSet>): T;
     abstract transformEntity(entity: Partial<T>): Partial<FieldSet>;
 
-    async getAll(count?: number, select?: string): Promise<T[]> {
-        const tableId = (this as any).tableId; // Assuming `tableId` is defined in the subclass
-        if (!tableId) {
-            throw new Error('Table ID is not defined.');
-        }
-        const table = this.base(this.tableId);
 
-        const records = await table
+
+    async getAll(count?: number, select?: string): Promise<T[]> {
+        let allRecords: T[] = [];
+        const table = this.base(this.tableId);
+        await table
             .select({
-                maxRecords: count || 100, // default max records is 100, more than that and we will need to start using pagination
+                pageSize: 100,
                 filterByFormula: select ?? '',
             })
-            .all()
-        return records.map(this.transform) as T[];
+            .eachPage((records, fetchNextPage) => {
+                const transformed = records.map(this.transform) as T[]
+                allRecords.push(...transformed);
+                if (count) {
+                    if (allRecords.length < count) {
+                        fetchNextPage(); // fetch next batch
+                    } else {
+                        allRecords = allRecords.slice(0, 100);
+                    }
+                } else {
+                    fetchNextPage(); // fetch next batch
+                }
+            });
+
+        console.log(`Retrieved ${allRecords.length} records.`);
+        return allRecords;
     }
 
     async getById(recordId: Identifier): Promise<T> {

@@ -30,7 +30,7 @@ const VentureCard: React.FC<VentureProps> = ({ venture }) => {
   const [partner, setPartner] = useState<Partner>();
 
   useEffect(() => {
-    partnerService.getById(venture.partnerId)
+    partnerService.getById(venture.partnerId!)
       .then(partner => setPartner(partner))
   }, [venture]);
 

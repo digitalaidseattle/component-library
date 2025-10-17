@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/airtable",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Wrapper for airtable that works with DAS Component library",
   "repository": "null//github.com/null/github.com/tree/master/packages/airtable",
   "main": "dist/digitalaidseattle-airtable.cjs.js",
