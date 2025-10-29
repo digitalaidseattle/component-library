@@ -5,11 +5,22 @@ type PageInfo<T> = {
     rows: T[]
 }
 
+type FilterItem = {
+    field: string
+    operator: string,
+    value: any
+}
+
+type FilterModel = {
+    items: FilterItem[]
+}
+
 type QueryModel = {
     page: number
     pageSize: number,
     sortField: string,
-    sortDirection: string
+    sortDirection: string,
+    filterModel?: FilterModel
 }
 
 const supabaseClient = createClient(

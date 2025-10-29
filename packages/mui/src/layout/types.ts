@@ -1,5 +1,6 @@
 import { ChipProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
+import { RouteObject } from "react-router";
 
 export type MenuItem = {
     id: string,
@@ -21,5 +22,6 @@ export interface LayoutConfiguration {
     menuItems: MenuItem[];
     toolbarItems: ReactNode[];
     theme?: Theme;
-    authProviders?: string[]
+    authProviders?: string[],
+    routes?: RouteObject[]
 }

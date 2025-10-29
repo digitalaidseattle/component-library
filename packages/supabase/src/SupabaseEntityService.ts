@@ -18,50 +18,72 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     // MUI datagrid filters
     supportedStringFilters(): string[] {
-        return ['contains', 'startsWith', 'endsWith']
+        return ['contains', 'startsWith', 'endsWith', 'equals', 'doesNotEqual']
     }
 
     supportedNumberFilters(): string[] {
-        return ['=', '>', '<']
+        return ['=', '>', '<', '!=']
     }
 
-    async find(queryModel: QueryModel): Promise<PageInfo<T>> {
+    async find(queryModel: QueryModel, select?: string, mapper?: (json: any) => T): Promise<PageInfo<T>> {
         try {
-            const fModel = queryModel as any;
+
             let query: any = supabaseClient
                 .from(this.tableName)
-                .select('*', { count: 'exact' })
-                .range(queryModel.page * queryModel.pageSize, (queryModel.page + 1) * queryModel.pageSize -1)
-                .order(queryModel.sortField, { ascending: queryModel.sortDirection === 'asc' });
-            if (fModel.filterField && fModel.filterOperator && fModel.filterValue) {
-                switch (fModel.filterOperator) {
-                    case '=':
-                        query = query.eq(fModel.filterField, fModel.filterValue)
-                        break;
-                    case '>':
-                        query = query.gt(fModel.filterField, fModel.filterValue)
-                        break;
-                    case '<':
-                        query = query.lt(fModel.filterField, fModel.filterValue)
-                        break;
-                    case 'contains':
-                        query = query.ilike(fModel.filterField, `%${fModel.filterValue}%`)
-                        break;
-                    case 'startsWith':
-                        query = query.ilike(fModel.filterField, `${fModel.filterValue}%`)
-                        break;
-                    case 'endsWith':
-                        query = query.ilike(fModel.filterField, `%${fModel.filterValue}`)
-                        break;
-                }
-            }
+                .select(select ?? '*', { count: 'exact' })
+                .range(queryModel.page * queryModel.pageSize, (queryModel.page + 1) * queryModel.pageSize - 1)
 
+            // add sorting
+            let sortField = queryModel.sortField
+            const sortOperator = { ascending: queryModel.sortDirection === 'asc' } as any
+            if (sortField.includes('.')) {
+                const split = sortField.split('.');
+                sortField = `${split[0]}(${split[1]})`;
+            }
+            query.order(sortField, sortOperator);
+
+            // add filtering
+            const filterModel = queryModel.filterModel;
+            if (filterModel && filterModel.items) {
+                filterModel.items.forEach((filter: any) => {
+                    const field = filter.field;
+                    const operator = filter.operator;
+                    const value = filter.value;
+                    if (field && operator && value) {
+                        switch (operator) {
+                            case '=':
+                            case 'equals':
+                                query = query.eq(field, value)
+                                break;
+                            case '!=':
+                            case 'doesNotEqual':
+                                query = query.neq(field, value)
+                                break;
+                            case '>':
+                                query = query.gt(field, value)
+                                break;
+                            case '<':
+                                query = query.lt(field, value)
+                                break;
+                            case 'contains':
+                                query = query.ilike(field, `%${value}%`)
+                                break;
+                            case 'startsWith':
+                                query = query.ilike(field, `${value}%`)
+                                break;
+                            case 'endsWith':
+                                query = query.ilike(field, `%${value}`)
+                                break;
+                        }
+                    }
+                })
+            }
 
             return query.then((resp: any) => {
                 return {
-                    rows: resp.data as T[],
+                    rows: mapper ? resp.data.map((json: any) => mapper(json)) : resp.data,
                     totalRowCount: resp.count,
-                } as PageInfo<T>;
+                };
             })
         } catch (err) {
             console.error('Unexpected error:', err);

@@ -29,7 +29,28 @@ export class SupabaseStorageService implements StorageService {
         this.bucketName = bucketName ?? BUCKET_NAME;
     }
 
-    downloadFile = async (filepath: string): Promise<string> => {
+    async list(): Promise<any[]> {
+        return supabaseClient
+            .storage
+            .from(this.bucketName)
+            .list()
+            .then(resp => {
+                if (resp.error) {
+                    throw new Error(resp.error.message)
+                }
+                return resp.data?.filter(f => f.name != '.emptyFolderPlaceholder')
+            })
+    }
+
+    getUrl(filepath: string): string {
+        const resp = supabaseClient
+            .storage
+            .from(this.bucketName)
+            .getPublicUrl(filepath);
+        return resp.data.publicUrl
+    }
+
+    async downloadFile(filepath: string): Promise<string> {
         return supabaseClient
             .storage
             .from(BUCKET_NAME)
@@ -42,10 +63,10 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    downloadBlob = async (filepath: string): Promise<Blob | null> => {
+    async downloadBlob(filepath: string): Promise<Blob | null> {
         return supabaseClient
             .storage
-            .from(BUCKET_NAME)
+            .from(this.bucketName)
             .download(filepath)
             .then(resp => {
                 if (resp.error) {
@@ -55,24 +76,10 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    // FIXME Should by FileObject, 
-    listFiles = async (): Promise<any[]> => {
-        return supabaseClient
-            .storage
-            .from(BUCKET_NAME)
-            .list()
-            .then(resp => {
-                if (resp.error) {
-                    throw new Error(resp.error.message)
-                }
-                return resp.data?.filter(f => f.name != '.emptyFolderPlaceholder')
-            })
-    }
-
     removeFile = async (fileName: string): Promise<any> => {
         return supabaseClient
             .storage
-            .from(BUCKET_NAME)
+            .from(this.bucketName)
             .remove([fileName])
             .then(resp => {
                 if (resp.error) {
@@ -85,9 +92,22 @@ export class SupabaseStorageService implements StorageService {
     uploadFile = async (file: any): Promise<any> => {
         return supabaseClient
             .storage
-            .from(BUCKET_NAME)
+            .from(this.bucketName)
             .upload(file.name, file)
             .then(resp => {
+                if (resp.error) {
+                    throw new Error(resp.error.message)
+                }
+                return resp.data
+            })
+    }
+
+    upload(path: string, blob: any) {
+        return supabaseClient
+            .storage
+            .from(this.bucketName)
+            .upload(path, blob)
+            .then((resp: any) => {
                 if (resp.error) {
                     throw new Error(resp.error.message)
                 }

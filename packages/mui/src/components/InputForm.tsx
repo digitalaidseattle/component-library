@@ -48,13 +48,13 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
     const inputField = (idx: number, option: InputOption, value: any) => {
         switch (option.type) {
             case 'custom':
-                return option.inputRenderer!(idx, option, value) 
+                return option.inputRenderer!(idx, option, value)
             case 'date':
                 return <DatePicker
                     key={`${idx}-${option.name}`}
                     label={option.label}
                     disabled={option.disabled}
-                    value={dayjs(value)} 
+                    value={dayjs(value)}
                     onChange={(value) => onChange(option.name, value?.toDate())}
                 />
             case 'time':
@@ -62,19 +62,19 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                     key={`${idx}-${option.name}`}
                     label={option.label}
                     disabled={option.disabled}
-                    value={dayjs(value)} 
+                    value={dayjs(value)}
                     onChange={(value) => onChange(option.name, value?.toDate())}
                 />
             case 'datetime':
                 return <DateTimePicker
                     label={option.label}
-                    value={dayjs(value)} 
+                    value={dayjs(value)}
                     onChange={(newValue) => onChange(option.name, newValue?.toDate())}
                 />
             case 'select': {
                 const menuItems = option.options!
                     .map((item: { label: string, value: string }, idx) =>
-                        <MenuItem key={`m-${idx}`} value={item.value} >{item.label}</MenuItem>
+                        <MenuItem key={`m-${idx + 1}`} value={item.value} >{item.label}</MenuItem>
                     )
                 return (
                     <FormControl fullWidth
@@ -88,7 +88,7 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                             label={option.label}
                             onChange={(evt) => onChange(option.name, evt.target.value)}>
                             {[
-                                <MenuItem key={`m-${idx}`} value={undefined} ></MenuItem>,
+                                <MenuItem key={`m-0`} value={undefined} ></MenuItem>,
                                 ...menuItems]}
                         </Select>
                     </FormControl>
