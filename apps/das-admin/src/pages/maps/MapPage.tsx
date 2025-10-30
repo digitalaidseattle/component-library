@@ -4,8 +4,8 @@
  */
 
 // react
-import { ReactNode, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
+import { ReactNode, useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -18,7 +18,6 @@ import {
   ListItemText,
   Paper,
   Stack,
-  Tabs,
   Typography
 } from '@mui/material';
 

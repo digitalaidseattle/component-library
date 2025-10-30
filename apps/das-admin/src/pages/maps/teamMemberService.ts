@@ -14,6 +14,7 @@ import { Location } from './mappingService';
 const airtableClient = new Airtable({ apiKey: import.meta.env.VITE_AIRTABLE_ANON_KEY })
 
 type TeamMember = {
+    id: string,
     name: string,
     role: string,
     url: string,
@@ -30,6 +31,7 @@ class TeamMemberService extends AirtableEntityService<TeamMember> {
     transform(record: Record<FieldSet>): TeamMember {
         const pics = record.fields.pic as any[];
         return {
+            id: record.id,
             name: `${record.fields['First name']} ${record.fields['Last name']}`,
             role: record.fields['Position'] as string,
             url: pics && pics[0] && pics[0].thumbnails.large.url || undefined,

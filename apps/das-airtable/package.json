@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@digitalaidseattle/airtable": "^1.0.1",
-    "@digitalaidseattle/core": "^1.0.8",
+    "@digitalaidseattle/core": "^1.0.9",
     "@digitalaidseattle/firebase": "^1.0.4",
-    "@digitalaidseattle/mui": "^1.0.13",
+    "@digitalaidseattle/mui": "^1.0.19",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.4.2",

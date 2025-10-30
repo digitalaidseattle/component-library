@@ -13,7 +13,7 @@ const StorageExamplePage = () => {
   const storageService = new SupabaseStorageService();
 
   useEffect(() => {
-    storageService!.listFiles()
+    storageService!.list()
       .then((resp: File[]) => {
         setFiles(resp);
       })

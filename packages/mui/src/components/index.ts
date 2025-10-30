@@ -4,6 +4,6 @@ export { default as ConfirmationDialog } from "./ConfirmationDialog";
 export { default as Notification } from "./Notification";
 export * from "./cards";
 export * from "./InputForm";
-export * from "./InputFormDialog";
-export * from "./SelectItemDialog";
+export { default as InputFormDialog } from "./InputFormDialog";
+export { default as SelectItemDialog } from "./SelectItemDialog";
 export * from "./TabbedPanelsCard";
