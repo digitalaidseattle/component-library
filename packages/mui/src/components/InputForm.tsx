@@ -1,28 +1,20 @@
 /**
- *  taskDialog.tsx
+ *  InputForm.tsx
  *
- *  @copyright 2024 Digital Aid Seattle
+ *  @copyright 2025 Digital Aid Seattle
  *
  */
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from 'dayjs';
-
-
-// TODO add more input types
-// TODO change input types into enum
-
-// enum InputType {
-//     String = "string",
-//     Text = "text"
-// }
+import dayjs from 'dayjs';
+import InputRating from './InputRating';
 
 interface InputOption {
     name: string;
     label: string;
-    type: string;
+    type?: 'custom' | 'date' | 'time' | 'datetime' | 'select' | 'rating' | 'string'; // defaults to string
     disabled: boolean;
     size?: number;
     options?: { label: string, value: string }[];
@@ -94,6 +86,12 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                     </FormControl>
                 )
             }
+            case 'rating': {
+                return <InputRating index={idx}
+                    option={option}
+                    value={value}
+                    onChange={(field, value) => onChange(field, value)} />
+            }
             case 'string':
             default:
                 return (
@@ -107,7 +105,7 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                             label={option.label}
                             multiline={option.size && option.size > 1 ? true : false}
                             rows={option.size ?? 1}
-                            value={value}
+                            value={value ?? ''}
                             fullWidth
                             variant="outlined"
                             onChange={(evt) => onChange(option.name, evt.target.value)}
@@ -125,3 +123,4 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
 }
 export { InputForm };
 export type { InputOption };
+
