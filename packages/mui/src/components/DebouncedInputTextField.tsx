@@ -5,6 +5,7 @@
 *
 */
 
+import React from "react"
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { InputOption } from "./InputForm";
@@ -15,7 +16,7 @@ interface InputProps {
     value: number,
     onChange: (field: string, value: any) => void
 }
-function DebouncedInputTextField({ index, option, value, onChange }: InputProps) {
+const DebouncedInputTextField: React.FC<InputProps> = ({ index, option, value, onChange }) => {
     const [inputValue, setInputValue] = useState('');
     const [debouncedValue, setDebouncedValue] = useState('');
 

@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/mui",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "description": "Material UI components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/mui",
   "main": "dist/digitalaidseattle-mui.cjs.js",

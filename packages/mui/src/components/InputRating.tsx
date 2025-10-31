@@ -1,9 +1,10 @@
 /**
- *  ForecastsDialog.tsx
+ *  InputRating.tsx
  *
  *  @copyright 2025 Digital Aid Seattle
  *
  */
+import React from "react"
 import { Box, FormLabel, Rating, Typography } from '@mui/material';
 import { InputOption } from '@digitalaidseattle/mui';
 
@@ -15,7 +16,7 @@ interface InputRatingProps {
     value: number,
     onChange: (field: string, value: any) => void
 }
-function InputRating({ index, option, value, onChange }: InputRatingProps) {
+const InputRating: React.FC<InputRatingProps> = ({ index, option, value, onChange }) => {
     return (
         <Box
             key={index}
