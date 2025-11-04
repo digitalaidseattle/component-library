@@ -17,7 +17,7 @@ import TestPage from './pages/TestPage';
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <MainLayout />,
+    element: <MainLayout sx={{ p: 1 }} />,
     children: [
       {
         path: "",

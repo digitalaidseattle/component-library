@@ -8,7 +8,6 @@ import logo from "./assets/logo-light-icon.svg";
 
 import { defaultTheme, MenuItem } from "@digitalaidseattle/mui";
 import packageJson from "../package.json";
-import { IconButton } from '@mui/material';
 import { HelpButton } from './components/HelpButton';
 
 export const Config = () => {

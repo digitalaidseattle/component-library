@@ -13,17 +13,21 @@ import { InputOption } from "./InputForm";
 interface InputProps {
     index: number;
     option: InputOption;
-    value: number,
+    value: string,
+    debounceTime?: number,
     onChange: (field: string, value: any) => void
 }
-const DebouncedInputTextField: React.FC<InputProps> = ({ index, option, value, onChange }) => {
+
+const DEFAULT_DEBOUNCE = 500;
+
+const DebouncedInputTextField: React.FC<InputProps> = ({ index, option, value, debounceTime, onChange }) => {
     const [inputValue, setInputValue] = useState('');
-    const [debouncedValue, setDebouncedValue] = useState('');
+    const [debouncedValue, setDebouncedValue] = useState(value);
 
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedValue(inputValue);
-        }, 500);
+        }, debounceTime ?? DEFAULT_DEBOUNCE);
 
         return () => {
             clearTimeout(handler);

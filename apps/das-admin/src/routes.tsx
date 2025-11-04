@@ -16,7 +16,7 @@ import TicketPage from "./pages/crud/TicketPage";
 const routes = [
   {
     path: "/",
-    element: <MainLayout />,
+    element: <MainLayout sx={{ p: 1 }} />,
     children: [
       {
         path: "",

@@ -9,7 +9,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { Box, Toolbar, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, SxProps } from '@mui/material/styles';
 
 // project import
 import Drawer from './Drawer';
@@ -29,8 +29,8 @@ import { DrawerOpenContext } from './DrawerOpenContext';
 import Notification from '../../components/Notification';
 
 // ==============================|| MAIN LAYOUT ||============================== //
+function MainLayout({ sx }: { sx?: SxProps }) {
 
-const MainLayout: React.FC = () => {
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const [user, setUser] = useState<User>(null as unknown as User);
@@ -67,8 +67,8 @@ const MainLayout: React.FC = () => {
           <DrawerOpenContext.Provider value={{ drawerOpen, setDrawerOpen }} >
             <RefreshContextProvider >
               <NotificationContextProvider>
-              <ScrollTop>
-                <Notification />
+                <ScrollTop>
+                  <Notification />
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <Header open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
                     <Drawer open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
@@ -78,13 +78,14 @@ const MainLayout: React.FC = () => {
                         flexGrow: 1,
                         p: { xs: 2, sm: 3 },
                         backgroundColor: theme.palette.background.default,
-                        minHeight: '100vh'
+                        minHeight: '100vh',
+                        ...sx
                       }}>
                       <Toolbar />
                       <Outlet />
                     </Box>
                   </Box>
-              </ScrollTop>
+                </ScrollTop>
               </NotificationContextProvider>
             </RefreshContextProvider>
           </DrawerOpenContext.Provider>

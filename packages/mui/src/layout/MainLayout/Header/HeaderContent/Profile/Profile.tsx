@@ -15,10 +15,11 @@ import {
   Typography
 } from '@mui/material';
 import { Direction, useTheme } from '@mui/material/styles';
-
-import { LogoutOutlined } from '@ant-design/icons';
-import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle/core';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import { LogoutOutlined } from '@ant-design/icons';
+
+import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle/core';
 
 import MainCard from '../../../../../components/cards/MainCard';
 import Transitions from '../../../../../components/Transitions';
@@ -77,7 +78,7 @@ const Profile = () => {
   useEffect(() => {
     if (user && user.user_metadata) {
       setAvatar(user.user_metadata.avatar_url ?? '')
-      setVersion(configuration ? configuration.version : '');
+      setVersion(configuration ? configuration.version ?? '' : '');
     }
   }, [configuration])
 
@@ -188,9 +189,15 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           {version && <Typography>version: {version}</Typography>}
+                          <Link
+                            style={{ 'textDecoration': 'none' }}
+                            color="secondary" to={`/privacy`}>
+                            Privacy Policy
+                          </Link>
                         </Grid>
                       </Grid>
                     </CardContent>
+
                     {/* {open && (
                       <>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
