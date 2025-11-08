@@ -16,21 +16,6 @@ interface TabPanelProps {
     dir: Direction
 }
 
-// tab panel wrapper
-const TabPanel: React.FC<TabPanelProps> = ({ children, value, index, dir, ...other }) => {
-    return (
-        <Box
-            role="tabpanel"
-            hidden={value !== index}
-            id={`profile-tabpanel-${index}`}
-            aria-labelledby={`profile-tab-${index}`}
-            dir={dir}
-            {...other}>
-            {value === index && children}
-        </Box>
-    );
-}
-
 interface TabbedCardProps {
     panels: {
         header: ReactNode,
@@ -71,15 +56,20 @@ const TabbedPanels: React.FC<TabbedCardProps> = ({ panels }) => {
                         />
                     ))}
                 </Tabs>
-                {panels.map((p, idx) => (
-                    <TabPanel value={activeTab} index={idx} dir={theme.direction}>
-                        {p.children}
-                    </TabPanel>
+                {panels.map((p, index) => (
+                    <Box
+                        key={index}
+                        role="tabpanel"
+                        hidden={activeTab !== index}
+                        id={`profile-tabpanel-${index}`}
+                        aria-labelledby={`profile-tab-${index}`}
+                        dir={theme.direction}>
+                        {activeTab === index && p.children}
+                    </Box>
                 ))}
             </CardContent>
         </Card>
     )
-
 }
 
 const TabbedPanelsCard: React.FC<TabbedCardProps> = ({ panels }) => {

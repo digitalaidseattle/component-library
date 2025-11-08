@@ -16,11 +16,10 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
     }
 
     abstract transform(record: Record<FieldSet>): T;
+
     abstract transformEntity(entity: Partial<T>): Partial<FieldSet>;
 
-
-
-    async getAll(count?: number, select?: string): Promise<T[]> {
+    async getAll(count?: number, select?: string, mapper?: (json:any) => T): Promise<T[]> {
         let allRecords: T[] = [];
         const table = this.base(this.tableId);
         await table
@@ -58,7 +57,7 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
             });
     }
 
-    async batchInsert(entities: T[], select?: string, user?: User): Promise<T[]> {
+    async batchInsert(entities: T[], select?: string, mapper?: (json:any) => T, user?: User): Promise<T[]> {
         return this.base(this.tableId)
             .update(entities.map(entity => {
                 return { id: entity.id!.toString(), fields: this.transformEntity(entity) }
@@ -66,13 +65,13 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
             .then(records => records.map(record => this.transform(record)));
     }
 
-    async insert(entity: T, select?: string, user?: User): Promise<T> {
+    async insert(entity: T, select?: string, mapper?: (json:any) => T, user?: User): Promise<T> {
         return this.base(this.tableId)
             .create(this.transformEntity(entity))
             .then(rec => this.transform(rec));
     }
 
-    async update(id: Identifier, changes: Partial<T>, select?: string, user?: User): Promise<T> {
+    async update(id: Identifier, changes: Partial<T>, select?: string, mapper?: (json:any) => T, user?: User): Promise<T> {
         return this.base(this.tableId)
             .update(id.toString(), this.transformEntity(changes))
             .then(rec => this.transform(rec))

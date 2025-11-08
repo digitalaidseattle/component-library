@@ -14,15 +14,15 @@ export interface Entity {
 
 export interface EntityService<T extends Entity> {
 
-    getAll(count?: number, select?: string): Promise<T[]>;
+    getAll(count?: number, select?: string, mapper?: (json: any) => T,): Promise<T[]>;
 
-    getById(id: Identifier, select?: string): Promise<T | null>;
+    getById(id: Identifier, select?: string, mapper?: (json: any) => T,): Promise<T | null>;
 
-    batchInsert(entities: T[], select?: string, user?: User): Promise<T[]>;
+    batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]>;
 
-    insert(entity: T, select?: string, user?: User): Promise<T>;
+    insert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T>;
 
-    update(id: Identifier, changes: Partial<T>, select?: string, user?: User): Promise<T>;
+    update(id: Identifier, changes: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T>;
 
     delete(id: Identifier, user?: User): Promise<void>;
 

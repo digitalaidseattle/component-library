@@ -1,3 +1,4 @@
+import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
 import {
     addDoc,
     collection,
@@ -6,10 +7,8 @@ import {
     getDoc,
     getDocs,
     getFirestore,
-    updateDoc,
-    writeBatch
+    updateDoc
 } from "firebase/firestore";
-import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
 
 import { firebaseClient } from "./firebaseClient";
 
@@ -23,7 +22,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
 
 
     // Get all documents from a collection
-    async getAll(count?: number, select?: string): Promise<T[]> {
+    async getAll(count?: number, select?: string, mapper?: (json: any) => T): Promise<T[]> {
         const querySnapshot = await getDocs(collection(this.db, this.collectionName));
         return querySnapshot.docs.map(doc => {
             return {
@@ -34,7 +33,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     }
 
     // Update a document to a collection
-    async getById(id: string, select?: string): Promise<T> {
+    async getById(id: string, select?: string, mapper?: (json: any) => T): Promise<T> {
         try {
             const docRef = await getDoc(doc(this.db, this.collectionName, id));
             if (docRef.exists()) {
@@ -52,7 +51,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     }
 
     // Add a document to a collection
-    async batchInsert(entities: T[], select?: string, user?: User): Promise<T[]> {
+    async batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]> {
         try {
             const docRef = await addDoc(collection(this.db, this.collectionName), entities);
             // FIXME add ID to docRef instead
@@ -64,7 +63,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     }
 
     // Add a document to a collection
-    async insert(entity: T, select?: string, user?: User): Promise<T> {
+    async insert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
         try {
             const docRef = await addDoc(collection(this.db, this.collectionName), entity);
             return {
@@ -82,11 +81,12 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
         entityId: Identifier,
         updatedFields: T,
         select?: string,
+        mapper?: (json: any) => T,
         user?: User): Promise<T> {
         try {
             const docRef = doc(this.db, this.collectionName, entityId as string);
             updateDoc(docRef, updatedFields as any);
-            return {...updatedFields} as T
+            return { ...updatedFields } as T
         } catch (e) {
             console.error("Error updating document: ", e);
             throw e;
@@ -102,4 +102,5 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
 
 export { FirestoreService };
 
-export type { Entity };
+    export type { Entity };
+
