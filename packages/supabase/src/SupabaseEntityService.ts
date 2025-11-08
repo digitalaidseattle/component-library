@@ -12,12 +12,12 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     tableName = '';
     select = '*';
-    mapper: (json: any) => T;
+    mapper = (json: any) => { json };
 
     constructor(tableName: string, select?: string, mapper?: (json: any) => T) {
         this.tableName = tableName;
         this.select = select ?? '*';
-        this.mapper = mapper!;
+        this.mapper = mapper ?? ((json: any) => json);
     }
 
     // MUI datagrid filters
@@ -84,8 +84,9 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
             }
 
             return query.then((resp: any) => {
+                const aMapper = mapper ?? this.mapper;
                 return {
-                    rows: mapper ? resp.data.map((json: any) => mapper(json)) : resp.data,
+                    rows: aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data,
                     totalRowCount: resp.count,
                 };
             })
@@ -117,7 +118,7 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                 .single()
                 .then((resp: any) => {
                     const aMapper = mapper ?? this.mapper;
-                    return aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data
+                    return aMapper(resp.data)!
                 })
         } catch (err) {
             console.error('Unexpected error during select:', err);
@@ -156,10 +157,10 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                 .single()
                 .then((resp: any) => {
                     const aMapper = mapper ?? this.mapper;
-                    return aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data
+                    return aMapper(resp.data)!
                 })
             if (error) {
-                console.error('Error inserting entity:', error.message);
+                console.error('Error inserting entity:', error);
                 throw new Error('Failed to insert entity');
             }
             return data as unknown as T;
@@ -178,10 +179,10 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                 .select(select ?? this.select)
                 .then((resp: any) => {
                     const aMapper = mapper ?? this.mapper;
-                    return aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data
+                    return aMapper(resp.data)!
                 })
             if (error) {
-                console.error('Error updating entity:', error.message);
+                console.error('Error updating entity:', error);
                 throw new Error('Failed to update entity');
             }
             return data as unknown as T;
