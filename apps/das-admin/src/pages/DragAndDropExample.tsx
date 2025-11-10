@@ -2,7 +2,7 @@
 import { DDType, DDCategory } from '@digitalaidseattle/draganddrop/dist/declarations/src/components/types';
 import { DragAndDrop } from '@digitalaidseattle/draganddrop';
 import { MainCard } from '@digitalaidseattle/mui';
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 type Ticket = {
@@ -64,15 +64,16 @@ export const DragAndDropExample = () => {
     };
 
     return (
-        <Box id="DnD" width="100%">
-            <MainCard title="Drag Drop Sample">
+        <Card>
+            <CardHeader title="Drag Drop Sample" />
+            <CardContent>
                 <DragAndDrop
                     onChange={(c: Map<string, unknown>, t: TicketWrapper) => handleChange(c, t)}
                     items={items}
                     categories={categories}
                     cardRenderer={cardRenderer}
                     headerRenderer={headerRenderer} />
-            </MainCard>
-        </Box>
+            </CardContent>
+        </Card>
     )
 }

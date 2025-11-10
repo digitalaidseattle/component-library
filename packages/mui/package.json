@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/mui",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Material UI components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/mui",
   "main": "dist/digitalaidseattle-mui.cjs.js",
@@ -13,8 +13,8 @@
     "@digitalaidseattle/core": "1.0.10",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.6",
-    "@mui/x-date-pickers": "^7.26.0",
+    "@mui/material": "^7.3.5",
+    "@mui/x-date-pickers": "^8.17.0",
     "dayjs": "^1.11.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

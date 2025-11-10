@@ -8,15 +8,27 @@ import { useContext, useEffect, useState } from 'react';
 // material-ui
 import {
     Box,
-    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    IconButton,
     Stack
 } from '@mui/material';
 import {
+    ColumnsPanelTrigger,
     DataGrid,
+    FilterPanelTrigger,
+    GridAddIcon,
     GridColDef,
+    GridDeleteIcon,
+    GridFilterListIcon,
     GridRenderCellParams,
     GridRowSelectionModel,
     GridSortModel,
+    GridToolbarExportContainer,
+    GridViewColumnIcon,
+    Toolbar,
+    ToolbarButton,
     useGridApiRef
 } from '@mui/x-data-grid';
 
@@ -62,7 +74,9 @@ const getColumns = (): GridColDef[] => {
             headerName: 'Status',
             width: 140,
             renderCell: (params: GridRenderCellParams<Ticket, string>) => (
-                <TicketStatus ticket={params.row!} />
+                <Box sx={{ height: '100%', alignContent: 'center' }}>
+                    <TicketStatus ticket={params.row!} />
+                </Box>
             ),
         },
         {
@@ -131,19 +145,17 @@ export default function TicketsPage() {
 
     function handleDelete(): void {
         if (rowSelectionModel) {
-            const promises = [];
-            const iterator = rowSelectionModel.entries();
-            let result = iterator.next();
-            while (!result.done) {
-                promises.push(ticketService.delete(result.value[1]))
-                result = iterator.next();
-            }
+            const promises = Array.from(rowSelectionModel.ids)
+                .map((id) => ticketService.delete(id));
 
             Promise
                 .all(promises)
                 .then(() => {
                     nofications.success('Tickets deleted');
-                    apiRef.current.setRowSelectionModel([]);
+                    apiRef.current!.setRowSelectionModel({
+                        ...rowSelectionModel,
+                        ids: new Set()
+                    });
                     setShowConfirmation(false);
                     setRefresh(refresh + 1)
                 })
@@ -167,53 +179,97 @@ export default function TicketsPage() {
         throw new Error('Function not implemented.');
     }
 
-    // End New Ticket
+    function CustomToolbar() {
+        return (
+            <Toolbar>
+                <Box sx={{ flex: 1, display: 'flex', gap: 1 }}>
+                    <IconButton
+                        title='New'
+                        color="primary"
+                        size="small"
+                        sx={{
+                            textTransform: 'none',
+                            padding: '4px 8px',
+                            lineHeight: 1.5,
+                            '&:hover': {
+                                backgroundColor: (theme) =>
+                                    theme.palette.action.hover,
+                            },
+                        }}
+                        onClick={newTicket}>
+                        <GridAddIcon /> New
+                    </IconButton>
+                    <IconButton
+                        color="primary"
+                        size="small"
+                        sx={{
+                            textTransform: 'none',
+                            padding: '4px 8px',
+                            lineHeight: 1.5,
+                            '&:hover': {
+                                backgroundColor: (theme) =>
+                                    theme.palette.action.hover,
+                            },
+                        }}
+                        disabled={!(rowSelectionModel && rowSelectionModel.ids.size > 0)}
+                        onClick={applyAction}>
+                        <GridDeleteIcon /> Delete
+                    </IconButton>
+                </Box>
+                {/* Add your custom actions */}
+                {/* Keep the default toolbar items */}
+                <Box>
+                    <ColumnsPanelTrigger render={<ToolbarButton />}>
+                        <GridViewColumnIcon fontSize="small" />
+                    </ColumnsPanelTrigger>
+                    <FilterPanelTrigger render={<ToolbarButton />}>
+                        <GridFilterListIcon fontSize="small" />
+                    </FilterPanelTrigger>
+                    <GridToolbarExportContainer />
+                </Box>
+            </Toolbar>
+        );
+    }
+
 
     return (
-        <Box>
-            <Stack direction="row" spacing={1} marginBottom={1}>
-                <Button
-                    title='Action'
-                    variant="contained"
-                    color="primary"
-                    onClick={newTicket}>
-                    {'New'}
-                </Button>
-                <Button
-                    title='Delete'
-                    variant="contained"
-                    color="primary"
-                    disabled={!(rowSelectionModel && rowSelectionModel.length > 0)}
-                    onClick={applyAction}>
-                    {'Delete'}
-                </Button>
-            </Stack>
-            <DataGrid
+        <Card>
+            <CardHeader title="CRUD Example" />
+            <CardContent>
+                <Stack direction="row" spacing={1} marginBottom={1}>
 
-                apiRef={apiRef}
-                rows={pageInfo.rows}
-                columns={getColumns()}
+                </Stack>
+                <DataGrid
+                    sx={{ width: 800 }}
+                    apiRef={apiRef}
+                    rows={pageInfo.rows}
+                    columns={getColumns()}
+                    showToolbar={true}
+                    slots={{
+                        toolbar: CustomToolbar, // 👈 use your custom toolbar here
+                    }}
 
-                paginationMode='server'
-                paginationModel={paginationModel}
-                rowCount={rowCountState}
-                onPaginationModelChange={setPaginationModel}
+                    paginationMode='server'
+                    paginationModel={paginationModel}
+                    rowCount={rowCountState}
+                    onPaginationModelChange={setPaginationModel}
 
-                sortingMode='server'
-                sortModel={sortModel}
-                onSortModelChange={setSortModel}
+                    sortingMode='server'
+                    sortModel={sortModel}
+                    onSortModelChange={setSortModel}
 
-                pageSizeOptions={[5, 10, 25, 100]}
-                checkboxSelection
-                onRowSelectionModelChange={setRowSelectionModel}
-                disableRowSelectionOnClick
-            />
-            <TicketDialog open={openTicketDialog} handleSuccess={handleSuccess} handleError={handleError} />
-            <ConfirmationDialog
-                message={`Delete selected tickets?`}
-                open={showConfirmation}
-                handleConfirm={handleDelete}
-                handleCancel={() => setShowConfirmation(false)} />
-        </Box>
+                    pageSizeOptions={[5, 10, 25, 100]}
+                    checkboxSelection
+                    onRowSelectionModelChange={setRowSelectionModel}
+                    disableRowSelectionOnClick
+                />
+                <TicketDialog open={openTicketDialog} handleSuccess={handleSuccess} handleError={handleError} />
+                <ConfirmationDialog
+                    message={`Delete selected tickets?`}
+                    open={showConfirmation}
+                    handleConfirm={handleDelete}
+                    handleCancel={() => setShowConfirmation(false)} />
+            </CardContent>
+        </Card>
     );
 }

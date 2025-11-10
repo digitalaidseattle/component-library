@@ -4,10 +4,10 @@
  */
 
 // react
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 
 // material-ui
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 
 import {
   LocalizationProvider
@@ -18,7 +18,7 @@ const CalendarPage = () => {
 
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateEntryExample />
     </LocalizationProvider>
   );

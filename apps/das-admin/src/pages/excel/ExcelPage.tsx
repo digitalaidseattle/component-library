@@ -4,11 +4,10 @@
 
 
 */
+import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
 
 import { useNotifications } from '@digitalaidseattle/core';
-import { MainCard } from '@digitalaidseattle/mui';
 import { staffService } from './staffService';
 import StaffTable from './StaffTable';
 import { Staff } from './types';
@@ -52,28 +51,31 @@ const ExcelPage = () => {
     }
 
     return (
-        <MainCard title="Excel Upload Example">
-            <Typography variant="body2">
-                This demo parses data from an excel file (.xlsx) that has the columns: <b>name</b>, <b>email</b>, and <b>roles</b>.
-                <br />
-                Try it out with <b>staff-test.xlsx</b> located in the github repository, under <b>test/resources</b>.
-                <br />
-                Or try downloading an excel spreadsheet.
-            </Typography>
-            <Stack direction={'row'} spacing={2} m={2}>
-                <Box sx={{ marginY: '1rem' }}>
-                    <input
-                        type="file"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        id="contained-button-file"
-                        onChange={(e) => handleUpload(e)}
-                    />
-                </Box>
-                <Button variant='outlined'
-                    onClick={download}>Export</Button>
-            </Stack>
-            <StaffTable tableData={staff} newData={newStaff} />
-        </MainCard >
+        <Card>
+            <CardHeader title="Excel Upload Example" />
+            <CardContent>
+                <Typography variant="body2">
+                    This demo parses data from an excel file (.xlsx) that has the columns: <b>name</b>, <b>email</b>, and <b>roles</b>.
+                    <br />
+                    Try it out with <b>staff-test.xlsx</b> located in the github repository, under <b>test/resources</b>.
+                    <br />
+                    Or try downloading an excel spreadsheet.
+                </Typography>
+                <Stack direction={'row'} spacing={2} m={2}>
+                    <Box sx={{ marginY: '1rem' }}>
+                        <input
+                            type="file"
+                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                            id="contained-button-file"
+                            onChange={(e) => handleUpload(e)}
+                        />
+                    </Box>
+                    <Button variant='outlined'
+                        onClick={download}>Export</Button>
+                </Stack>
+                <StaffTable tableData={staff} newData={newStaff} />
+            </CardContent>
+        </Card>
     );
 }
 

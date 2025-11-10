@@ -15,9 +15,11 @@ import {
 import {
     DateCalendar,
     DayCalendarSkeleton,
-    PickersCalendarHeaderProps, PickersDay, pickersDayClasses, PickersDayProps
+    PickersCalendarHeaderProps,
+    PickersDay, pickersDayClasses,
+    PickersDayProps
 } from '@mui/x-date-pickers';
-import { format } from 'date-fns/format';
+import dayjs from 'dayjs';
 
 
 interface ReadOnlyCalendarProps {
@@ -27,18 +29,18 @@ interface ReadOnlyCalendarProps {
 
 const ReadOnlyCalendar: React.FC<ReadOnlyCalendarProps> = ({ defaultDay, selectedDay }) => {
 
-    const CustomCalendarHeader = (props: PickersCalendarHeaderProps<Date>) => {
+    const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
         const { currentMonth } = props;
         return (
             <Stack spacing={1} direction="row">
-                <Typography variant="body2">{format(currentMonth, "MMMM yyy")}</Typography>
+                <Typography variant="body2">{dayjs(currentMonth).format("MMMM YYYY")}</Typography>
             </Stack>
         );
     }
 
-    function CustomDay(props: PickersDayProps<Date>) {
+    function CustomDay(props: PickersDayProps) {
         const { day, outsideCurrentMonth, ...other } = props;
-        const { isSelected, color } = selectedDay(props.day);
+        const { isSelected, color } = selectedDay(props.day.toDate());
         // const isSelected = highlightedDays.find(d => isSameDay(d, props.day)) !== undefined;
         // logic could be injected here to vary the color
         const special = {
@@ -57,7 +59,7 @@ const ReadOnlyCalendar: React.FC<ReadOnlyCalendarProps> = ({ defaultDay, selecte
 
     return (
         <DateCalendar
-            defaultValue={defaultDay}
+            defaultValue={dayjs(defaultDay)}
             renderLoading={() => <DayCalendarSkeleton />}
             slots={{
                 day: CustomDay,

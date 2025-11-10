@@ -1,5 +1,5 @@
 import { Stack, Typography } from "@mui/material";
-import { format } from "date-fns";
+import dayjs from 'dayjs';
 
 import { MainCard } from "@digitalaidseattle/mui";
 import { TicketProps } from "./TicketProps";
@@ -13,7 +13,7 @@ const TicketHistoryCard: React.FC<TicketProps> = ({ ticket }) => {
                     const date = hist.created_at;
                     return <MainCard key={idx}>
                         <Typography>Action: {hist.description}</Typography>
-                        <Typography>Date: {format(date, "MM-dd-yyyy")} {format(date, "hh:mm")}</Typography>
+                        <Typography>Date: {dayjs(date).format("MM-dd-YYYY")} {dayjs(date).format("hh:mm")}</Typography>
                         <Typography>Change By: {hist.change_by}</Typography>
                     </MainCard>
                 })}

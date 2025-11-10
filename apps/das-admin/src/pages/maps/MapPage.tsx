@@ -11,6 +11,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  Card,
+  CardHeader,
   Grid,
   List,
   ListItem,
@@ -145,11 +147,10 @@ const MapPage = () => {
   }
 
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Stack direction="row" justifyContent={'space-between'} >
-          <Typography variant="h5" color={theme.palette.text.primary}>{Labels.title}</Typography>
+    <Card>
+      <CardHeader
+        title={Labels.title}
+        action={
           <Stack direction="row" spacing={'1rem'}>
             <Button
               title={Labels.resetButton}
@@ -167,67 +168,67 @@ const MapPage = () => {
               {Labels.saveButton}
             </Button>
           </Stack>
-        </Stack>
-      </Grid>
+        }
+      />
+      <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+        <Grid size={3}>
+          <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
+            <List >
+              {people.map((p, idx) =>
+                <ListItem key={('p' + idx)}>
+                  <ListItemButton
+                    onClick={() => handlePeopleSelection(p)}>
+                    <ListItemText
+                      primary={p.name} secondary={p.location} />
+                  </ListItemButton>
+                </ListItem>
+              )}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid size={9}>
+          <Box height={MAP_HEIGHT}>
+            <Map
+              {...viewState}
+              onMove={evt => setViewState(evt.viewState)}
+              mapStyle={mapStyle}
+            >
+              <GeolocateControl position="top-left" />
+              <FullscreenControl position="top-left" />
+              <NavigationControl position="top-left" />
+              <ScaleControl />
+              {pins}
+              {popupInfo && (
+                <Popup
+                  anchor="top"
+                  longitude={Number(popupInfo.location.longitude)}
+                  latitude={Number(popupInfo.location.latitude)}
+                  onClose={() => setPopupInfo(null)}
+                >
+                  <Stack>
+                    <Typography fontWeight={600}>
+                      <a target="_new"
+                        href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.location.name}`}
+                      >{popupInfo.location.name}</a>
+                    </Typography>
 
-      {/* row 2 */}
-      <Grid item xs={12} lg={3}>
-        <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
-          <List >
-            {people.map((p, idx) =>
-              <ListItem key={('p' + idx)}>
-                <ListItemButton
-                  onClick={() => handlePeopleSelection(p)}>
-                  <ListItemText
-                    primary={p.name} secondary={p.location} />
-                </ListItemButton>
-              </ListItem>
-            )}
-          </List>
-        </Paper>
+                    {popupInfo.members.length === 1 ?
+                      <Stack>
+                        <img src={popupInfo.members[0].url} />
+                        <Typography fontWeight={600}>{popupInfo.members[0].name}</Typography>
+                        <Typography fontWeight={400}>{popupInfo.members[0].role}</Typography>
+                      </Stack>
+                      :
+                      <Typography>Home of {popupInfo.members.length} Cadre members</Typography>
+                    }
+                  </Stack>
+                </Popup>
+              )}
+            </Map>
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={9}>
-        <Box height={MAP_HEIGHT}>
-          <Map
-            {...viewState}
-            onMove={evt => setViewState(evt.viewState)}
-            mapStyle={mapStyle}
-          >
-            <GeolocateControl position="top-left" />
-            <FullscreenControl position="top-left" />
-            <NavigationControl position="top-left" />
-            <ScaleControl />
-            {pins}
-            {popupInfo && (
-              <Popup
-                anchor="top"
-                longitude={Number(popupInfo.location.longitude)}
-                latitude={Number(popupInfo.location.latitude)}
-                onClose={() => setPopupInfo(null)}
-              >
-                <Stack>
-                  <Typography fontWeight={600}>
-                    <a target="_new"
-                      href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.location.name}`}
-                    >{popupInfo.location.name}</a>
-                  </Typography>
-
-                  {popupInfo.members.length === 1 ?
-                    <Stack>
-                      <img src={popupInfo.members[0].url} />
-                      <Typography fontWeight={600}>{popupInfo.members[0].name}</Typography>
-                      <Typography fontWeight={400}>{popupInfo.members[0].role}</Typography>
-                    </Stack>
-                    :
-                    <Typography>Home of {popupInfo.members.length} Cadre members</Typography>
-                  }
-                </Stack>
-              </Popup>
-            )}
-          </Map>
-        </Box>
-      </Grid>
-    </Grid>
+    </Card>
   );
 }
 

@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
+// material-ui
+import {
+  Card,
+  CardContent,
+  CardHeader
+} from '@mui/material';
+import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
-import { formatISO } from 'date-fns';
 
-import { MainCard } from '@digitalaidseattle/mui';
 import { File, SupabaseStorageService } from '@digitalaidseattle/supabase';
 import FilesTable from './FilesTable';
 
@@ -24,7 +29,7 @@ const StorageExamplePage = () => {
       id: id,
       name: name,
       metadata: { size: size, mimetype: mimetype },
-      created_at: formatISO(new Date())
+      created_at: dayjs(new Date())
     }
   }
 
@@ -48,8 +53,10 @@ const StorageExamplePage = () => {
   }
 
   return (
-    <MainCard title="Upload/Delete Storage Files">
-      <div>
+    <Card>
+      <CardHeader
+        title="Upload/Delete Storage Files" />
+      <CardContent>
         <input
           accept="*"
           id="contained-button-file"
@@ -57,8 +64,8 @@ const StorageExamplePage = () => {
           onChange={(e) => handleUpload(e)}
         />
         <FilesTable fileList={files} onDelete={(fName: string) => handleDelete(fName)} />
-      </div>
-    </MainCard>
+      </CardContent>
+    </Card>
   );
 }
 
