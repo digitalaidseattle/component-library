@@ -42,7 +42,7 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    getUrl(filepath: string): string {
+    async getUrl(filepath: string): Promise<string> {
         const resp = supabaseClient
             .storage
             .from(this.bucketName)
@@ -76,7 +76,7 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    removeFile = async (fileName: string): Promise<any> => {
+    async removeFile(fileName: string): Promise<any> {
         return supabaseClient
             .storage
             .from(this.bucketName)
@@ -89,7 +89,7 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    uploadFile = async (file: any): Promise<any> => {
+    async uploadFile(file: any): Promise<any> {
         return supabaseClient
             .storage
             .from(this.bucketName)
@@ -102,7 +102,7 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    upload(path: string, blob: any) {
+    async upload(path: string, blob: any): Promise<any> {
         return supabaseClient
             .storage
             .from(this.bucketName)

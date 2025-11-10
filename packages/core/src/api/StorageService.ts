@@ -10,7 +10,7 @@ export interface StorageService {
 
     list(filepath?: string): Promise<any[]>;
 
-    getUrl(filepath: string): string;
+    getUrl(filepath: string): Promise<string>;
 
     upload(path: string, blob: any): Promise<any>
 
@@ -33,7 +33,7 @@ export class LocalStorageService implements StorageService {
         throw new Error("Method not implemented.");
     }
 
-    getUrl(filepath: string): string {
+    getUrl(filepath: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
