@@ -35,7 +35,11 @@ export class LocalStorageService implements StorageService {
         throw new Error("Method not implemented.");
     }
 
-    getUrl(filepath: string): Promise<string> {
+    getUrl(filepath: string): string {
+        throw new Error("Method not implemented.");
+    }
+
+    getUrlAsync(filepath: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
