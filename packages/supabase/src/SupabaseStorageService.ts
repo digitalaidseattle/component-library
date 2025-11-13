@@ -41,8 +41,16 @@ export class SupabaseStorageService implements StorageService {
                 return resp.data?.filter(f => f.name != '.emptyFolderPlaceholder')
             })
     }
+    // Temp methdo that should be move into component library
+    getUrl(filepath: string): string {
+        const resp = supabaseClient
+            .storage
+            .from(this.bucketName)
+            .getPublicUrl(filepath);
+        return resp.data.publicUrl
+    }
 
-    async getUrl(filepath: string): Promise<string> {
+    async getUrlAsync(filepath: string): Promise<string> {
         const resp = supabaseClient
             .storage
             .from(this.bucketName)

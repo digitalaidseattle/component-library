@@ -10,7 +10,9 @@ export interface StorageService {
 
     list(filepath?: string): Promise<any[]>;
 
-    getUrl(filepath: string): Promise<string>;
+    getUrl(filepath: string): string;
+
+    getUrlAsync(filepath: string): Promise<string>;
 
     upload(path: string, blob: any): Promise<any>
 
