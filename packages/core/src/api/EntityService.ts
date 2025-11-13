@@ -9,7 +9,7 @@ import { User } from "./AuthService";
 export type Identifier = string | number;
 
 export interface Entity {
-    id: Identifier | undefined;
+    id: Identifier | undefined | null;
 }
 
 export interface EntityService<T extends Entity> {

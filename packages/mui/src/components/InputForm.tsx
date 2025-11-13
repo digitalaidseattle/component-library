@@ -81,7 +81,7 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                             label={option.label}
                             onChange={(evt) => onChange(option.name, evt.target.value)}>
                             {[
-                                <MenuItem key={`m-0`} value={undefined} ></MenuItem>,
+                                <MenuItem key={`m-0`} value='null'>{`<Make Selection>`}</MenuItem>,
                                 ...menuItems]}
                         </Select>
                     </FormControl>

@@ -3,7 +3,7 @@
  * 
  * Example of integrating tickets with data-grid
  */
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -35,14 +35,14 @@ import {
 // third-party
 
 // project import
-import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
-import { ConfirmationDialog } from '@digitalaidseattle/mui';
+import { useNotifications } from '@digitalaidseattle/core';
+import { ConfirmationDialog, InputFormDialog, InputOption } from '@digitalaidseattle/mui';
 import { PageInfo, QueryModel } from '@digitalaidseattle/supabase';
 import TicketContact from './components/TicketContact';
-import TicketDialog from './components/TicketDialog';
 import TicketLink from './components/TicketLink';
 import TicketStatus from './components/TicketStatus';
-import { ticketService } from './ticketService';
+import { ticketService, TicketSource } from './ticketService';
+import { Ticket } from './types';
 
 // ==============================|| Tickets Grid ||============================== //
 
@@ -92,6 +92,44 @@ const getColumns = (): GridColDef[] => {
     ];
 }
 
+
+const staffingInputFields: InputOption[] = [
+    {
+        name: "inputSource",
+        label: 'Input Source',
+        type: 'select',
+        disabled: false,
+        options: Object.values(TicketSource).map(s => ({ value: s.value, label: s.label }))
+    },
+    {
+        name: "clientName",
+        label: 'Client Name',
+        disabled: false,
+    },
+    {
+        name: "email",
+        label: 'Email Address',
+        disabled: false,
+    },
+    {
+        name: "phone",
+        label: 'Phone',
+        disabled: false,
+    },
+    {
+        name: "summary",
+        label: 'Summary',
+        size: 4,
+        disabled: false
+    },
+    {
+        name: "description",
+        label: 'Description',
+        size: 4,
+        disabled: false,
+    }
+];
+
 export default function TicketsPage() {
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: PAGE_SIZE });
     const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created_at', sort: 'desc' }])
@@ -99,7 +137,6 @@ export default function TicketsPage() {
     const [pageInfo, setPageInfo] = useState<PageInfo<Ticket>>({ rows: [], totalRowCount: 0 });
     const [rowCountState, setRowCountState] = useState(pageInfo?.totalRowCount || 0,);
     const apiRef = useGridApiRef();
-    const { refresh, setRefresh } = useContext(RefreshContext);
 
     const [openTicketDialog, setOpenTicketDialog] = useState<boolean>(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -116,18 +153,15 @@ export default function TicketsPage() {
 
     useEffect(() => {
         if (paginationModel && sortModel) {
-            const queryModel = {
-                page: paginationModel.page,
-                pageSize: paginationModel.pageSize,
-                sortField: sortModel.length === 0 ? 'created_at' : sortModel[0].field,
-                sortDirection: sortModel.length === 0 ? 'created_at' : sortModel[0].sort
-            } as QueryModel
-            ticketService.find(queryModel)
-                .then((pi) => setPageInfo(pi))
+            fetchData();
         }
     }, [paginationModel, sortModel])
 
     useEffect(() => {
+        fetchData();
+    }, [])
+
+    function fetchData() {
         const queryModel = {
             page: paginationModel.page,
             pageSize: paginationModel.pageSize,
@@ -136,7 +170,7 @@ export default function TicketsPage() {
         } as QueryModel
         ticketService.find(queryModel)
             .then((pi) => setPageInfo(pi))
-    }, [refresh])
+    }
 
     // Delete Ticket
     const applyAction = () => {
@@ -157,7 +191,7 @@ export default function TicketsPage() {
                         ids: new Set()
                     });
                     setShowConfirmation(false);
-                    setRefresh(refresh + 1)
+                    fetchData();
                 })
         }
         // ticketService.delete()
@@ -169,14 +203,20 @@ export default function TicketsPage() {
         setOpenTicketDialog(true);
     }
 
-    function handleSuccess(_resp: Ticket | null): void {
-        setOpenTicketDialog(false);
-        throw new Error('Function not implemented.');
-    }
-
-    function handleError(_err: Error): void {
-        setOpenTicketDialog(false);
-        throw new Error('Function not implemented.');
+    function handleTicketChange(ticket: Ticket | null): void {
+        if (ticket) {
+            const json = { ...ticket } as any;
+            delete json.id;
+            delete json.ticket_history;
+            ticketService.insert(json)
+                .then(inserted => {
+                    nofications.success(`Ticket inserted: ${inserted.id}`);
+                    fetchData();
+                    setOpenTicketDialog(false);
+                })
+        } else {
+            setOpenTicketDialog(false);
+        }
     }
 
     function CustomToolbar() {
@@ -240,7 +280,6 @@ export default function TicketsPage() {
 
                 </Stack>
                 <DataGrid
-                    sx={{ width: 800 }}
                     apiRef={apiRef}
                     rows={pageInfo.rows}
                     columns={getColumns()}
@@ -263,7 +302,12 @@ export default function TicketsPage() {
                     onRowSelectionModelChange={setRowSelectionModel}
                     disableRowSelectionOnClick
                 />
-                <TicketDialog open={openTicketDialog} handleSuccess={handleSuccess} handleError={handleError} />
+                <InputFormDialog
+                    open={openTicketDialog} title={'Create Service Ticket'}
+                    inputFields={staffingInputFields}
+                    entity={ticketService.empty()}
+                    onChange={handleTicketChange} />
+                {/* <TicketDialog open={openTicketDialog} handleSuccess={handleSuccess} handleError={handleError} /> */}
                 <ConfirmationDialog
                     message={`Delete selected tickets?`}
                     open={showConfirmation}

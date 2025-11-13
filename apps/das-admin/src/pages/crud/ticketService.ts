@@ -7,6 +7,7 @@
 
 import { Identifier } from "@digitalaidseattle/core";
 import { supabaseClient, SupabaseEntityService } from "@digitalaidseattle/supabase";
+import { Ticket, TicketHistory } from "./types";
 
 const TicketSource = {
     Email: { value: 'email', label: 'Email' },
@@ -18,6 +19,23 @@ const TicketSource = {
 const TABLE_SERVICE_TICKET = 'service_ticket';
 
 class TicketService extends SupabaseEntityService<Ticket> {
+
+    empty() {
+        return {
+            id: null,
+            created_at: new Date(),
+            inputSource: '',
+            summary: '',
+            description: '',
+            status: '',
+            assignee: '',
+            due_date: new Date(),
+            phone: '',
+            email: '',
+            clientName: '',
+            ticket_history: []
+        };
+    }
 
     validateTicket(updated: Ticket): Map<string, string> {
         const map = new Map<string, string>();

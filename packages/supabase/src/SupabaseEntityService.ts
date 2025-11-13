@@ -128,7 +128,7 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     async batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]> {
         try {
-            const { data, error } = await supabaseClient
+            return await supabaseClient
                 .from(this.tableName)
                 .insert(entities)
                 .select(select ?? this.select)
@@ -137,11 +137,6 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                     const aMapper = mapper ?? this.mapper;
                     return aMapper ? data.map((json: any) => aMapper(json)) : data
                 })
-            if (error) {
-                console.error('Error inserting entity:', error.message);
-                throw new Error('Failed to insert entity');
-            }
-            return data as unknown as T[];
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
@@ -150,7 +145,7 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     async insert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
         try {
-            const { data, error } = await supabaseClient
+            return await supabaseClient
                 .from(this.tableName)
                 .insert([entity])
                 .select(select ?? this.select)
@@ -159,11 +154,6 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                     const aMapper = mapper ?? this.mapper;
                     return aMapper(resp.data)!
                 })
-            if (error) {
-                console.error('Error inserting entity:', error);
-                throw new Error('Failed to insert entity');
-            }
-            return data as unknown as T;
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
@@ -172,20 +162,16 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     async update(entityId: Identifier, updatedFields: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
         try {
-            const { data, error } = await supabaseClient
+            return await supabaseClient
                 .from(this.tableName)
                 .update(updatedFields)
                 .eq('id', entityId)
                 .select(select ?? this.select)
+                .single()
                 .then((resp: any) => {
                     const aMapper = mapper ?? this.mapper;
                     return aMapper(resp.data)!
                 })
-            if (error) {
-                console.error('Error updating entity:', error);
-                throw new Error('Failed to update entity');
-            }
-            return data as unknown as T;
         } catch (err) {
             console.error('Unexpected error during update:', err);
             throw err;
@@ -198,7 +184,6 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
                 .from(this.tableName)
                 .delete()
                 .eq('id', entityId);
-
             if (error) {
                 console.error('Error deleting entity:', error.message);
                 throw new Error('Failed to delete entity');

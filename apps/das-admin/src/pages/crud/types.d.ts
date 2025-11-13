@@ -1,5 +1,7 @@
+import { Identifier } from "@digitalaidseattle/core";
+
 type Ticket = {
-    id: number,
+    id: Identifier,
     created_at: Date,
     inputSource: string,
     summary: string,
@@ -10,7 +12,7 @@ type Ticket = {
     phone: string,
     email: string,
     clientName: string,
-    ticket_history: TicketHistory[]
+    ticket_history?: TicketHistory[]
 };
 
 type TicketHistory = {
