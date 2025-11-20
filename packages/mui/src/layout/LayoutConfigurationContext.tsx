@@ -23,7 +23,8 @@ const EMPTY_CONFIGURATION = {
     logoUrl: '',
     drawerWidth: 240,
     menuItems: [],
-    toolbarItems: []
+    toolbarItems: [],
+    profileItems: []
 }
 
 export const LayoutConfigurationContext = createContext<LayoutConfigurationContextType>({

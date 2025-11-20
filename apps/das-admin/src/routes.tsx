@@ -5,13 +5,16 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
+import {
+  Box
+} from '@mui/material';
 import { DragAndDropExample } from "./pages/DragAndDropExample";
 import CalendarPage from "./pages/calendar/CalendarPage";
+import TicketPage from "./pages/crud/TicketPage";
+import TicketsGrid from "./pages/crud/TicketsPage";
 import ExcelPage from "./pages/excel/ExcelPage";
 import MapPage from "./pages/maps/MapPage";
 import StorageExamplePage from "./pages/storage/StorageExamplePage";
-import TicketsGrid from "./pages/crud/TicketsPage";
-import TicketPage from "./pages/crud/TicketPage";
 
 const routes = [
   {
@@ -33,6 +36,10 @@ const routes = [
       {
         path: "privacy",
         element: <MarkdownPage filepath='privacy.md' />,
+      },
+      {
+        path: "profile",
+        element: <Box># The Applicants page is under construction.</Box>,
       },
       {
         path: "calendar-example",

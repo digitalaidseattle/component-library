@@ -12,6 +12,7 @@ import packageJson from "../package.json";
 
 import { LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
 import Notification from "./Notification";
+import { Link } from 'react-router-dom';
 
 export const Config: LayoutConfiguration = ({
     appName: 'DAS Admin',
@@ -77,6 +78,20 @@ export const Config: LayoutConfiguration = ({
     } as MenuItem],
     toolbarItems: [
         <Notification key={1} />
+    ],
+    profileItems: [
+        <Link
+            style={{ 'textDecoration': 'none' }}
+            color="secondary"
+            to={`/privacy`}>
+            Privacy Policy
+        </Link>,
+        <Link
+            style={{ 'textDecoration': 'none' }}
+            color="secondary"
+            to={`/profile`}>
+            Profile
+        </Link>
     ],
     authProviders: ["google"]
 })

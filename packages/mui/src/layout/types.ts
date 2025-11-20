@@ -21,6 +21,7 @@ export interface LayoutConfiguration {
     drawerWidth: number;
     menuItems: MenuItem[];
     toolbarItems: ReactNode[];
+    profileItems?: ReactNode[];
     theme?: Theme;
     authProviders?: string[],
     routes?: RouteObject[]
