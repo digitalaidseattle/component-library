@@ -25,7 +25,7 @@ interface LoggingService {
 
 class ConsoleLoggingService implements LoggingService {
 
-    enabled = import.meta.env.VITE_LOGGING ?? true;
+    enabled = false;
 
     info(message?: string, ...optionalParams: any[]) {
         if (this.enabled) {

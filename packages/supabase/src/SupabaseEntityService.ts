@@ -12,7 +12,7 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     tableName = '';
     select = '*';
-    mapper = (json: any) => { json };
+    mapper = (json: any) => (json as T);
 
     constructor(tableName: string, select?: string, mapper?: (json: any) => T) {
         this.tableName = tableName;

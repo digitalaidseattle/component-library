@@ -15,6 +15,7 @@ import Notification from "./Notification";
 import { Link } from 'react-router-dom';
 
 export const Config: LayoutConfiguration = ({
+
     appName: 'DAS Admin',
     version: packageJson.version,
     logoUrl: logo,
@@ -52,13 +53,7 @@ export const Config: LayoutConfiguration = ({
                 url: '/calendar-example',
                 icon: <CalendarOutlined />
             } as MenuItem,
-            {
-                id: 'excel-example-page',
-                title: 'Excel Example',
-                type: 'item',
-                url: '/excel-example',
-                icon: <TableOutlined />
-            } as MenuItem,
+
             {
                 id: 'storage-example-page',
                 title: 'Storage Example',
@@ -74,6 +69,20 @@ export const Config: LayoutConfiguration = ({
                 url: '/crud-example',
                 icon: <DatabaseOutlined />
             } as MenuItem
+        ]
+    } as MenuItem,
+    {
+        id: 'group-addons',
+        title: 'Add Ons',
+        type: 'collapse',
+        children: [
+            {
+                id: 'excel-example-page',
+                title: 'Excel Example',
+                type: 'item',
+                url: '/excel-example',
+                icon: <TableOutlined />
+            } as MenuItem,
         ]
     } as MenuItem],
     toolbarItems: [

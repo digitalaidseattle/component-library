@@ -1249,6 +1249,44 @@
     human-id "^4.1.1"
     prettier "^2.7.1"
 
+"@digitalaidseattle/airtable@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@digitalaidseattle/airtable/-/airtable-1.0.5.tgz#d28ee8fed0cd4c5dfb130986c2044b089621bb0c"
+  integrity sha512-LFroWZhWk2Y2YQa5mpvKX6Z2yani8FAhGT3cB3OFpKtJTCn3f9NTdJ8UmhkSraEo66reZE3kiDo1W++7UdrP6g==
+  dependencies:
+    "@babel/runtime" "^7.25.0"
+    "@digitalaidseattle/core" "1.0.11"
+    airtable "^0.12.2"
+    react "^18.3.1"
+
+"@digitalaidseattle/core@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.11.tgz#2d42f12207bdd1c3829c2a0517f88e0ce32a828d"
+  integrity sha512-0dNgvjtagGEredcSoVmTvL5jWWutTVI9y3l0Y+r3yeJFttlczOaHviPEqKrzKc0stSmR1rlXXpWs1alxT9MuOQ==
+  dependencies:
+    "@babel/runtime" "^7.25.0"
+    react "^18.3.1"
+    react-dom "^18.3.1"
+    typescript "^5.5.4"
+
+"@digitalaidseattle/core@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.12.tgz#666c0a70a95f48919a67c8ed7fafda119cf80f54"
+  integrity sha512-+wolQk6Qlu9jihT+j+iH/bXZKz4gD0U8vnqrXgqizBwj7zCW4heG5HMTEvys1XdTNWkWf2Vx13yWiC1QdTR30w==
+  dependencies:
+    "@babel/runtime" "^7.25.0"
+    react "^18.3.1"
+    react-dom "^18.3.1"
+    typescript "^5.5.4"
+
+"@digitalaidseattle/supabase@1.0.14":
+  version "1.0.15"
+  dependencies:
+    "@babel/runtime" "^7.25.0"
+    "@digitalaidseattle/core" "1.0.13"
+    "@supabase/supabase-js" "^2.39.3"
+    react "^18.3.1"
+
 "@dnd-kit/accessibility@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"

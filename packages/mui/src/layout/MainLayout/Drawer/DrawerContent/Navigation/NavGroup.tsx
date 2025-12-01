@@ -1,30 +1,42 @@
 import React from 'react';
 
 // material-ui
-import { Box, List, Typography } from '@mui/material';
+import { Box, IconButton, List, Typography } from '@mui/material';
 
 // project import
 import { useContext } from 'react';
 import NavItem from './NavItem';
 import { DrawerOpenContext } from '../../../DrawerOpenContext';
 import { MenuItem } from '../../../../types';
+import styled from '@emotion/styled';
+import { DownOutlined } from '@ant-design/icons';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
+const ExpandMore = styled((props: any) => {
+  const { expand, ...other } = props;
+  return <IconButton size="small" {...other} />;
+})(({ theme, expand }: { theme?: any; expand: boolean }) => ({
+  transform: !expand ? "rotate(180deg)" : "rotate(0deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 interface NavGroupProps {
   item: MenuItem
 }
 const NavGroup: React.FC<NavGroupProps> = ({ item }) => {
   const { drawerOpen } = useContext(DrawerOpenContext);
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handleExpandClick = () => {
+    setExpanded((prev) => !prev);
+  };
+
 
   const navCollapse = item.children?.map((menuItem: MenuItem) => {
     switch (menuItem.type) {
-      case 'collapse':
-        return (
-          <Typography key={menuItem.id} variant="caption" color="error" sx={{ p: 2.5 }}>
-            collapse - only available in paid version
-          </Typography>
-        );
       case 'item':
         return <NavItem key={menuItem.id} item={menuItem} level={1} />;
       default:
@@ -41,19 +53,30 @@ const NavGroup: React.FC<NavGroupProps> = ({ item }) => {
       subheader={
         item.title &&
         drawerOpen && (
-          <Box sx={{ pl: 3, mb: 1.5 }}>
-            <Typography variant="subtitle2" color="textSecondary">
+          <Box sx={{ pl: 3, mb: 1.5, display: 'flex' }}>
+            <Typography color="textSecondary">
               {item.title}
             </Typography>
-            {/* only available in paid version */}
-          </Box>
+            {item.type === 'collapse' &&
+              <ExpandMore
+                expand={expanded}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <DownOutlined />
+              </ExpandMore>
+            }
+          </Box >
         )
       }
       sx={{ mb: drawerOpen ? 1.5 : 0, py: 0, zIndex: 0 }}
     >
-      {navCollapse}
-    </List>
+      {expanded && navCollapse}
+    </List >
   );
 };
+
+
 
 export default NavGroup;
