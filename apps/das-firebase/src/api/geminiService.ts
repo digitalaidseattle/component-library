@@ -1,8 +1,6 @@
 /**
  * Institution AI Service
- * This service interacts with the AI backend to generate content related to institutions.
- * It uses the Firebase AI SDK to create a generative model that can respond to prompts
- * about institutions, such as listing philanthropic organizations in a specific area.  
+ * 
  * 
  * Provision Firebase application  in Google Cloud
  * <ol>
@@ -18,28 +16,38 @@
 
 
 import { firebaseClient } from "@digitalaidseattle/firebase";
-import { getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
+import { AI, GenerativeModel, getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
 import { AiService } from "./aitypes";
 
 class GeminiService implements AiService {
 
     modelType = "gemini-2.5-flash";  // "gemini-2.5-pro", "gemini-2.5-flash-lite";
-    ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
+    ai: AI
 
-    // Create a `GenerativeModel` instance with a model that supports your use case
-    model = getGenerativeModel(this.ai, {
-        model: this.modelType
-    });
+    constructor(modelType?: string) {
+        this.modelType = modelType ?? "gemini-2.5-flash";
+        this.ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
+    }
 
-    calcTokenCount(request: string): Promise<number> {
-        return this.model.countTokens(request)
+    static getModels(): string[] {
+        return ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.5-flash-lite"];
+    }
+
+    createModel(): GenerativeModel {
+        return getGenerativeModel(this.ai, { model: this.modelType });
+    }
+
+    calcTokenCount(prompt: string): Promise<number> {
+        return this.createModel()
+            .countTokens(prompt)
             .then(response => response.totalTokens)
     }
 
     // Wrap in an async function so you can use await
     generateContent(prompt: string): Promise<any> {
         // To generate text output, call generateContent with the text input
-        return this.model.generateContent(prompt)
+        return this.createModel()
+            .generateContent(prompt)
             .then(result => result.response.text())
             .catch(error => {
                 console.error("Error querying AI: ", error);
@@ -86,6 +94,6 @@ class GeminiService implements AiService {
 
 }
 
-const geminiService = new GeminiService();
-export { geminiService };
+
+export { GeminiService };
 

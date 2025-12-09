@@ -4,11 +4,10 @@
 */
 import { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from 'react-router';
-
+import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import { AddOutlined, ContentCopyOutlined, DeleteOutlineOutlined, EditOutlined } from '@mui/icons-material';
-import { IconButton, Stack } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
-import { format } from 'date-fns';
+import dayjs from "dayjs";
 
 import { useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
@@ -28,9 +27,9 @@ const GrantsPage: React.FC = ({ }) => {
     useEffect(() => {
         refresh();
     }, []);
-    
+
     useEffect(() => {
-        if(showHelp) {
+        if (showHelp) {
             notifications.info('You got no help on this page.');
             setShowHelp(false);
         }
@@ -125,27 +124,30 @@ const GrantsPage: React.FC = ({ }) => {
             field: 'submitted', headerName: 'Submitted', width: 150,
             renderCell: (params => {
                 const submitted = params.row.submitted;
-                return submitted ? format(new Date(submitted.seconds * 1000), "MMM d, yyyy") : ''
+                return submitted ? dayjs(submitted).format("MMM d, YYYY") : ''
             })
         },
         { field: 'tokenCount', headerName: 'Token Count', width: 100 },
         { field: 'response', headerName: 'Response', width: 300 },
     ];
     return (
-        <Stack gap={2}>
-            <DataGrid
-                rows={grantProposals}
-                columns={columns}
-                // initialState={{ pagination: { paginationModel } }}
-                pageSizeOptions={[5, 10, 100]}
-                sx={{ border: 0 }}
-            />
-            <ConfirmationDialog
-                message={grantProposal ? `Delete proposal ${grantProposal.description}` : ''}
-                open={showDeleteDialog}
-                handleConfirm={handleDelete}
-                handleCancel={() => setShowDeleteDialog(false)} />
-        </Stack>
+        <Card>
+            <CardHeader title="Grant Proposals" />
+            <CardContent>
+                <DataGrid
+                    rows={grantProposals}
+                    columns={columns}
+                    // initialState={{ pagination: { paginationModel } }}
+                    pageSizeOptions={[5, 10, 100]}
+                    sx={{ border: 0 }}
+                />
+                <ConfirmationDialog
+                    message={grantProposal ? `Delete proposal ${grantProposal.description}` : ''}
+                    open={showDeleteDialog}
+                    handleConfirm={handleDelete}
+                    handleCancel={() => setShowDeleteDialog(false)} />
+            </CardContent>
+        </Card>
     );
 }
 

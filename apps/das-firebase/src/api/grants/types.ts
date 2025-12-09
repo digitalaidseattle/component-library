@@ -18,7 +18,8 @@ export type GrantInput = {
 
 export type GrantOutput = {
     name: string;
-    maxWords: number;
+    maxSymbols: number;
+    unit: 'words' | 'characters';
 }
 
 export type GrantRecipe = Entity & {
@@ -27,13 +28,14 @@ export type GrantRecipe = Entity & {
     updatedAt: Timestamp | Date;
     updatedBy: string;
     description: string;
-    prompt: string;  // Instructions for AI
+    template: string;  // Instructions for AI
     inputParameters: GrantInput[]; // AI will be asked to include this information
-    outputsWithWordCount: GrantOutput[]; // AI will be based to output the data with these constraints
-    tokenString: string;  // Store what will be sent to AI
+    outputParameters: GrantOutput[]; // AI will be based to output the data with these constraints
+    prompt: string;  // Store what will be sent to AI
     tokenCount: number;
-    proposalIds: string[];
     modelType: string;  // "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.5-flash-lite";
+    enableContext: boolean;
+    context: string;
 }
 
 export type GrantProposal = Entity & {

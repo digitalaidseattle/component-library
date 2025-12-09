@@ -17,7 +17,7 @@ interface HelpContexType {
 
 export const HelpContext = createContext<HelpContexType>({
     showHelp: false,
-    setShowHelp: (c: boolean) => { }
+    setShowHelp: (c: boolean) => { console.log(c) }
 });
 
 export const HelpContextProvider = (props: { children: React.ReactNode }) => {

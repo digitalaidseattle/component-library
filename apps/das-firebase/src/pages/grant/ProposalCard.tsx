@@ -9,76 +9,67 @@ import { Card, CardContent, Grid, Rating, Stack, Typography } from "@mui/materia
 import { Clipboard } from "../../components/ClipBoard";
 
 interface ProposalProps {
-    proposalId: string;
+    proposal: GrantProposal;
 }
-export const ProposalCard: React.FC<ProposalProps> = ({ proposalId }) => {
-    const [proposal, setProposal] = useState<GrantProposal>();
+export const ProposalCard: React.FC<ProposalProps> = ({ proposal }) => {
+    const [grantProposal, setGrantProposal] = useState<GrantProposal>();
     const [structured, setStructured] = useState<any>({});
-    const [displayChoice, setDisplayChoice] = useState<string>('');
+    const [displayChoice, setDisplayChoice] = useState< 'markdown' | 'structured'>('markdown');
 
     useEffect(() => {
-        if (proposalId) {
-            grantProposalService.getById(proposalId)
-                .then((proposal) => setProposal(proposal))
-                .catch(err => console.log('error', proposalId, err));
-        }
-    }, [proposalId]);
-
-    useEffect(() => {
-        if (proposal) {
-            setDisplayChoice(proposal.textResponse ? "markdown" : "structured");
-            // to map => object
-            setStructured(proposal.structuredResponse);
-        }
+        setGrantProposal(proposal);
     }, [proposal]);
 
+    useEffect(() => {
+        if (grantProposal) {
+            setDisplayChoice(grantProposal.textResponse ? "markdown" : "structured");
+            // to map => object
+            setStructured(grantProposal.structuredResponse);
+        }
+    }, [grantProposal]);
+
     function handleRatingChange(_event: SyntheticEvent<Element, Event>, value: number | null): void {
-        if (proposal) {
-            proposal.rating = value;
-            grantProposalService.update(proposalId, proposal)
-                .then(updated => setProposal(updated));
+        if (grantProposal) {
+            grantProposal.rating = value;
+            grantProposalService.update(grantProposal.id!, grantProposal)
+                .then(updated => setGrantProposal(updated));
         }
     }
 
-    return (proposal &&
-        <Fragment key={proposal.id}>
+    return (grantProposal &&
+        <Fragment key={grantProposal.id}>
             <Stack direction={'row'}>
                 <Typography> Rating: </Typography>
-                <Rating value={proposal.rating} onChange={handleRatingChange} />
+                <Rating value={grantProposal.rating} onChange={handleRatingChange} />
             </Stack>
             <Card>
-                {displayChoice === 'markdown' && proposal.textResponse &&
+                {displayChoice === 'markdown' && grantProposal.textResponse &&
                     <CardContent>
                         <Markdown>
-                            {proposal.textResponse}
+                            {grantProposal.textResponse}
                         </Markdown>
                     </CardContent>
                 }
                 {displayChoice === 'structured' &&
-                    <>
-                        <CardContent>
-                            <Typography variant="h3">Structured Output</Typography>
-                        </CardContent>
-                        <CardContent>
-                            <Stack gap={2} >
-                                {Object.entries(structured).map(([key, value]) => {
-                                    // TODO consider stripping quotes in the service
-                                    const formatted = JSON.stringify(value, null, 2).replace(/^["]+|["]+$/g, "");
-                                    return (<Grid container spacing={2}>
-                                        <Grid item xs={2} >
-                                            <Stack direction={'row'} alignItems={'center'}>
-                                                <Clipboard text={formatted} size={'medium'} />
-                                                <Typography variant="h4"><strong>{key}:</strong></Typography>
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={10}>
-                                            <Typography>{formatted}</Typography>
-                                        </Grid>
-                                    </Grid>)
-                                })}
-                            </Stack>
-                        </CardContent>
-                    </>
+                    <CardContent>
+                        <Stack gap={2} >
+                            {Object.entries(structured).map(([key, value]) => {
+                                // TODO consider stripping quotes in the service
+                                const formatted = JSON.stringify(value, null, 2).replace(/^["]+|["]+$/g, "");
+                                return (<Grid container spacing={2}>
+                                    <Grid size={2} >
+                                        <Stack direction={'row'} alignItems={'center'}>
+                                            <Clipboard text={formatted} size={'medium'} />
+                                            <Typography variant="h6"><strong>{key}:</strong></Typography>
+                                        </Stack>
+                                    </Grid>
+                                    <Grid size={10}>
+                                        <Markdown>{formatted}</Markdown>
+                                    </Grid>
+                                </Grid>)
+                            })}
+                        </Stack>
+                    </CardContent>
                 }
             </Card>
         </Fragment>);

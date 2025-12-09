@@ -1,5 +1,7 @@
 import { FirestoreService } from "@digitalaidseattle/firebase";
-import { GrantProposal, GrantRecipe } from "./types";
+import dayjs from "dayjs";
+import Handlebars from "handlebars";
+import { GrantRecipe } from "./types";
 
 
 class GrantService extends FirestoreService<GrantRecipe> {
@@ -9,57 +11,39 @@ class GrantService extends FirestoreService<GrantRecipe> {
     }
 
     empty(): GrantRecipe {
-        return {
+        const now = new Date();
+        const recipe = {
             id: "",
-            createdAt: new Date(),
+            createdAt: now,
             createdBy: '',
-            updatedAt: new Date(),
+            updatedAt: now,
             updatedBy: '',
-            description: "New Proposal",
-            prompt: "Create a grant proposal",
+            description: "New Proposal " + dayjs(now).format("YYYY-MM-D"),
+            template: "Create a grant proposal including the following information:\n {{#each inputs}}{{key}} = {{value}},\n{{/each}}"
+                + " where{{#each outputs}}{{#unless @first}} and{{/unless}} the {{name}} is constrained by a maximum {{maxSymbols}} of {{unit}} {{/each}}.",
             inputParameters: [
                 { key: "to", value: 'Microsoft Philanthropy' },
                 { key: "from", value: 'Digital Aid Seattle' }
             ],
-
-            outputsWithWordCount: [
-                { name: 'description', maxWords: 500 },
-                { name: 'usage', maxWords: 500 }
+            outputParameters: [
+                { name: 'description', maxSymbols: 500, unit: 'words' },
+                { name: 'usage', maxSymbols: 500, unit: 'words' }
             ],
-            tokenString: "",
+            prompt: "",
             tokenCount: 0,
-            proposalIds: [],
-            modelType: ''
-        }
+            modelType: '',
+            enableContext: false,
+            context: ''
+        } as GrantRecipe
+        return recipe;
     }
 
-    createMarkdownRequest(proposal: GrantRecipe): string {
-        const inputs = `${proposal.inputParameters.map(param => `'${param.key}' : '${param.value}'`).join(', ')}`;
-        const outputNames = proposal.outputsWithWordCount.map(p => p.name).join(', ');
-        let limits = '';
-        if (proposal.outputsWithWordCount.length > 0) {
-            limits = proposal.outputsWithWordCount.map(propOutput => {
-                `${propOutput.name} to ${propOutput.maxWords} words`
-            }).join(', and ')
-        }
-        const request = `${proposal.prompt} using the inputs: {${inputs}}.
-          Include in the output the following: ${outputNames},
-           limiting ${limits} `;
-        return request
-    }
-
-    createStructuredRequest(proposal: GrantRecipe): { request: string, schemaFields: string[] } {
-        const inputs = `${proposal.inputParameters.map(param => `'${param.key}' : '${param.value}'`).join(', ')}`;
-        const outputNames = proposal.outputsWithWordCount.map(p => p.name).join(', ');
-        let limits = '';
-        if (proposal.outputsWithWordCount.length > 0) {
-            limits = proposal.outputsWithWordCount.map(propOutput => {
-                `${propOutput.name} to ${propOutput.maxWords} words`
-            }).join(', and ')
-        }
-        const request = `${proposal.prompt} using the inputs: {${inputs}}.  Include in the output the following: ${outputNames}, limiting ${limits} `;
-        const schemaFields = proposal.outputsWithWordCount.map(p => p.name);
-        return { request: request, schemaFields: schemaFields }
+    createPrompt(grantRecipe: GrantRecipe): string {
+        var template = Handlebars.compile(grantRecipe.template);
+        return template({
+            inputs: grantRecipe.inputParameters,
+            outputs: grantRecipe.outputParameters
+        });
     }
 
 }

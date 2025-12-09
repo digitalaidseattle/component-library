@@ -8,8 +8,8 @@ import { Button, Card, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 
 import Markdown from 'react-markdown';
-import { geminiService } from '../../api/geminiService';
 import DebouncedTextField from '../../components/DebouncedTextField';
+import { GeminiService } from '../../api/geminiService';
 
 
 // Dummy KeyValueForm component for demonstration; replace with your actual implementation or import
@@ -74,6 +74,7 @@ const DonationsPage: React.FC = ({ }) => {
         ['donation amount', '$500']
     ]));
 
+    const geminiService = new GeminiService()
 
     function generate() {
         setProposal("");

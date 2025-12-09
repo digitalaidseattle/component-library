@@ -1,33 +1,45 @@
 import { AiService } from "../aitypes";
 import { grantProposalService } from "./grantProposalService";
-import { grantService } from "./grantService";
-import { GrantRecipe } from "./types";
+import { GrantProposal, GrantRecipe } from "./types";
 
 export class StructureJsonGenerator {
+
     aiService: AiService;
 
     constructor(service: AiService) {
         this.aiService = service;
     }
 
-    async generate(grantRecipe: GrantRecipe): Promise<GrantRecipe> {
-        const { request, schemaFields } = grantService.createStructuredRequest(grantRecipe);
-        const tokenCount = await this.aiService.calcTokenCount(request)
-        const structured = await this.aiService.generateParameterizedContent(request, schemaFields)
+    createPrompt(grantRecipe: GrantRecipe): string {
+        // TODO switch to handlebars
+        const inputs = `${grantRecipe.inputParameters.map(param => `'${param.key}' : '${param.value}'`).join(', ')}`;
+        const outputNames = grantRecipe.outputParameters.map(p => p.name).join(', ');
+        let limits = '';
+        if (grantRecipe.outputParameters.length > 0) {
+            limits = grantRecipe.outputParameters.map(propOutput => {
+                `${propOutput.name} to ${propOutput.maxSymbols} words`
+            }).join(', and ')
+        }
+        const request = `${grantRecipe.template} using the inputs: {${inputs}}.  Include in the output the following: ${outputNames}, limiting ${limits} `;
+        return request;
+    }
+
+    createSchema(grantRecipe: GrantRecipe): string[] {
+        return grantRecipe.outputParameters.map(p => p.name);
+    }
+
+    async generate(grantRecipe: GrantRecipe): Promise<GrantProposal> {
+        const schemaFields = this.createSchema(grantRecipe);
+        const structured = await this.aiService.generateParameterizedContent(grantRecipe.prompt, schemaFields)
         const proposal = {
-            id: "",
+            id: null,
             grantRecipeId: grantRecipe.id as string,
             createdAt: new Date(),
+            createdBy: '',
             structuredResponse: structured,
             rating: null
         }
-        const savedProposal = await grantProposalService.insert(proposal)
-        const updatedRecipe = {
-            ...grantRecipe,
-            tokenString: request,
-            tokenCount: tokenCount
-        }
-        updatedRecipe.proposalIds.push(savedProposal.id as string);
-        return await grantService.update(updatedRecipe.id as string, updatedRecipe);
+        return await grantProposalService.insert(proposal)
     }
+
 }
