@@ -13,14 +13,14 @@ import {
 
 import { LoadingContext } from "@digitalaidseattle/core";
 import { GeminiService } from "../../api/geminiService";
-import { GrantOutputEditor } from "../../api/grants/GrantOutputEditor";
+import { GrantOutputEditor } from "./GrantOutputEditor";
 import { grantProposalService } from "../../api/grants/grantProposalService";
 import { grantService } from "../../api/grants/grantService";
 import { MarkdownGenerator } from "../../api/grants/markdownGenerator";
 import { StructureJsonGenerator } from "../../api/grants/structureJsonGenerator";
 import { GrantInput, GrantOutput, GrantProposal, GrantRecipe } from "../../api/grants/types";
 import { useHelp } from "../../components/HelpContext";
-import { InputParametersEditor } from "../../components/InputParametersEditor";
+import { InputParametersEditor } from "./InputParametersEditor";
 import { ProposalCard } from "./ProposalCard";
 
 const HELP_DRAWER_WIDTH = 300;
@@ -253,7 +253,6 @@ const GrantPage: React.FC = ({ }) => {
                             </Grid>
                         </CardContent>
                     </Card>
-
                     <InputParametersEditor
                         disabled={disabled}
                         parameters={grantRecipe.inputParameters ?? []}
