@@ -182,8 +182,7 @@ const GrantPage: React.FC = ({ }) => {
             <Box sx={{ marginRight: `${showHelp ? HELP_DRAWER_WIDTH : 0}px` }}>
                 <Card sx={{ flexGrow: 1, padding: 2, gap: 1, display: 'flex', flexDirection: 'column' }}>
                     <Card>
-                        <CardHeader title="Settings"
-                            action={<Typography>Token count = {grantRecipe.tokenCount}</Typography>} />
+                        <CardHeader title="Settings" />
                         <CardContent>
                             <Grid container spacing={2} >
                                 <Grid size={2}>
@@ -264,7 +263,8 @@ const GrantPage: React.FC = ({ }) => {
                         onChange={handleOutputChange}
                     />
                     <Card>
-                        <CardHeader title="Prompt" />
+                        <CardHeader title="Prompt"
+                            action={<Typography>Token count = {grantRecipe.tokenCount}</Typography>} />
                         <CardContent>
                             <TextField
                                 id="prompt"
