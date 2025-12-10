@@ -1706,6 +1706,14 @@
     "@firebase/util" "1.12.1"
     tslib "^2.1.0"
 
+"@firebase/component@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@firebase/component/-/component-0.7.0.tgz#3736644fdb6d3572dceae7fdc1c35a8bd3819adc"
+  integrity sha512-wR9En2A+WESUHexjmRHkqtaVH94WLNKt6rmeqZhSLBybg4Wyf0Umk04SZsS6sBq4102ZsDBFwoqMqJYj2IoDSg==
+  dependencies:
+    "@firebase/util" "1.13.0"
+    tslib "^2.1.0"
+
 "@firebase/data-connect@0.3.10":
   version "0.3.10"
   resolved "https://registry.yarnpkg.com/@firebase/data-connect/-/data-connect-0.3.10.tgz#7f3449151807a653433e69e33b8a4cf44176ca90"
@@ -1779,6 +1787,19 @@
     "@grpc/proto-loader" "^0.7.8"
     tslib "^2.1.0"
 
+"@firebase/firestore@^4.9.2":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-4.9.2.tgz#0c65203f9754d5aa801ec31c6f885445cfb346f4"
+  integrity sha512-iuA5+nVr/IV/Thm0Luoqf2mERUvK9g791FZpUJV1ZGXO6RL2/i/WFJUj5ZTVXy5pRjpWYO+ZzPcReNrlilmztA==
+  dependencies:
+    "@firebase/component" "0.7.0"
+    "@firebase/logger" "0.5.0"
+    "@firebase/util" "1.13.0"
+    "@firebase/webchannel-wrapper" "1.0.5"
+    "@grpc/grpc-js" "~1.9.0"
+    "@grpc/proto-loader" "^0.7.8"
+    tslib "^2.1.0"
+
 "@firebase/functions-compat@0.3.26":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@firebase/functions-compat/-/functions-compat-0.3.26.tgz#008387f9c4f6873d8caaeae38c65e2c7ff9317f4"
@@ -1837,6 +1858,13 @@
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@firebase/logger/-/logger-0.4.4.tgz#29e8379d20fd1149349a195ee6deee4573a86f48"
   integrity sha512-mH0PEh1zoXGnaR8gD1DeGeNZtWFKbnz9hDO91dIml3iou1gpOnLqXQ2dJfB71dj6dpmUjcQ6phY3ZZJbjErr9g==
+  dependencies:
+    tslib "^2.1.0"
+
+"@firebase/logger@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@firebase/logger/-/logger-0.5.0.tgz#a9e55b1c669a0983dc67127fa4a5964ce8ed5e1b"
+  integrity sha512-cGskaAvkrnh42b3BA3doDWeBmuHFO/Mx5A83rbRDYakPjO9bJtRL3dX7javzc2Rr/JHZf4HlterTW2lUkfeN4g==
   dependencies:
     tslib "^2.1.0"
 
@@ -1956,10 +1984,22 @@
   dependencies:
     tslib "^2.1.0"
 
+"@firebase/util@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@firebase/util/-/util-1.13.0.tgz#2e9e7569722a1e3fc86b1b4076d5cbfbfa7265d6"
+  integrity sha512-0AZUyYUfpMNcztR5l09izHwXkZpghLgCUaAGjtMwXnCg3bj4ml5VgiwqOMOxJ+Nw4qN/zJAaOQBcJ7KGkWStqQ==
+  dependencies:
+    tslib "^2.1.0"
+
 "@firebase/webchannel-wrapper@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-1.0.3.tgz#a73bab8eb491d7b8b7be2f0e6c310647835afe83"
   integrity sha512-2xCRM9q9FlzGZCdgDMJwc0gyUkWFtkosy7Xxr6sFgQwn+wMNIWd7xIvYNauU1r64B5L5rsGKy/n9TKJ0aAFeqQ==
+
+"@firebase/webchannel-wrapper@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-1.0.5.tgz#39cf5a600450cb42f1f0b507cc385459bf103b27"
+  integrity sha512-+uGNN7rkfn41HLO0vekTFhTxk61eKa8mTpRGLO0QSqlQdKvIoGAvLp3ppdVIWbTGYJWM6Kp0iN+PjMIOcnVqTw==
 
 "@grpc/grpc-js@~1.9.0":
   version "1.9.15"

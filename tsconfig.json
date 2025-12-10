@@ -15,6 +15,9 @@
     },
     {
       "path": "./packages/supabase"
+    },
+    {
+      "path": "./packages/grants"
     }
   ],
   "compilerOptions": {
@@ -125,6 +128,9 @@
       ],
       "@digitalaidseattle/airtable": [
         "packages/airtable/src"
+      ],
+      "@digitalaidseattle/grants": [
+        "packages/grants/src"
       ]
     }
   }

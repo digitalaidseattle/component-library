@@ -6,9 +6,8 @@ import {
     HomeOutlined
 } from '@ant-design/icons';
 import logo from "./assets/logo-light-icon.svg";
-import { defaultTheme, MenuItem } from "@digitalaidseattle/mui";
+import { defaultTheme, HelpButton, MenuItem } from "@digitalaidseattle/mui";
 import packageJson from "../package.json";
-import { HelpButton } from './components/HelpButton';
 
 export const Config = () => {
 

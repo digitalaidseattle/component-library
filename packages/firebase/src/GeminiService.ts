@@ -15,9 +15,9 @@
 
 
 
+import { AiService } from "@digitalaidseattle/core";
 import { firebaseClient } from "@digitalaidseattle/firebase";
 import { AI, GenerativeModel, getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
-import { AiService } from "./aitypes";
 
 class GeminiService implements AiService {
 
@@ -93,7 +93,6 @@ class GeminiService implements AiService {
     }
 
 }
-
 
 export { GeminiService };
 

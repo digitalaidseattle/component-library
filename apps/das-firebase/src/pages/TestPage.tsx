@@ -1,6 +1,6 @@
 import { Box, CssBaseline, Drawer, IconButton, Stack, styled, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { useHelp } from "../components/HelpContext";
+import { useHelp } from "@digitalaidseattle/mui";
 
 const HELP_DRAWER_WIDTH = 300;
 

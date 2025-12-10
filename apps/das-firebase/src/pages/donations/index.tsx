@@ -9,7 +9,7 @@ import { useState } from "react";
 
 import Markdown from 'react-markdown';
 import DebouncedTextField from '../../components/DebouncedTextField';
-import { GeminiService } from '../../api/geminiService';
+import { GeminiService } from '@digitalaidseattle/firebase';
 
 
 // Dummy KeyValueForm component for demonstration; replace with your actual implementation or import

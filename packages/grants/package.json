@@ -1,0 +1,32 @@
+{
+  "name": "@digitalaidseattle/grants",
+  "version": "1.0.0",
+  "description": "Grant proposal generation module",
+  "repository": "null//github.com/null/github.com/tree/master/packages/grants",
+  "main": "dist/digitalaidseattle-grants.cjs.js",
+  "module": "dist/digitalaidseattle-grants.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@ant-design/icons": "^5.3.0",
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "^1.0.15",
+    "@digitalaidseattle/firebase": "^1.0.9",
+    "@digitalaidseattle/mui": "^1.0.31",
+    "@firebase/firestore": "^4.9.2",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/material": "^7.3.5",
+    "@mui/x-data-grid": "^8.17.0",
+    "dayjs": "^1.11.13",
+    "firebase": "^11.2.0",
+    "handlebars": "^4.7.8",
+    "react": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "react-router": "^6.22.0"
+  },
+  "scripts": {
+    "postbuild": "cp src/*.css dist/"
+  },
+  "files": [
+    "dist"
+  ]
+}

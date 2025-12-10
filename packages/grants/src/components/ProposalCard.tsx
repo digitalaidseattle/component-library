@@ -1,20 +1,23 @@
 /**
- * ProposalCard.tsx
-*/
-import { Fragment, SyntheticEvent, useEffect, useState } from "react";
-import { grantProposalService } from "../../api/grants/grantProposalService";
-import { GrantProposal } from "../../api/grants/types";
+ *  ProposalCard.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import React, { Fragment, SyntheticEvent, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { Card, CardContent, Grid, Rating, Stack, Typography } from "@mui/material";
+import { GrantProposal } from "../services/types";
+import { grantProposalService } from "../services/grantProposalService";
 import { Clipboard } from "@digitalaidseattle/mui";
 
 interface ProposalProps {
     proposal: GrantProposal;
 }
 export const ProposalCard: React.FC<ProposalProps> = ({ proposal }) => {
-    const [grantProposal, setGrantProposal] = useState<GrantProposal>();
+    const [grantProposal, setGrantProposal] = React.useState<GrantProposal>();
     const [structured, setStructured] = useState<any>({});
-    const [displayChoice, setDisplayChoice] = useState< 'markdown' | 'structured'>('markdown');
+    const [displayChoice, setDisplayChoice] = useState<'markdown' | 'structured'>('markdown');
 
     useEffect(() => {
         setGrantProposal(proposal);

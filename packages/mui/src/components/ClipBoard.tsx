@@ -1,10 +1,16 @@
-import { IconButton } from "@mui/material";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+/**
+ *  Clipboard.ts
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import React, { useEffect, useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
-import { useEffect, useState } from "react";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { IconButton } from "@mui/material";
 
 export const Clipboard = (props: { text: string, size?: "large" | "medium" | "small" }) => {
-    const [copying, setCopying] = useState<boolean>(false);
+    const [copying, setCopying] = React.useState<boolean>(false);
     const [iconSize, setIconSize] = useState<number>(20);
 
     useEffect(() => {
@@ -37,6 +43,7 @@ export const Clipboard = (props: { text: string, size?: "large" | "medium" | "sm
         }
     };
 
+    // TODO add protocol check
     // Requires https
     // const copyToClipboardModern = (text: string) => {
     //     navigator.clipboard.writeText(text)

@@ -15,12 +15,11 @@ import {
   UserContextProvider
 } from "@digitalaidseattle/core";
 import { FirebaseAuthService } from "@digitalaidseattle/firebase";
-import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
+import { HelpContextProvider, LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
 import { Config } from './Config';
 import { routes } from './routes';
-import { HelpContextProvider } from './components/HelpContext';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -32,13 +31,13 @@ const App: React.FC = () => {
     <>
       <AuthServiceProvider authService={new FirebaseAuthService()} >
         <UserContextProvider>
-          <LayoutConfigurationProvider configuration={Config()}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <HelpContextProvider>
+          <HelpContextProvider>
+            <LayoutConfigurationProvider configuration={Config()}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <RouterProvider router={router} />
-              </HelpContextProvider>
-            </LocalizationProvider>
-          </LayoutConfigurationProvider>
+              </LocalizationProvider>
+            </LayoutConfigurationProvider>
+          </HelpContextProvider>
         </UserContextProvider>
       </AuthServiceProvider>
     </>

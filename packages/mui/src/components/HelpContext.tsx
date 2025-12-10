@@ -5,10 +5,7 @@
  *
  */
 
-import React, { createContext, useContext, useState } from 'react';
-
-// TODO library need ability to import CSS, PNG,  & SVG
-// import {logo} from '../../assets/das-dark.png';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface HelpContexType {
     showHelp: boolean,
@@ -17,15 +14,17 @@ interface HelpContexType {
 
 export const HelpContext = createContext<HelpContexType>({
     showHelp: false,
-    setShowHelp: (c: boolean) => { console.log(c) }
+    setShowHelp: () => { }
 });
 
 export const HelpContextProvider = (props: { children: React.ReactNode }) => {
     const [showHelp, setShowHelp] = useState<boolean>(false);
 
+    useEffect(() => {
+        console.log(showHelp)
+    }, [showHelp])
     return (
-        <HelpContext.Provider value={{ showHelp, setShowHelp }
-        }>
+        <HelpContext.Provider value={{ showHelp, setShowHelp }}>
             {props.children}
         </HelpContext.Provider>
     )
@@ -33,5 +32,7 @@ export const HelpContextProvider = (props: { children: React.ReactNode }) => {
 
 // Hook to use the dependency
 export const useHelp = () => {
-    return useContext(HelpContext);
+    const ctx = useContext(HelpContext);
+    if (!ctx) throw new Error("useHelp must be used within a HelpContextProvider");
+    return ctx;
 };

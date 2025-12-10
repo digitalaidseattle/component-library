@@ -2,18 +2,16 @@
  * grants/index.tsx
  * Example of firestore
 */
-import { MouseEventHandler, useEffect, useState } from "react";
-import { useNavigate } from 'react-router';
-import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import { AddOutlined, ContentCopyOutlined, DeleteOutlineOutlined, EditOutlined } from '@mui/icons-material';
+import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import dayjs from "dayjs";
+import { MouseEventHandler, useEffect, useState } from "react";
+import { useNavigate } from 'react-router';
 
 import { useNotifications } from "@digitalaidseattle/core";
-import { ConfirmationDialog } from "@digitalaidseattle/mui";
-import { grantService } from '../../api/grants/grantService';
-import { GrantRecipe } from '../../api/grants/types';
-import { useHelp } from "../../components/HelpContext";
+import { ConfirmationDialog, useHelp } from "@digitalaidseattle/mui";
+import { GrantRecipe, grantService } from "../services";
 
 const GrantsPage: React.FC = ({ }) => {
     const notifications = useNotifications();
@@ -29,6 +27,7 @@ const GrantsPage: React.FC = ({ }) => {
     }, []);
 
     useEffect(() => {
+        console.log('its', showHelp)
         if (showHelp) {
             notifications.info('You got no help on this page.');
             setShowHelp(false);
