@@ -1249,6 +1249,38 @@
     human-id "^4.1.1"
     prettier "^2.7.1"
 
+"@digitalaidseattle/core@1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@digitalaidseattle/core/-/core-1.0.15.tgz#2ebb37a21791195187ad3d49ad1715276dab0881"
+  integrity sha512-LyBSwZtfOy2PIj9AItaXT1/H1QSwyXKNiRRh6gM9IZ49CCO5C7Gv4q1oerPBcn3b5qJtIssYO4rRJ+MEUTj7LA==
+  dependencies:
+    "@babel/runtime" "^7.25.0"
+    react "^18.3.1"
+    react-dom "^18.3.1"
+    typescript "^5.5.4"
+
+"@digitalaidseattle/mui@1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@digitalaidseattle/mui/-/mui-1.0.31.tgz#744c8f09dfd051c02c8fc7162ebc8d094b22abcf"
+  integrity sha512-srPu9jbEZktZgBZ6EDAaQrTKubIWi52SH3T+9PVAHnbiQg9zy9AGVIlCjnwBArYGhO8aXdnY8wQkEfbHQX4L3Q==
+  dependencies:
+    "@ant-design/colors" "^7.0.2"
+    "@ant-design/icons" "^5.3.0"
+    "@babel/runtime" "^7.25.0"
+    "@digitalaidseattle/core" "1.0.15"
+    "@emotion/react" "^11.13.0"
+    "@emotion/styled" "^11.13.0"
+    "@mui/icons-material" "^7.3.5"
+    "@mui/material" "^7.3.5"
+    "@mui/x-date-pickers" "^8.17.0"
+    dayjs "^1.11.13"
+    react "^18.3.1"
+    react-dom "^18.3.1"
+    react-markdown "^10.1.0"
+    react-router "^6.22.0"
+    react-router-dom "^6.22.0"
+    typescript "^5.5.4"
+
 "@dnd-kit/accessibility@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"

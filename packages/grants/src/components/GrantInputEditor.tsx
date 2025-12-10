@@ -4,6 +4,7 @@
  *  @copyright 2025 Digital Aid Seattle
  *
  */
+import React from "react";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, CardContent, CardHeader, Stack, TextField } from "@mui/material";
 import { GrantInput } from '../services/types';

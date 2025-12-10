@@ -3,6 +3,7 @@
  * 
  * @copyright 2025 Digital Aid Seattle
 */
+import React, { useEffect } from "react";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Button, Card,
@@ -12,7 +13,6 @@ import {
   Switch,
   TextField
 } from "@mui/material";
-import React, { useEffect } from "react";
 import { GrantOutput } from '../services/types';
 
 interface ParameterRowProps {

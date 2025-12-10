@@ -8,11 +8,11 @@ import {
   MinimalLayout,
 } from "@digitalaidseattle/mui";
 import DonationsPage from "./pages/donations";
-// import GrantPage from "./pages/grant";
 import InstitutionsPage from "./pages/institutions";
 import ProjectsPage from "./pages/projects";
 import TestPage from './pages/TestPage';
-import { GrantPage, GrantsPage } from "@digitalaidseattle/core";
+import { GrantPage, GrantsPage } from '@digitalaidseattle/grants';
+
 
 const routes: RouteObject[] = [
   {

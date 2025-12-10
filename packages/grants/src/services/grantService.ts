@@ -1,3 +1,9 @@
+/**
+ *  GrantService.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
 import { FirestoreService } from "@digitalaidseattle/firebase";
 import dayjs from "dayjs";
 import Handlebars from "handlebars";
@@ -50,5 +56,5 @@ class GrantService extends FirestoreService<GrantRecipe> {
 
 
 const grantService = new GrantService();
-export { grantService };
+export { grantService, GrantService };
 

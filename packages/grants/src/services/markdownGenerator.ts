@@ -1,4 +1,10 @@
-import { AiService } from "../aitypes";
+/**
+ *  MarkdownGenerator.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import { AiService } from "@digitalaidseattle/core";
 import { grantProposalService } from "./grantProposalService";
 import { GrantProposal, GrantRecipe } from "./types";
 

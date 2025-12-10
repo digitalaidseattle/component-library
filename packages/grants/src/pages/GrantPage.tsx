@@ -1,8 +1,10 @@
 /**
- * projects/grants.tsx
-*/
-
-import { useContext, useEffect, useState } from "react";
+ *  GrantPage.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,16 +13,17 @@ import {
     Select, Stack, Switch, Tab, Tabs, TextField, Typography
 } from "@mui/material";
 
-import { LoadingContext } from "@digitalaidseattle/core";
+import { LoadingContext, useHelp } from "@digitalaidseattle/core";
+import { GeminiService } from "@digitalaidseattle/firebase";
+// import { useHelp } from "@digitalaidseattle/mui";
 import { GrantInputEditor, GrantOutputEditor, ProposalCard } from "../components";
-import { GeminiService } from "../services/geminiService";
 import { GrantInput, GrantOutput, GrantProposal, grantProposalService, GrantRecipe, grantService, MarkdownGenerator, StructuredJsonGenerator } from "../services";
 
 const HELP_DRAWER_WIDTH = 300;
 const GrantPage: React.FC = ({ }) => {
 
     const { id: grantReceiptId } = useParams<string>();
-    const [ showHelp, setShowHelp ] = useState<boolean>(false);
+    const {showHelp, setShowHelp} = useHelp();
     const navigate = useNavigate();
 
     const { loading, setLoading } = useContext(LoadingContext);
@@ -329,4 +332,4 @@ const GrantPage: React.FC = ({ }) => {
     );
 }
 
-export default GrantPage;
+export { GrantPage };

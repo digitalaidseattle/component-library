@@ -6,7 +6,6 @@ export { default as InputRating } from "./InputRating";
 export * from "./cards";
 export * from "./ClipBoard";
 export * from "./HelpButton";
-export * from "./HelpContext";
 export * from "./InputForm";
 export { default as InputFormDialog } from "./InputFormDialog";
 export { default as SelectItemDialog } from "./SelectItemDialog";

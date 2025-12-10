@@ -1,16 +1,18 @@
 /**
- * grants/index.tsx
- * Example of firestore
-*/
+ *  GrantsPage.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
 import { AddOutlined, ContentCopyOutlined, DeleteOutlineOutlined, EditOutlined } from '@mui/icons-material';
-import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { Box, Button, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, Toolbar } from '@mui/x-data-grid';
 import dayjs from "dayjs";
-import { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from 'react-router';
 
-import { useNotifications } from "@digitalaidseattle/core";
-import { ConfirmationDialog, useHelp } from "@digitalaidseattle/mui";
+import { useHelp, useNotifications } from "@digitalaidseattle/core";
+import { ConfirmationDialog } from "@digitalaidseattle/mui";
 import { GrantRecipe, grantService } from "../services";
 
 const GrantsPage: React.FC = ({ }) => {
@@ -18,7 +20,7 @@ const GrantsPage: React.FC = ({ }) => {
     const navigate = useNavigate();
     const { showHelp, setShowHelp } = useHelp();
 
-    const [grantProposals, setGrantProposals] = useState<GrantRecipe[]>([]);
+    const [grantProposals, setGrantProposals] = React.useState<GrantRecipe[]>([]);
     const [grantProposal, setGrantProposal] = useState<GrantRecipe>(grantService.empty());
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
@@ -84,14 +86,6 @@ const GrantsPage: React.FC = ({ }) => {
             field: 'actions',
             type: 'actions',
             headerName: 'Actions',
-            renderHeader: (_params) => (
-                <IconButton color="primary"
-                    aria-label="New Grant"
-                    title="New Grant"
-                    onClick={() => handleNewClick()}>
-                    <AddOutlined />
-                </IconButton>
-            ),
             width: 200,
             cellClassName: 'actions',
             getActions: ({ id }) => {
@@ -129,6 +123,22 @@ const GrantsPage: React.FC = ({ }) => {
         { field: 'tokenCount', headerName: 'Token Count', width: 100 },
         { field: 'response', headerName: 'Response', width: 300 },
     ];
+
+    function CustomToolbar() {
+        return <Toolbar>
+            <Box sx={{ flexGrow: 1 }}>
+                <Button color="primary"
+                    variant="outlined"
+                    aria-label="New Grant"
+                    title="New Grant"
+                    onClick={() => handleNewClick()}
+                    startIcon={<AddOutlined />}
+                >
+                    New Proposal
+                </Button>
+            </Box>
+        </Toolbar>
+    }
     return (
         <Card>
             <CardHeader title="Grant Proposals" />
@@ -139,6 +149,10 @@ const GrantsPage: React.FC = ({ }) => {
                     // initialState={{ pagination: { paginationModel } }}
                     pageSizeOptions={[5, 10, 100]}
                     sx={{ border: 0 }}
+                    showToolbar={true}
+                    slots={{
+                        toolbar: CustomToolbar
+                    }}
                 />
                 <ConfirmationDialog
                     message={grantProposal ? `Delete proposal ${grantProposal.description}` : ''}
@@ -150,4 +164,4 @@ const GrantsPage: React.FC = ({ }) => {
     );
 }
 
-export default GrantsPage;
+export { GrantsPage };

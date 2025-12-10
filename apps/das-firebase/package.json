@@ -11,11 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@digitalaidseattle/core": "^1.0.14",
+    "@digitalaidseattle/core": "^1.0.15",
     "@digitalaidseattle/firebase": "^1.0.8",
-    "@digitalaidseattle/mui": "^1.0.30",
-    "@mui/x-data-grid": "^8.17.0",
-    "handlebars": "^4.7.8"
+    "@digitalaidseattle/grants": "^1.0.1",
+    "@digitalaidseattle/mui": "^1.0.31"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1,3 +1,9 @@
+/**
+ *  GrantProposalService.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
 import { FirestoreService } from "@digitalaidseattle/firebase";
 
 import { GrantProposal } from "./types";
@@ -35,5 +41,5 @@ class GrantProposalService extends FirestoreService<GrantProposal> {
 
 
 const grantProposalService = new GrantProposalService();
-export { grantProposalService };
+export { grantProposalService, GrantProposalService };
 

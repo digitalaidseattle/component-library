@@ -12,10 +12,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 // project import
 import {
   AuthServiceProvider,
+  HelpContextProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
 import { FirebaseAuthService } from "@digitalaidseattle/firebase";
-import { HelpContextProvider, LayoutConfigurationProvider } from "@digitalaidseattle/mui";
+import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
 import { Config } from './Config';
