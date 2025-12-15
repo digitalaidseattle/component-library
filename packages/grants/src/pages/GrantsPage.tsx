@@ -5,7 +5,7 @@
  *
  */
 import { AddOutlined, ContentCopyOutlined, DeleteOutlineOutlined, EditOutlined } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, Toolbar } from '@mui/x-data-grid';
 import dayjs from "dayjs";
 import React, { MouseEventHandler, useEffect, useState } from "react";
@@ -29,7 +29,6 @@ const GrantsPage: React.FC = ({ }) => {
     }, []);
 
     useEffect(() => {
-        console.log('its', showHelp)
         if (showHelp) {
             notifications.info('You got no help on this page.');
             setShowHelp(false);

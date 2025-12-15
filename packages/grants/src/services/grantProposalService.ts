@@ -4,11 +4,10 @@
  *  @copyright 2025 Digital Aid Seattle
  *
  */
-import { FirestoreService } from "@digitalaidseattle/firebase";
+import { firebaseClient, FirestoreService } from "@digitalaidseattle/firebase";
 
 import { GrantProposal } from "./types";
-import { collection, getDocs, query, where } from "@firebase/firestore";
-
+import { collection, getDocs, getFirestore, query, Timestamp, where } from "firebase/firestore";
 
 class GrantProposalService extends FirestoreService<GrantProposal> {
 
@@ -18,19 +17,17 @@ class GrantProposalService extends FirestoreService<GrantProposal> {
 
     async findByGrantRecipeId(recipeId: string): Promise<GrantProposal[]> {
         try {
-            const proposalCollection = collection(this.db, this.collectionName);
-            const q = query(proposalCollection, where("grantRecipeId", "==", recipeId));
-
+            const adb = getFirestore(firebaseClient);
+            const proposalRef = collection(adb, this.collectionName);
+            const q = query(proposalRef, where("grantRecipeId", "==", recipeId));
             const querySnapshot = await getDocs(q);
-
             const results = querySnapshot.docs
                 .map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 } as GrantProposal));
-
-            console.log(results);
-            return results;
+            return results
+                .sort((a, b) => (a.createdAt as Timestamp).nanoseconds - (b.createdAt as Timestamp).nanoseconds);
         } catch (err) {
             console.error("Error fetching documents:", err);
             throw err;
@@ -38,7 +35,6 @@ class GrantProposalService extends FirestoreService<GrantProposal> {
     }
 
 }
-
 
 const grantProposalService = new GrantProposalService();
 export { grantProposalService, GrantProposalService };

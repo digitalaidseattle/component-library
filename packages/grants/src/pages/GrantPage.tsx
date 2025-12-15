@@ -9,30 +9,39 @@ import { useNavigate, useParams } from "react-router";
 
 import CloseIcon from '@mui/icons-material/Close';
 import {
-    Box, Button, Card, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, MenuItem,
-    Select, Stack, Switch, Tab, Tabs, TextField, Typography
+    Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Drawer,
+    IconButton,
+    Stack,
+    TextField, Typography
 } from "@mui/material";
 
-import { LoadingContext, useHelp } from "@digitalaidseattle/core";
+import { LoadingContext, useHelp, useNotifications } from "@digitalaidseattle/core";
 import { GeminiService } from "@digitalaidseattle/firebase";
 // import { useHelp } from "@digitalaidseattle/mui";
-import { GrantInputEditor, GrantOutputEditor, ProposalCard } from "../components";
-import { GrantInput, GrantOutput, GrantProposal, grantProposalService, GrantRecipe, grantService, MarkdownGenerator, StructuredJsonGenerator } from "../services";
+import { GrantInputEditor, GrantOutputEditor, GrantProposals, GrantSettingsEditor } from "../components";
+import {
+    GrantInput,
+    GrantOutput,
+    GrantProposal,
+    grantProposalService,
+    GrantRecipe,
+    grantService,
+    MarkdownGenerator,
+    StructuredJsonGenerator
+} from "../services";
 
 const HELP_DRAWER_WIDTH = 300;
 const GrantPage: React.FC = ({ }) => {
 
     const { id: grantReceiptId } = useParams<string>();
-    const {showHelp, setShowHelp} = useHelp();
+    const { showHelp, setShowHelp } = useHelp();
     const navigate = useNavigate();
+    const notifications = useNotifications();
 
     const { loading, setLoading } = useContext(LoadingContext);
-    const models = GeminiService.getModels();
-
     const [grantRecipe, setGrantRecipe] = useState<GrantRecipe>(grantService.empty());
-    const [disabled, setDisabled] = useState<boolean>(false);
     const [proposals, setProposals] = useState<GrantProposal[]>([]);
-    const [activeTab, setActiveTab] = useState<number>(0);
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         fetchData(grantReceiptId!);
@@ -47,11 +56,11 @@ const GrantPage: React.FC = ({ }) => {
             grantService.getById(grantReceiptId)
                 .then((proposal) => { setGrantRecipe(proposal ?? grantService.empty()) })
                 .catch(err => console.log('error', grantReceiptId, err));
+            // TODO sort by date descending
             grantProposalService.findByGrantRecipeId(grantReceiptId)
                 .then(proposals => setProposals(proposals))
         } else {
             const newRecipe = grantService.empty();
-            newRecipe.modelType = models[0];
             updateRecipe(newRecipe)
                 .then(updated => setGrantRecipe(updated))
         }
@@ -97,7 +106,10 @@ const GrantPage: React.FC = ({ }) => {
     function saveRecipe() {
         if (grantRecipe.id) {
             grantService.update(grantRecipe.id, grantRecipe)
-                .then(resp => setGrantRecipe(resp))
+                .then(resp => {
+                    setGrantRecipe(resp);
+                    notifications.success('Proposal saved.')
+                })
         } else {
             grantService.insert(grantRecipe)
                 .then(resp => navigate(`/grant-proposal/${resp.id}`))
@@ -105,17 +117,10 @@ const GrantPage: React.FC = ({ }) => {
         }
     }
 
-    function handleChangeDescription(event: React.ChangeEvent<HTMLInputElement>) {
-        setGrantRecipe({
-            ...grantRecipe,
-            description: event?.target.value
-        })
-    }
-
     async function updateRecipe(grantRecipe: GrantRecipe) {
         const geminiService = new GeminiService(grantRecipe.modelType);
         const prompt = grantService.createPrompt(grantRecipe);
-        const tokenCount = await geminiService.calcTokenCount(prompt);
+        const tokenCount = await geminiService.calcTokenCount(grantRecipe.modelType, prompt);
         const updated = {
             ...grantRecipe,
             tokenCount: tokenCount,
@@ -124,27 +129,9 @@ const GrantPage: React.FC = ({ }) => {
         return updated
     }
 
-    async function handleChangeTemplate(newTemplate: string) {
-        updateRecipe({ ...grantRecipe, template: newTemplate })
+    function handleSettingsChange(changed: GrantRecipe) {
+        updateRecipe(changed)
             .then(updated => setGrantRecipe(updated))
-    }
-
-    function handleChangeContext(newContext: string) {
-        updateRecipe({ ...grantRecipe, context: newContext })
-            .then(updated => setGrantRecipe(updated))
-    }
-
-    function handleChangeModel(newModel: string) {
-        // TODOverify  changing model should not change counts?
-        updateRecipe({ ...grantRecipe, modelType: newModel })
-            .then(updated => setGrantRecipe(updated))
-    }
-
-    function toggleEnableContext() {
-        setGrantRecipe({
-            ...grantRecipe,
-            enableContext: !grantRecipe.enableContext
-        })
     }
 
     function handleInputChange(newParams: GrantInput[]) {
@@ -157,97 +144,13 @@ const GrantPage: React.FC = ({ }) => {
             .then(updated => setGrantRecipe(updated))
     }
 
-    function getCreatedDateTimeString(proposal: GrantProposal): string {
-        const cDate = new Date((proposal.createdAt as any).seconds * 1000);
-        return cDate.toLocaleString();
-    }
-
-    function a11yProps(index: number) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
-
-    const handleChangeProposal = (_event: React.SyntheticEvent, newValue: number) => {
-        setActiveTab(newValue);
-    };
-
     return (
-        <Stack gap={4}>
-            <Box sx={{ marginRight: `${showHelp ? HELP_DRAWER_WIDTH : 0}px` }}>
+        <Box gap={4}>
+            <Stack sx={{ gap: 2, marginRight: `${showHelp ? HELP_DRAWER_WIDTH : 0}px` }}>
                 <Card sx={{ flexGrow: 1, padding: 2, gap: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Card>
-                        <CardHeader title="Settings" />
-                        <CardContent>
-                            <Grid container spacing={2} >
-                                <Grid size={2}>
-                                    Description:
-                                </Grid>
-                                <Grid size={10}>
-                                    <TextField
-                                        fullWidth
-                                        value={grantRecipe.description}
-                                        onChange={handleChangeDescription}></TextField>
-                                </Grid>
-                                <Grid size={2}>
-                                    Model:
-                                </Grid>
-                                <Grid size={10}>
-                                    <Select
-                                        fullWidth
-                                        value={grantRecipe.modelType ?? ''}
-                                        onChange={(evt) => handleChangeModel(evt.target.value)} >
-                                        {models.map(model => <MenuItem key={model} value={model}>{model}</MenuItem>)}
-                                    </Select>
-                                </Grid>
-                                <Grid size={2}>
-                                    Project Context:
-                                </Grid>
-                                <Grid size={10}>
-                                    <Stack direction={'row'}>
-                                        <Box sx={{ alignItems: 'center', justifyItems: 'center' }}>
-                                            <Typography>Enabled</Typography>
-                                            <Switch
-                                                value={grantRecipe.enableContext}
-                                                onChange={() => toggleEnableContext()}></Switch>
-                                        </Box>
-                                        <TextField
-                                            id="context"
-                                            label="Context folder location"
-                                            fullWidth
-                                            value={grantRecipe.context}
-                                            disabled={disabled || grantRecipe.enableContext}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                handleChangeContext(event.target.value);
-                                            }} />
-                                    </Stack>
-                                </Grid>
-                                <Grid size={2}>
-                                    Prompt Template:
-                                </Grid>
-                                <Grid size={10}>
-                                    <TextField
-                                        id="template"
-                                        fullWidth
-                                        multiline={true}
-                                        rows={6}
-                                        value={grantRecipe.template}
-                                        disabled={disabled}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                            handleChangeTemplate(event.target.value);
-                                        }}
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                resize: 'vertical',
-                                                overflow: 'auto',
-                                            }
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                    <GrantSettingsEditor
+                        grantRecipe={grantRecipe}
+                        onChange={handleSettingsChange} />
                     <GrantInputEditor
                         disabled={disabled}
                         parameters={grantRecipe.inputParameters ?? []}
@@ -272,38 +175,32 @@ const GrantPage: React.FC = ({ }) => {
                             />
                         </CardContent>
                     </Card>
-                    <Stack direction="row" gap={1} justifyContent="flex-start">
-                        <Button
-                            variant="outlined"
-                            size="medium"
-                            disabled={disabled || loading}
-                            onClick={saveRecipe}>Save</Button>
-                        <Divider orientation="vertical" flexItem />
-                        <Button
-                            variant="outlined"
-                            size="medium"
-                            disabled={loading}
-                            onClick={generateMarkdown}>Generate Markdown</Button>
-                        <Button
-                            variant="outlined"
-                            size="medium"
-                            disabled={loading}
-                            onClick={generateStuctured}>Generate Structured Output</Button>
-                    </Stack>
+                    <CardActions>
+                        <Stack direction="row" gap={1} justifyContent="flex-start">
+                            <Button
+                                variant="outlined"
+                                size="medium"
+                                disabled={disabled || loading}
+                                onClick={saveRecipe}>Save</Button>
+                            <Divider orientation="vertical" flexItem />
+                            <Button
+                                variant="outlined"
+                                size="medium"
+                                disabled={loading}
+                                onClick={generateMarkdown}>Generate Markdown</Button>
+                            <Button
+                                variant="outlined"
+                                size="medium"
+                                disabled={loading}
+                                onClick={generateStuctured}>Generate Structured Output</Button>
+                        </Stack>
+                    </CardActions>
                 </Card>
-                <Divider />
-                {proposals.length > 0 && <Card>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={activeTab} onChange={handleChangeProposal} aria-label="basic tabs example">
-                            {proposals.map((prop, index) => <Tab value={index} label={getCreatedDateTimeString(prop)} {...a11yProps(0)} />)}
-                        </Tabs>
-                    </Box>
-                    <CardContent>
-                        {<ProposalCard proposal={proposals[activeTab]} />}
-                    </CardContent>
-                </Card>
-                }
-            </Box>
+                {proposals.length > 0 &&
+                    <GrantProposals
+                        proposals={proposals}
+                        onChange={() => fetchData(grantRecipe.id as string)} />}
+            </Stack>
             <Drawer
                 anchor={'right'}
                 open={showHelp}
@@ -328,7 +225,7 @@ const GrantPage: React.FC = ({ }) => {
                     </Box>
                 </Stack>
             </Drawer>
-        </Stack >
+        </Box >
     );
 }
 

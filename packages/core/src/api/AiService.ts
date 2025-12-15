@@ -6,10 +6,12 @@
  */
 export interface AiService {
 
-    calcTokenCount(request: string): Promise<number>;
+    getModels(): string[];
 
-    generateContent(prompt: string): Promise<string>;
+    calcTokenCount(model: string, request: string): Promise<number>;
 
-    generateParameterizedContent(prompt: string, schemaParams: string[]): Promise<any>;
+    generateContent(model: string, prompt: string): Promise<string>;
+
+    generateParameterizedContent(model: string, prompt: string, schemaParams: string[]): Promise<any>;
 
 }

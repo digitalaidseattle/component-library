@@ -59,7 +59,7 @@ export const ProposalCard: React.FC<ProposalProps> = ({ proposal }) => {
                             {Object.entries(structured).map(([key, value]) => {
                                 // TODO consider stripping quotes in the service
                                 const formatted = JSON.stringify(value, null, 2).replace(/^["]+|["]+$/g, "");
-                                return (<Grid container spacing={2}>
+                                return (<Grid key={key} container spacing={2}>
                                     <Grid size={2} >
                                         <Stack direction={'row'} alignItems={'center'}>
                                             <Clipboard text={formatted} size={'medium'} />

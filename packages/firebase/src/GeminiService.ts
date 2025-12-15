@@ -17,36 +17,32 @@
 
 import { AiService } from "@digitalaidseattle/core";
 import { firebaseClient } from "@digitalaidseattle/firebase";
-import { AI, GenerativeModel, getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
+import { AI, getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
 
 class GeminiService implements AiService {
 
-    modelType = "gemini-2.5-flash";  // "gemini-2.5-pro", "gemini-2.5-flash-lite";
     ai: AI
 
     constructor(modelType?: string) {
-        this.modelType = modelType ?? "gemini-2.5-flash";
         this.ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
     }
 
-    static getModels(): string[] {
+    getModels(): string[] {
         return ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.5-flash-lite"];
     }
 
-    createModel(): GenerativeModel {
-        return getGenerativeModel(this.ai, { model: this.modelType });
-    }
 
-    calcTokenCount(prompt: string): Promise<number> {
-        return this.createModel()
+    calcTokenCount(model: string, prompt: string): Promise<number> {
+        return getGenerativeModel(this.ai, { model: model })
             .countTokens(prompt)
             .then(response => response.totalTokens)
     }
 
     // Wrap in an async function so you can use await
-    generateContent(prompt: string): Promise<any> {
+    generateContent(model: string, prompt: string): Promise<any> {
         // To generate text output, call generateContent with the text input
-        return this.createModel()
+        console.log('generateContent', model, prompt)
+        return getGenerativeModel(this.ai, { model: model })
             .generateContent(prompt)
             .then(result => result.response.text())
             .catch(error => {
@@ -56,7 +52,7 @@ class GeminiService implements AiService {
     }
 
     // Wrap in an async function so you can use await
-    generateParameterizedContent(prompt: string, schemaParams: string[]): Promise<any> {
+    generateParameterizedContent(model: string, prompt: string, schemaParams: string[]): Promise<any> {
         // Provide a JSON schema object using a standard format.
         // Later, pass this schema object into `responseSchema` in the generation config.
         const schema = Schema.object({
@@ -71,7 +67,7 @@ class GeminiService implements AiService {
 
         // Create a `GenerativeModel` instance with a model that supports your use case
         const jModel = getGenerativeModel(this.ai, {
-            model: this.modelType,
+            model: model,
             // In the generation config, set the `responseMimeType` to `application/json`
             // and pass the JSON schema object into `responseSchema`.
             generationConfig: {

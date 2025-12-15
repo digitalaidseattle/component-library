@@ -31,7 +31,7 @@ export class MarkdownGenerator {
     }
 
     async generate(grantRecipe: GrantRecipe): Promise<GrantProposal> {
-        const response = await this.aiService.generateContent(grantRecipe.prompt)
+        const response = await this.aiService.generateContent(grantRecipe.modelType, grantRecipe.prompt)
         const proposal = {
             id: "",
             grantRecipeId: grantRecipe.id as string,

@@ -36,7 +36,7 @@ export class StructuredJsonGenerator {
 
     async generate(grantRecipe: GrantRecipe): Promise<GrantProposal> {
         const schemaFields = this.createSchema(grantRecipe);
-        const structured = await this.aiService.generateParameterizedContent(grantRecipe.prompt, schemaFields)
+        const structured = await this.aiService.generateParameterizedContent(grantRecipe.modelType, grantRecipe.prompt, schemaFields)
         const proposal = {
             id: null,
             grantRecipeId: grantRecipe.id as string,
