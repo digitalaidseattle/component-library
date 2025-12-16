@@ -16,8 +16,8 @@ import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 
-import getMockSurveyData from "../models/MockSurveyData";
-import type { Survey } from "../models/MockSurveyData";
+import getMockSurveyData from "../../models/MockSurveyData";
+import type { Survey } from "../../models/MockSurveyData";
 
 export default function DashboardSidebar() {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function DashboardSidebar() {
     <Box display="flex" flexDirection="column" gap={2}>
       {/* Create New Survey */}
       <Card variant="outlined">
-        <CardActionArea onClick={() => navigate("/create")}>
+      <CardActionArea onClick={() => navigate("/new")}>
           <CardContent
             sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
           >

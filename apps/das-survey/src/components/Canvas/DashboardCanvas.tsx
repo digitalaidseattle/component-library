@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import getMockSurveyData from "../models/MockSurveyData";
-import SurveyCard from "../components/SurveyCard";
-import type { Survey } from "../models/MockSurveyData";
+import getMockSurveyData from "../../models/MockSurveyData";
+import SurveyCard from "../utils/SurveyCard";
+import type { Survey } from "../../models/MockSurveyData";
 
 type StatusFilter = "all" | "active" | "draft";
 type SortOrder = "recent" | "oldest";
@@ -38,7 +38,7 @@ export default function Content() {
   return (
     <Box>
       <Typography variant="h5" fontWeight={600} gutterBottom>
-        My Surveys
+        My Surveys (Mock Data)
       </Typography>
 
       {/* Filters */}
