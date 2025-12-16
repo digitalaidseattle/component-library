@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
-import CreateSurveyPage from "./pages/templates/CreateSurveyTemplate";
+import CreateSurveyPage from "./pages/CreatorSurveyPage";
 import TemplateGalleryPage from "./pages/TemplateGalleryPage";
 
 export default function App() {
