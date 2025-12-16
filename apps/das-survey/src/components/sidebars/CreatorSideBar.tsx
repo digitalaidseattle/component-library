@@ -1,131 +1,103 @@
-// src/components/sidebars/CreatorSidebar.tsx
-
-import { useState } from "react";
 import {
   Box,
   Button,
   Typography,
   Divider,
-  Tabs,
-  Tab,
 } from "@mui/material";
-import type { CreatorCommand } from "../../models/CreatorModel";
-
-type SidebarTab = "build" | "style" | "workflow";
 
 export type CreatorSidebarProps = {
-  onCommand: (cmd: CreatorCommand) => void;
+  hasSurveyTitle: boolean;
+  hasSurveyDescription: boolean;
+
+  hasParticipantName: boolean;
+  hasParticipantEmail: boolean;
+  hasParticipantAddress: boolean;
+
+  onAddSurveyTitle: () => void;
+  onAddSurveyDescription: () => void;
+  onAddParticipantName: () => void;
+  onAddParticipantEmail: () => void;
+  onAddParticipantAddress: () => void;
 };
 
 export default function CreatorSidebar({
-  onCommand,
+  hasSurveyTitle,
+  hasSurveyDescription,
+  hasParticipantName,
+  hasParticipantEmail,
+  hasParticipantAddress,
+  onAddSurveyTitle,
+  onAddSurveyDescription,
+  onAddParticipantName,
+  onAddParticipantEmail,
+  onAddParticipantAddress,
 }: CreatorSidebarProps) {
-  const [activeTab, setActiveTab] = useState<SidebarTab>("build");
-
   return (
-    <Box p={3} height="100%" display="flex" flexDirection="column">
-      <Tabs
-        value={activeTab}
-        onChange={(_, v) => setActiveTab(v)}
-        sx={{ mb: 3 }}
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="scrollable auto tabs example"
+    <Box p={3}>
+      {/* Tabs placeholder */}
+      <Box display="flex" gap={3} mb={3} fontWeight={600}>
+        <Typography color="primary">BUILD</Typography>
+        <Typography color="text.secondary">STYLE</Typography>
+        <Typography color="text.secondary">WORKFLOW</Typography>
+      </Box>
+
+      <Typography fontWeight={600} gutterBottom>
+        Survey Introduction
+      </Typography>
+
+      <Button
+        fullWidth
+        variant="outlined"
+        sx={{ mb: 1 }}
+        disabled={hasSurveyTitle}
+        onClick={onAddSurveyTitle}
       >
-        <Tab label="Build" value="build" />
-        <Tab label="Style" value="style" />
-        <Tab label="Workflow" value="workflow" />
-      </Tabs>
+        Add survey title
+      </Button>
 
-      {activeTab === "build" && (
-        <>
-          <Typography variant="overline" color="text.secondary">
-            Chapter 0
-          </Typography>
-          <Typography fontWeight={600} gutterBottom>
-            Cover
-          </Typography>
+      <Button
+        fullWidth
+        variant="outlined"
+        disabled={hasSurveyDescription}
+        onClick={onAddSurveyDescription}
+      >
+        Add brief introduction
+      </Button>
 
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 1 }}
-            onClick={() => onCommand({ type: "ADD_TITLE" })}
-          >
-            Add story title
-          </Button>
+      <Divider sx={{ my: 3 }} />
 
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => onCommand({ type: "ADD_BLURB" })}
-          >
-            Add short blurb
-          </Button>
+      <Typography fontWeight={600} gutterBottom>
+        Participant Introduction
+      </Typography>
 
-          <Divider sx={{ my: 3 }} />
+      <Button
+        fullWidth
+        variant="outlined"
+        sx={{ mb: 1 }}
+        disabled={hasParticipantName}
+        onClick={onAddParticipantName}
+      >
+        Ask for name
+      </Button>
 
-          <Typography variant="overline" color="text.secondary">
-            Chapter 1
-          </Typography>
-          <Typography fontWeight={600} gutterBottom>
-            The reader steps in
-          </Typography>
+      <Button
+        fullWidth
+        variant="outlined"
+        sx={{ mb: 1 }}
+        disabled={hasParticipantEmail}
+        onClick={onAddParticipantEmail}
+      >
+        Ask for email
+      </Button>
 
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 1 }}
-            onClick={() =>
-              onCommand({
-                type: "ADD_PARTICIPANT",
-                fieldType: "name",
-              })
-            }
-          >
-            Ask for name
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 1 }}
-            onClick={() =>
-              onCommand({
-                type: "ADD_PARTICIPANT",
-                fieldType: "email",
-              })
-            }
-          >
-            Ask for email
-          </Button>
-
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() =>
-              onCommand({
-                type: "ADD_PARTICIPANT",
-                fieldType: "address",
-              })
-            }
-          >
-            Ask for address
-          </Button>
-        </>
-      )}
-
-      {activeTab === "style" && (
-        <Typography color="text.secondary">
-          Style controls coming next.
-        </Typography>
-      )}
-
-      {activeTab === "workflow" && (
-        <Typography color="text.secondary">
-          Workflow controls coming next.
-        </Typography>
-      )}
+      <Button
+        fullWidth
+        variant="outlined"
+        disabled={hasParticipantAddress}
+        onClick={onAddParticipantAddress}
+      >
+        Ask for address
+      </Button>
     </Box>
   );
 }
