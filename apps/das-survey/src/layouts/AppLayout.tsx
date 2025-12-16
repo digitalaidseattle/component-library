@@ -1,6 +1,6 @@
 import { Box, Toolbar } from "@mui/material";
 import { useState } from "react";
-import AppAppBar from "../components/AppAppBar";
+import AppAppBar from "../components/utils/AppAppBar";
 
 export type Breadcrumb = {
   label: string;
@@ -13,7 +13,7 @@ type AppLayoutProps = {
   children: React.ReactNode;
 };
 
-const SIDEBAR_WIDTH = 280;
+const SIDEBAR_WIDTH = 350;
 const APPBAR_OFFSET = 72;
 
 export default function AppLayout({
