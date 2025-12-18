@@ -13,7 +13,7 @@ type AppLayoutProps = {
   children: React.ReactNode;
 };
 
-const SIDEBAR_WIDTH = 350;
+const SIDEBAR_WIDTH = 290;
 const APPBAR_OFFSET = 72;
 
 export default function AppLayout({
@@ -21,7 +21,7 @@ export default function AppLayout({
   sidebarContent,
   children,
 }: AppLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const hasSidebar = Boolean(sidebarContent);
 
   return (

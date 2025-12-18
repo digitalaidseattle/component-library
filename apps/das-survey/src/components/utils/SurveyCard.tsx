@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { styled, alpha } from "@mui/material/styles";
-import type { Survey } from "../models/MockSurveyData";
+import type { Survey } from "../../models/MockSurveyData";
 
 const CardRoot = styled("div", {
   shouldForwardProp: (prop) => prop !== "status",
