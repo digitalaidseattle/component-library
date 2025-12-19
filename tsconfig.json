@@ -18,6 +18,9 @@
     },
     {
       "path": "./packages/grants"
+    },
+    {
+      "path": "./packages/surveys"
     }
   ],
   "compilerOptions": {
@@ -131,6 +134,9 @@
       ],
       "@digitalaidseattle/grants": [
         "packages/grants/src"
+      ],
+      "@digitalaidseattle/surveys": [
+        "packages/surveys/src"
       ]
     }
   }

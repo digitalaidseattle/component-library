@@ -1,0 +1,24 @@
+{
+  "name": "@digitalaidseattle/surveys",
+  "version": "1.0.0",
+  "description": "Survey generation and operation module",
+  "repository": "null//github.com/null/github.com/tree/master/packages/surveys",
+  "main": "dist/digitalaidseattle-surveys.cjs.js",
+  "module": "dist/digitalaidseattle-surveys.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "^1.0.16",
+    "@digitalaidseattle/mui": "^1.0.32",
+    "@mui/material": "^7.3.5",
+    "dayjs": "^1.11.13",
+    "react": "^18.3.1",
+    "uuid": "^11.0.5"
+  },
+  "scripts": {
+    "postbuild": "cp src/*.css dist/"
+  },
+  "files": [
+    "dist"
+  ]
+}

@@ -57,6 +57,12 @@ export const Config = () => {
                     title: 'Test Page',
                     type: 'item',
                     url: '/testpage'
+                } as MenuItem,
+                {
+                    id: 'TEST-survey',
+                    title: 'Test  Survey Page',
+                    type: 'item',
+                    url: '/surveys'
                 } as MenuItem
             ]
         } as MenuItem],

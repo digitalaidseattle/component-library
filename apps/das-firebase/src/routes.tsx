@@ -12,7 +12,7 @@ import InstitutionsPage from "./pages/institutions";
 import ProjectsPage from "./pages/projects";
 import TestPage from './pages/TestPage';
 import { GrantPage, GrantsPage } from '@digitalaidseattle/grants';
-
+import { SurveyPage } from '@digitalaidseattle/surveys';
 
 const routes: RouteObject[] = [
   {
@@ -48,6 +48,10 @@ const routes: RouteObject[] = [
       {
         path: "testpage",
         element: <TestPage />,
+      },
+      {
+        path: "surveys",
+        element: <SurveyPage />,
       }
     ]
   },
