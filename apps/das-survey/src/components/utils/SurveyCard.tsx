@@ -1,40 +1,38 @@
-// src/components/SurveyCard.tsx
-
 import {
   Box,
   Typography,
   Avatar,
   AvatarGroup,
   CardActionArea,
+  IconButton,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { styled, alpha } from "@mui/material/styles";
-import type { Survey } from "../../models/MockSurveyData";
+import { useNavigate } from "react-router-dom";
+
+import { deleteDraft } from "../../storage/DraftSurveyStorage";
+import type { SurveyCardModel } from "../../models/SurveyCardModel";
+
+/* ---------- Styles ---------- */
 
 const CardRoot = styled("div", {
   shouldForwardProp: (prop) => prop !== "status",
-})<{ status: Survey["status"] }>(({ theme, status }) => {
+})<{ status: SurveyCardModel["status"] }>(({ theme, status }) => {
   const isActive = status === "active";
 
   return {
     height: "100%",
     borderRadius: theme.shape.borderRadius,
-
-    /* Base border */
     border: `1px solid ${theme.palette.divider}`,
-
-    /* Status indicator (left rail) */
     borderLeft: `4px solid ${
       isActive
         ? theme.palette.primary.main
         : theme.palette.divider
     }`,
-
-    /* Background tint */
     backgroundColor: isActive
       ? alpha(theme.palette.primary.main, 0.06)
       : theme.palette.background.paper,
-
     transition: "all 0.2s ease",
 
     "&:hover": {
@@ -53,21 +51,38 @@ const CardRoot = styled("div", {
       opacity: 1,
       transform: "translateX(4px)",
     },
-
-    "&:focus-visible": {
-      outline: `3px solid ${theme.palette.primary.main}`,
-      outlineOffset: 2,
-    },
   };
 });
 
-export default function SurveyCard({ survey }: { survey: Survey }) {
+/* ---------- Component ---------- */
+
+export default function SurveyCard({
+  survey,
+}: {
+  survey: SurveyCardModel;
+}) {
+  const navigate = useNavigate();
+
+  function handleOpen() {
+    if (survey.status === "draft") {
+      navigate(`/surveys/edit/${survey.id}`);
+    } else {
+      navigate(`/surveys/${survey.id}`);
+    }
+  }
+
   return (
-    <CardRoot
-      status={survey.status}
-      tabIndex={0}
-    >
-      <CardActionArea sx={{ height: "100%", p: 3 }}>
+    <CardRoot status={survey.status}>
+      <CardActionArea
+        sx={{
+          height: "100%",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+        }}
+        onClick={handleOpen}
+      >
         {/* Status */}
         <Typography
           variant="caption"
@@ -81,7 +96,7 @@ export default function SurveyCard({ survey }: { survey: Survey }) {
           {survey.status === "active" ? "Active" : "Draft"}
         </Typography>
 
-        {/* Title + arrow */}
+        {/* Title */}
         <Box display="flex" alignItems="center" gap={1} mt={1}>
           <Typography
             variant="h6"
@@ -101,49 +116,87 @@ export default function SurveyCard({ survey }: { survey: Survey }) {
           />
         </Box>
 
-        {/* Description */}
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            mt: 1,
-            mb: 3,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {survey.description}
-        </Typography>
+        {/* ===== Blurb (survey description) ===== */}
+        {survey.description ? (
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1,
+              mb: 2,
+              color: "text.secondary",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {survey.description}
+          </Typography>
+        ) : (
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1,
+              mb: 2,
+              fontStyle: "italic",
+              color: "text.disabled",
+            }}
+          >
+            No description yet
+          </Typography>
+        )}
 
         {/* Footer */}
         <Box
+          mt="auto"
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          mt="auto"
         >
           <Box display="flex" alignItems="center" gap={1}>
-            <AvatarGroup max={3}>
-              {survey.collaborators.map((c, i) => (
-                <Avatar
-                  key={i}
-                  sx={{ width: 24, height: 24 }}
-                >
-                  {c.name[0]}
-                </Avatar>
-              ))}
-            </AvatarGroup>
+            {survey.collaborators && (
+              <>
+                <AvatarGroup max={3}>
+                  {survey.collaborators.map((c, i) => (
+                    <Avatar
+                      key={i}
+                      sx={{ width: 24, height: 24 }}
+                    >
+                      {c.name[0]}
+                    </Avatar>
+                  ))}
+                </AvatarGroup>
 
-            <Typography variant="caption">
-              {survey.collaborators.map((c) => c.name).join(", ")}
-            </Typography>
+                <Typography variant="caption">
+                  {survey.collaborators
+                    .map((c) => c.name)
+                    .join(", ")}
+                </Typography>
+              </>
+            )}
           </Box>
 
-          <Typography variant="caption" color="text.secondary">
-            {survey.lastOpened.toLocaleDateString()}
-          </Typography>
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+            >
+              {survey.lastOpened.toLocaleDateString()}
+            </Typography>
+
+            {survey.status === "draft" && (
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteDraft(survey.id);
+                  window.location.reload();
+                }}
+              >
+                <DeleteOutlineIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Box>
         </Box>
       </CardActionArea>
     </CardRoot>

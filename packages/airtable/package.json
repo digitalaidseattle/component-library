@@ -8,7 +8,7 @@
   "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@digitalaidseattle/core": "1.0.16",
+    "@digitalaidseattle/core": "1.0.14",
     "airtable": "^0.12.2",
     "react": "^18.3.1"
   },

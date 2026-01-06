@@ -67,7 +67,7 @@ export default function TemplateGalleryPage() {
       {/* Preview */}
       {selectedTemplate === "blank" && (
         <BlankTemplatePreview
-          onUseTemplate={() => navigate("/create")}
+          onUseTemplate={() => navigate("/surveys/create")}
         />
       )}
     </AppLayout>
