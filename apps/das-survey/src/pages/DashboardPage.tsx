@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import AppLayout from "../layouts/AppLayout";
-import Content from "../components/Canvas/DashboardCanvas";
+import Content from "../components/canvas/DashboardCanvas";
 import Sidebar from "../components/sidebars/Sidebar";
 
 export default function DashboardPage() {
@@ -17,7 +17,7 @@ export default function DashboardPage() {
           primaryAction={{
             label: "New Survey",
             icon: <AddIcon />,
-            onClick: () => navigate("/new"), // Template Gallery
+            onClick: () => navigate("/surveys/new"),
           }}
         />
       }

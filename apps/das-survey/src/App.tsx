@@ -6,9 +6,20 @@ import TemplateGalleryPage from "./pages/TemplateGalleryPage";
 export default function App() {
   return (
     <Routes>
+      {/* Dashboard */}
       <Route path="/" element={<DashboardPage />} />
-      <Route path="/new" element={<TemplateGalleryPage />} />
-      <Route path="/create" element={<CreateSurveyPage />} />
+
+      {/* Template gallery */}
+      <Route path="/surveys/new" element={<TemplateGalleryPage />} />
+
+      {/* Create new survey (blank draft) */}
+      <Route path="/surveys/create" element={<CreateSurveyPage />} />
+
+      {/* Edit existing draft */}
+      <Route
+        path="/surveys/edit/:draftId"
+        element={<CreateSurveyPage />}
+      />
     </Routes>
   );
 }

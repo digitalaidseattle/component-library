@@ -1,5 +1,3 @@
-// src/Content.tsx
-
 import {
   Box,
   Chip,
@@ -8,22 +6,27 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-import getMockSurveyData from "../../models/MockSurveyData";
+import { loadDrafts } from "../../storage/DraftSurveyStorage";
 import SurveyCard from "../utils/SurveyCard";
-import type { Survey } from "../../models/MockSurveyData";
+
+import { draftToCardModel } from "../../models/DraftToCardModel";
+import type { SurveyCardModel } from "../../models/SurveyCardModel";
+
 
 type StatusFilter = "all" | "active" | "draft";
 type SortOrder = "recent" | "oldest";
 
 export default function Content() {
-  const surveys: Survey[] = getMockSurveyData();
-
   const [statusFilter, setStatusFilter] =
     useState<StatusFilter>("all");
   const [sortOrder, setSortOrder] =
     useState<SortOrder>("recent");
+
+  const surveys: SurveyCardModel[] = useMemo(() => {
+  return loadDrafts().map(draftToCardModel);
+}, []);
 
   const filteredSurveys = surveys
     .filter((s) =>
@@ -38,7 +41,7 @@ export default function Content() {
   return (
     <Box>
       <Typography variant="h5" fontWeight={600} gutterBottom>
-        My Surveys (Mock Data)
+        My Surveys
       </Typography>
 
       {/* Filters */}
