@@ -57,6 +57,14 @@ const Social: React.FC = () => {
         loggingService.info('Logged in with Google: ' + resp.data);
         navigate('/');
       })
+      .catch(err => {
+        console.error('googleHandler', err);
+        if ((err.message as string).includes("auth/admin-restricted-operation")) {
+          navigate('/login?error=AccessDenied');
+        } else {
+          navigate('/');
+        }
+      })
   };
 
   const microsoftHandler = async () => {
@@ -64,6 +72,14 @@ const Social: React.FC = () => {
       .then((resp: OAuthResponse) => {
         loggingService.info('Logged in with Azure: ' + resp.data)
         navigate('/');
+      })
+      .catch(err => {
+        console.error('microsoftHandler', err);
+        if ((err.message as string).includes("auth/admin-restricted-operation")) {
+          navigate('/login?error=AccessDenied');
+        } else {
+          navigate('/');
+        }
       })
   };
 
