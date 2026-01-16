@@ -79,7 +79,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     // Update a document to a collection
     async update(
         entityId: Identifier,
-        updatedFields: T,
+        updatedFields: Partial<T>,
         select?: string,
         mapper?: (json: any) => T,
         user?: User): Promise<T> {

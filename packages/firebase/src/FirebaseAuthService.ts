@@ -70,7 +70,8 @@ class FirebaseAuthService implements AuthService {
                 }
             };
         } catch (error) {
-            console.error(error);
+            console.error('signInWithGoogle', error);
+            throw error;
         }
     }
 }
