@@ -11,3 +11,6 @@ export { default as InputFormDialog } from "./InputFormDialog";
 export { default as SelectItemDialog } from "./SelectItemDialog";
 export * from "./DebouncedInputTextField";
 export * from "./TabbedPanelsCard";
+export * from "./LoadingOverlay";
+export * from "./SplitButton";
+export * from './HelpDrawer';

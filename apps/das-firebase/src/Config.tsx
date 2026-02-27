@@ -40,9 +40,9 @@ export const Config = () => {
                 } as MenuItem,
                 {
                     id: 'GRNT',
-                    title: 'Grant Proposals',
+                    title: 'AI Projects',
                     type: 'item',
-                    url: '/grant-proposals',
+                    url: '/ai-projects',
                     icon: <FormOutlined />,
                 } as MenuItem,
                 {

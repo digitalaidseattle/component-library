@@ -20,13 +20,13 @@ const MinimalLayout: React.FC = () => (
       minHeight: '90vh'
     }}
   >
-    <Grid item xs={12}></Grid>
-    <Grid item xs={12}
+    <Grid size={12}></Grid>
+    <Grid size={12}
       alignItems="center"
     >
       <Outlet />
     </Grid>
-    <Grid item xs={12}>
+    <Grid size={12}>
       <MinimalFooter />
     </Grid>
   </Grid>

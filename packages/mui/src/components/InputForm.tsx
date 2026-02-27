@@ -117,6 +117,15 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                             fullWidth
                             variant="outlined"
                             onChange={(evt) => onChange(option.name, evt.target.value)}
+                            sx={((option.size ?? 1) > 1)
+                                ? {
+                                    '& .MuiInputBase-input': {
+                                        resize: 'vertical',
+                                        overflow: 'auto',
+                                    }
+                                }
+                                : {}
+                            }
                         />
                     </FormControl>
                 );

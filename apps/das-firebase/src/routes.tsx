@@ -11,8 +11,7 @@ import DonationsPage from "./pages/donations";
 import InstitutionsPage from "./pages/institutions";
 import ProjectsPage from "./pages/projects";
 import TestPage from './pages/TestPage';
-import { GrantPage, GrantsPage } from '@digitalaidseattle/grants';
-
+import { ProjectPage as AiProjectPage, ProjectsListPage as AiProjectsListPage } from '@digitalaidseattle/content-generation';
 
 const routes: RouteObject[] = [
   {
@@ -21,7 +20,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "",
-        element: <GrantsPage />,
+        element: <AiProjectsListPage />,
       },
       {
         path: "projects",
@@ -32,11 +31,11 @@ const routes: RouteObject[] = [
         element: <InstitutionsPage />,
       },
       {
-        path: "grant-proposal/:id",
-        element: <GrantPage />,
+        path: "ai-projects/:id",
+        element: <AiProjectPage listPath={"ai-projects"} />,
       }, {
-        path: "grant-proposals",
-        element: <GrantsPage />,
+        path: "ai-projects",
+        element: <AiProjectsListPage detailPath="ai-projects" helpFilePath='./ai-projects.md' />,
       }, {
         path: "donations",
         element: <DonationsPage />,
