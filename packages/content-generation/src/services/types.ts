@@ -1,5 +1,5 @@
 /**
- * grants/types.ts
+ * types.ts
  */
 
 import { Entity, Identifier } from "@digitalaidseattle/core";

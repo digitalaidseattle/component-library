@@ -25,7 +25,7 @@ export class GeminiProjectService extends FirestoreService<Project> implements P
       name: "",
       tags: [],
       rating: 0,
-      template: "Create a grant proposal",
+      template: "",
       prompt: "",
       contexts: [],
       outputs: [],

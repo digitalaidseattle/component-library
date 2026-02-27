@@ -60,7 +60,7 @@ const Social: React.FC = () => {
       .catch(err => {
         console.error('googleHandler', err);
         if ((err.message as string).includes("auth/admin-restricted-operation")) {
-          navigate('/login?error=AccessDenied');
+          navigate('/login?code=AccessDenied');
         } else {
           navigate('/');
         }
@@ -76,7 +76,7 @@ const Social: React.FC = () => {
       .catch(err => {
         console.error('microsoftHandler', err);
         if ((err.message as string).includes("auth/admin-restricted-operation")) {
-          navigate('/login?error=AccessDenied');
+          navigate('/login?code=AccessDenied');
         } else {
           navigate('/');
         }

@@ -11,7 +11,7 @@ import React, { useContext } from "react";
 import { AiProjectContext } from "./AiProjectContext";
 
 const HELP_TOPIC = "Template";
-
+const DEFAULT_PLACEHOLDER_TEXT="Create a grant proposal.";
 export const ProjectTemplateEditor = ({ title, onChange }: { title: string, onChange: (updated: string) => void }) => {
     const { setHelpTopic } = React.useContext(HelpTopicContext);
     const { setShowHelp } = useHelp();
@@ -30,6 +30,7 @@ export const ProjectTemplateEditor = ({ title, onChange }: { title: string, onCh
                     value={project.template ?? ""}
                     onChange={(evt) => onChange(evt.target.value)}
                     multiline={true}
+                    placeholder={DEFAULT_PLACEHOLDER_TEXT}
                     sx={{
                         '& .MuiInputBase-input': {
                             resize: 'vertical',

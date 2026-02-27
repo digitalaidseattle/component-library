@@ -1,5 +1,5 @@
 /**
- * GrantOutputEditor.tsx
+ * ProjectInfoEditor.tsx
  * 
  * @copyright 2025 Digital Aid Seattle
 */

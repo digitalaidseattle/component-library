@@ -15,20 +15,4 @@ service firebase.storage {
   }
 }
 
-// TEMPORARY TESTING RULES (REMOVE IN PRODUCTION!)
-// If you need to test without authentication, temporarily use these rules instead:
-// rules_version = '2';
-// service cloud.firestore {
-//   match /databases/{database}/documents {
-//     match /grant-recipes/{document=**} {
-//       allow read, write: if true;
-//     }
-//     match /grant-proposal/{document=**} {
-//       allow read, write: if true;
-//     }
-//     match /grant-request/{document=**} {
-//       allow read, write: if true;
-//     }
-//   }
-// }
 

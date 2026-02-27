@@ -119,7 +119,6 @@ const ProjectCard: React.FC = () => {
           setContent(content);
           setShowContentDialog(true);
           notifications.success(`Proposal generated for ${project.name}.`);
-          // navigate(`/grant-proposals/${response.id}`);
         })
         .catch((err: any) => {
           console.error(err);
@@ -134,7 +133,7 @@ const ProjectCard: React.FC = () => {
     }
   }
 
-  function handleGrantOutputChange(updated: ProjectOutput[]): void {
+  function handleProjectOutputChange(updated: ProjectOutput[]): void {
     const prompt = aiService.generatePrompt({ ...project!, outputs: updated });
     setProject({
       ...project!,
@@ -144,12 +143,7 @@ const ProjectCard: React.FC = () => {
     setDirty(true);
   }
 
-  function handleInfoChange(updated: Project): void {
-    setProject(updated);
-    setDirty(true);
-  }
-
-  function handleGrantContextsChange(revised: Project): void {
+  function handleProjectContextsChange(revised: Project): void {
     // prompt not affected by contexts change
     setProject(revised);
     setDirty(true);
@@ -197,8 +191,8 @@ const ProjectCard: React.FC = () => {
           }}>
           <Stack gap={1}>
             <ProjectTemplateEditor title={UI_CONSTANTS.TEMPLATE_TITLE} onChange={handleTemplateChange} />
-            <ProjectContextEditor title={UI_CONSTANTS.CONTEXT_TITLE} onChange={handleGrantContextsChange} />
-            <ProjectOutputEditor title={UI_CONSTANTS.OUTPUT_TITLE} onChange={handleGrantOutputChange} />
+            <ProjectContextEditor title={UI_CONSTANTS.CONTEXT_TITLE} onChange={handleProjectContextsChange} />
+            <ProjectOutputEditor title={UI_CONSTANTS.OUTPUT_TITLE} onChange={handleProjectOutputChange} />
             <PlainTextCard title={UI_CONSTANTS.PROMPT_TITLE} value={project.prompt} />
           </Stack>
         </CardContent>
