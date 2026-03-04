@@ -13,9 +13,9 @@ import { SplitButton } from "@digitalaidseattle/mui";
 
 import { getContentGenerationServices } from "../services";
 import { ProjectContent, Project, ProjectOutput } from "../services/types";
-import { saveProject } from "../transactions";
-import { cloneProject } from "../transactions/CloneProject";
-import { generateProjectContent } from "../transactions/GenerateProjectContent";
+import { saveProject } from "../services/transactions";
+import { cloneProject } from "../services/transactions/CloneProject";
+import { generateProjectContent } from "../services/transactions/GenerateProjectContent";
 import { DateUtils } from "../utils/dateUtils";
 import { AiProjectContext } from "./AiProjectContext";
 import { PlainTextCard } from "./PlainTextCard";

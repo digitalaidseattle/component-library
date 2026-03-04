@@ -21,8 +21,7 @@ import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 
 import { Clipboard } from "@digitalaidseattle/mui";
-import { Project, ProjectContent } from "../services";
-import { exportProjectContent } from "../transactions/ExportProjectContent";
+import { getContentGenerationServices, Project, ProjectContent } from "../services";
 
 //Count words in string
 function countWords(text: string): number {
@@ -42,6 +41,8 @@ interface ProjectContentDialogProps {
 };
 
 const ProjectContentDialog = ({ title = "AI Generated Project", project, content, open, onClose }: ProjectContentDialogProps) => {
+    const contentService = getContentGenerationServices().projectContentService;
+
     const dialogRef = React.useRef<HTMLDivElement | null>(null);
 
     const reponses: {
@@ -65,7 +66,7 @@ const ProjectContentDialog = ({ title = "AI Generated Project", project, content
     }, [project, content]);
 
     async function handleExport() {
-        await exportProjectContent(content);
+        await contentService.export(content);
     }
 
     function handleClose(_event: {}, reason: "backdropClick" | "escapeKeyDown"): void {

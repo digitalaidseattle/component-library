@@ -22,7 +22,13 @@ import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 import "./App.css";
 import { Config } from './Config';
 import { routes } from './routes';
-import { GeminiAiService, GeminiContentService, GeminiProjectService, setContentGenerationServices } from '@digitalaidseattle/content-generation';
+import {
+  GeminiAiService,
+  GeminiContentService,
+  GeminiProjectService,
+  setContentGenerationServices,
+  TransactionService
+} from '@digitalaidseattle/content-generation';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -38,7 +44,8 @@ setCoreServices({
 setContentGenerationServices({
   aiService: new GeminiAiService(),
   projectService: new GeminiProjectService(),
-  projectContentService: new GeminiContentService()
+  projectContentService: new GeminiContentService(),
+  projectTransactionService: new TransactionService()
 })
 const App: React.FC = () => {
 

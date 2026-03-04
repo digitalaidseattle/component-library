@@ -4,7 +4,7 @@
  *  @copyright 2026 Digital Aid Seattle
  *
  */
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
     Box,
@@ -27,6 +27,12 @@ const FileUploadDialog = ({ title = "Upload files", open, onChange }: FileUpload
 
     const [files, setFiles] = React.useState<File[]>([]);
 
+    useEffect(() => {
+        if (true) {
+            setFiles([]);
+        }
+    }, [open]);
+    
     function handleConfirm(): void {
         onChange(files);
     }

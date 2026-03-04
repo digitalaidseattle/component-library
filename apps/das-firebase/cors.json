@@ -1,0 +1,11 @@
+[
+  {
+    "origin": [
+      "http://localhost:3000",
+      "https://das-firebase-19661.web.app"
+    ],
+    "method": ["GET", "HEAD"],
+    "responseHeader": ["Content-Type", "Authorization"],
+    "maxAgeSeconds": 3600
+  }
+]

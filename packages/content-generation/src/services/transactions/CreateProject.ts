@@ -7,8 +7,8 @@
 
 import { getCoreServices } from "@digitalaidseattle/core";
 import { v4 as uuid } from 'uuid';
-import { getContentGenerationServices } from "../services/contentGenerationServices";
-import { Project } from "../services/types";
+import { getContentGenerationServices } from "../contentGenerationServices";
+import { Project } from "../types";
 
 const DEFAULT_NAME = 'New Project';
 

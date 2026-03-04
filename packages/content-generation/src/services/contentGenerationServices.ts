@@ -8,7 +8,7 @@
  */
 
 
-import { EntityService, StorageFile } from "@digitalaidseattle/core";
+import { EntityService, Identifier, StorageFile } from "@digitalaidseattle/core";
 import { Part } from "@google/genai";
 import { Project, ProjectContent, ProjectContext } from "./types";
 
@@ -24,18 +24,28 @@ export interface AiService {
   generatePrompt(project: Project): string;
 }
 
+export interface ProjectTransactionService {
+  create(): Promise<Project>;
+  clone(project: Project): Promise<Project>;
+  save(project: Project): Promise<Project>;
+  delete(id: Identifier): Promise<void>;
+  generateContent(project: Project): Promise<ProjectContent>;
+}
+
 export interface ProjectService extends EntityService<Project> {
   empty(): Project;
   findByName(name: string): Promise<Project[]>;
 }
 
 export interface ProjectContentService extends EntityService<ProjectContent> {
-  empty(): ProjectContent
+  empty(): ProjectContent;
+  export(projectContent: ProjectContent): Promise<void>;
 }
 
 export interface ContentGenerationServices {
   aiService: AiService;
   projectService: ProjectService;
+  projectTransactionService: ProjectTransactionService;
   projectContentService: ProjectContentService;
 }
 

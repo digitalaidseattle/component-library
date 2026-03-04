@@ -30,7 +30,7 @@ const ProjectPage: React.FC<{ listPath?: string }> = ({ listPath = "projects" })
           <NavLink to={`/${listPath}`} >Projects</NavLink>
           <Typography color="text.primary">Project Detail</Typography>
         </Breadcrumbs>
-        <Box gap={4}>
+        <Box gap={4} >
           <Stack sx={{
             height: "calc(100dvh - 112px)",
             gap: 2,

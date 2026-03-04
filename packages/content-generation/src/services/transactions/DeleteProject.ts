@@ -6,8 +6,8 @@
  */
 
 import { getCoreServices, Identifier } from "@digitalaidseattle/core";
-import { getContentGenerationServices } from "../services";
-import { Project } from "../services/types";
+import { getContentGenerationServices } from "..";
+import { Project } from "../types";
 
 const DEFAULT_FOLDER = import.meta.env.VITE_FIREBASE_STORAGE_FOLDER;
 

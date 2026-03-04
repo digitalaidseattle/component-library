@@ -41,7 +41,9 @@ export class FirebaseStorageService implements StorageService {
     }
 
     downloadBlob(filepath: string): Promise<Blob | null> {
-        throw new Error("Method not implemented.");
+        const fileRef = ref(this.storage, filepath);
+        return getBytes(fileRef)
+            .then(bytes => new Blob([bytes]));
     }
 
     removeFile(path: string): Promise<void> {
@@ -79,12 +81,12 @@ export class FirebaseStorageService implements StorageService {
         return files;
     }
 
-    async upload(path: string, file: File): Promise<any> {
+    async upload(path: string, file: any): Promise<any> {
         const storageRef = ref(this.storage, path);
 
         // Upload file
         const snapshot = await uploadBytes(storageRef, file, {
-            contentType: file.type,
+            contentType: file?.type,
         });
 
         // Get public download URL
@@ -92,4 +94,3 @@ export class FirebaseStorageService implements StorageService {
         return downloadUrl;
     }
 }
-

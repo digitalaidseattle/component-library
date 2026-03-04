@@ -7,10 +7,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
 import { getContentGenerationServices } from "../services/contentGenerationServices";
 import { Project } from "../services/types";
-import { createProject } from "../transactions";
-import { cloneProject } from "../transactions/CloneProject";
+import { createProject } from "../services/transactions";
+import { cloneProject } from "../services/transactions/CloneProject";
 import { DateUtils } from "../utils/dateUtils";
-import { deleteProject } from "../transactions/DeleteProject";
+import { deleteProject } from "../services/transactions/DeleteProject";
 
 const ProjectsListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "projects" }) => {
   const projectService = getContentGenerationServices().projectService;
@@ -99,24 +99,21 @@ const ProjectsListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "pro
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      flex: 2
     },
     {
       field: "tokenCount",
       headerName: "Token Count",
-      width: 130,
       type: "number",
     },
     {
       field: "modelType",
       headerName: "Model Type",
-      width: 180,
     },
 
     {
       field: "updatedAt",
       headerName: "Updated At",
-      width: 150,
       valueGetter: (_value, row) => DateUtils.formatDateTime(row.updated_at!),
     }
   ];
@@ -158,7 +155,7 @@ const ProjectsListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "pro
     <>
       <Card>
         <CardHeader title="Projects" />
-        <CardContent>
+        <CardContent sx={{ width: '100%' }}>
           <DataGrid
             rows={projects}
             columns={columns}

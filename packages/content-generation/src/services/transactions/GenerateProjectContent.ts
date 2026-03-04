@@ -5,8 +5,8 @@
  *
  */
 
-import { getContentGenerationServices } from "../services/contentGenerationServices";
-import { Project, ProjectContent } from "../services/types";
+import { getContentGenerationServices } from "../contentGenerationServices";
+import { Project, ProjectContent } from "../types";
 import { saveProject } from "./SaveProject";
 
 async function validate(project: Project) {
