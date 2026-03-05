@@ -9,9 +9,10 @@ import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";
 import { Card, CardContent, CardHeader, IconButton, TextField } from "@mui/material";
 import React, { useContext } from "react";
 import { AiProjectContext } from "./AiProjectContext";
+import { StableCursorTextField } from "@digitalaidseattle/mui";
 
 const HELP_TOPIC = "Template";
-const DEFAULT_PLACEHOLDER_TEXT="Create a grant proposal.";
+const DEFAULT_PLACEHOLDER_TEXT = "Create a grant proposal.";
 export const ProjectTemplateEditor = ({ title, onChange }: { title: string, onChange: (updated: string) => void }) => {
     const { setHelpTopic } = React.useContext(HelpTopicContext);
     const { setShowHelp } = useHelp();
@@ -26,7 +27,8 @@ export const ProjectTemplateEditor = ({ title, onChange }: { title: string, onCh
                     onClick={() => { setHelpTopic(HELP_TOPIC); setShowHelp(true) }}
                     color="primary"><InfoCircleOutlined /></IconButton>} />
             <CardContent>
-                <TextField fullWidth={true}
+                <StableCursorTextField
+                    fullWidth={true}
                     value={project.template ?? ""}
                     onChange={(evt) => onChange(evt.target.value)}
                     multiline={true}

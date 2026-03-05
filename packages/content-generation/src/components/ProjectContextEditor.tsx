@@ -14,7 +14,7 @@ import { getContentGenerationServices } from '../services';
 import { Project, ProjectContext } from '../services/types';
 import { AiProjectContext as ContentGenerationProjectContext } from './AiProjectContext';
 import { FileUploadDialog } from './FileUploadDialog';
-import { SplitButton } from '@digitalaidseattle/mui';
+import { SplitButton, StableCursorTextField } from '@digitalaidseattle/mui';
 
 const SUPPORTED_FILE_TYPES = [
     "text/plain",
@@ -52,7 +52,7 @@ const ContextRow = ({ index, context, onChange, onDelete }: ContextRowProps) => 
                 <DeleteOutlined />
             </Button>
             {(context.type === 'text') &&
-                <OutlinedInput
+                <StableCursorTextField
                     fullWidth={true}
                     value={context.value}
                     placeholder='Enter context information here'

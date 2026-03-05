@@ -3,18 +3,18 @@
  * 
  * @copyright 2025 Digital Aid Seattle
 */
-import { DeleteOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { HelpTopicContext, useHelp } from '@digitalaidseattle/core';
 import {
   Button, ButtonGroup,
   Card, CardContent, CardHeader,
   IconButton,
-  Stack,
-  TextField
+  Stack
 } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { ProjectOutput } from '../services/types';
 import { AiProjectContext } from './AiProjectContext';
+import { StableCursorTextField } from '@digitalaidseattle/mui';
 
 export const ProjectOutputEditor = ({ title, onChange }: { title: string, onChange: (updated: ProjectOutput[]) => void }) => {
   const { project } = useContext(AiProjectContext);
@@ -81,13 +81,13 @@ export const ProjectOutputEditor = ({ title, onChange }: { title: string, onChan
               >
                 <DeleteOutlined />
               </Button>
-              <TextField
+              <StableCursorTextField
                 label="Field"
                 fullWidth={true}
                 value={field.name}
                 onChange={(e) => handleOutputFieldChange(index, 'name', e.target.value)}
               />
-              <TextField
+              <StableCursorTextField
                 label={`Max ${field.unit === 'words' ? 'Words' : 'Characters'}`}
                 type="number"
                 value={field.maxWords}
