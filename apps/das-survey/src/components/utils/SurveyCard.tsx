@@ -21,8 +21,10 @@ import type { SurveyCardModel } from "../../models/SurveyCardModel";
 
 export default function SurveyCard({
   survey,
+  onDeleted,
 }: {
   survey: SurveyCardModel;
+  onDeleted?: () => Promise<void> | void;
 }) {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -188,10 +190,10 @@ export default function SurveyCard({
             {survey.status === "draft" && (
               <IconButton
                 size="small"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
-                  deleteDraft(survey.id);
-                  window.location.reload();
+                  await deleteDraft(survey.id);
+                  await onDeleted?.();
                 }}
                 sx={{
                   opacity: 0.7,

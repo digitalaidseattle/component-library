@@ -9,7 +9,7 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { loadDrafts } from "../../storage/DraftSurveyStorage";
 import SurveyCard from "../utils/SurveyCard";
@@ -26,9 +26,15 @@ export default function Content() {
     useState<StatusFilter>("all");
   const [sortOrder, setSortOrder] =
     useState<SortOrder>("recent");
+  const [surveys, setSurveys] = useState<SurveyCardModel[]>([]);
 
-  const surveys: SurveyCardModel[] = useMemo(() => {
-    return loadDrafts().map(draftToCardModel);
+  async function refreshSurveys() {
+    const drafts = await loadDrafts();
+    setSurveys(drafts.map(draftToCardModel));
+  }
+
+  useEffect(() => {
+    void refreshSurveys();
   }, []);
 
   const filteredSurveys = surveys
@@ -127,7 +133,11 @@ export default function Content() {
           gap={2}
         >
           {filteredSurveys.map((survey) => (
-            <SurveyCard key={survey.id} survey={survey} />
+            <SurveyCard
+              key={survey.id}
+              survey={survey}
+              onDeleted={refreshSurveys}
+            />
           ))}
         </Box>
       ) : (
