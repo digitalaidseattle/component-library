@@ -1,5 +1,12 @@
+/**
+ * routes.tsx
+ * 
+ * @copyright 2025 Digital Aid Seattle
+*/
+
 import { RouteObject } from 'react-router-dom';
 
+import { ProjectPage } from '@digitalaidseattle/content-generation';
 import {
   Error,
   Login,
@@ -7,12 +14,8 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
-import DonationsPage from "./pages/donations";
+import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
 import InstitutionsPage from "./pages/institutions";
-import ProjectsPage from "./pages/projects";
-import TestPage from './pages/TestPage';
-import { GrantPage, GrantsPage } from '@digitalaidseattle/grants';
-
 
 const routes: RouteObject[] = [
   {
@@ -21,33 +24,22 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "",
-        element: <GrantsPage />,
-      },
-      {
-        path: "projects",
-        element: <ProjectsPage />,
+        element: <AiProjectsPage />,
       },
       {
         path: "institutions",
         element: <InstitutionsPage />,
       },
       {
-        path: "grant-proposal/:id",
-        element: <GrantPage />,
+        path: "ai-projects/:id",
+        element: <ProjectPage listPath={"ai-projects"} />,
       }, {
-        path: "grant-proposals",
-        element: <GrantsPage />,
-      }, {
-        path: "donations",
-        element: <DonationsPage />,
+        path: "ai-projects",
+        element: <AiProjectsPage />,
       },
       {
         path: "privacy",
         element: <MarkdownPage filepath='privacy.md' />,
-      },
-      {
-        path: "testpage",
-        element: <TestPage />,
       }
     ]
   },

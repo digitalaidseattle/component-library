@@ -28,7 +28,7 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ filepath }) => {
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-            <Grid item>
+            <Grid >
                 <Markdown>
                     {file}
                 </Markdown>

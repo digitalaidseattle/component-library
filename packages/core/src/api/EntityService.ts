@@ -10,6 +10,10 @@ export type Identifier = string | number;
 
 export interface Entity {
     id: Identifier | undefined | null;
+    created_by?: string;
+    created_at?: Date;
+    updated_by?: string;
+    updated_at?: Date;
 }
 
 export interface EntityService<T extends Entity> {
@@ -25,5 +29,7 @@ export interface EntityService<T extends Entity> {
     update(id: Identifier, changes: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T>;
 
     delete(id: Identifier, user?: User): Promise<void>;
+
+    upsert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T>;
 
 }
