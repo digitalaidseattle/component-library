@@ -74,7 +74,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     authService.signOut()
-      .then(() => navigate('/login'))
+      .then(() => navigate('/login?code=Logout'))
   };
 
   return (

@@ -1,28 +1,22 @@
+/**
+ *  storageService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 
-import { AuthError, AuthService, OAuthResponse, User } from '@digitalaidseattle/core';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { firebaseClient } from "./firebaseClient";
+import { AuthError, AuthService, OAuthResponse } from '@digitalaidseattle/core';
+import { FirebaseApp } from 'firebase/app';
+import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 
-class FirebaseAuthService implements AuthService {
+export class FirebaseAuthService implements AuthService {
 
-    currentUser: User | undefined = undefined;
-    auth = getAuth(firebaseClient);
+    auth: Auth;
 
-    constructor() {
-        this.auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.currentUser = {
-                    email: user.email,
-                    user_metadata: {
-                        name: user.displayName,
-                        avatar_url: user.photoURL,
-                        email: user.email
-                    }
-                } as User;
-
-            }
-        })
+    constructor(firebaseClient: FirebaseApp) {
+        this.auth = getAuth(firebaseClient);
     }
+
 
     getProviders(): string[] {
         return ["google"];
@@ -38,32 +32,40 @@ class FirebaseAuthService implements AuthService {
     }
 
     hasUser(): Promise<boolean> {
-        return Promise.resolve(this.currentUser !== null);
+        return new Promise((resolve) => {
+            const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+                unsubscribe(); // stop listening after first call
+                resolve(user ? true : false);
+            });
+        });
     }
 
     getUser = async (): Promise<any | null> => {
-        return this.currentUser;
+        return new Promise((resolve) => {
+            const unsubscribe = onAuthStateChanged(this.auth, (gUser) => {
+                unsubscribe(); // stop listening after first call
+                const user = gUser ? {
+                    email: gUser.email,
+                    user_metadata: {
+                        name: gUser.displayName,
+                        avatar_url: gUser.photoURL,
+                        email: gUser.email
+                    }
+                } : null;
+                resolve(user);
+            });
+        });
     }
 
     signOut = async (): Promise<{ error: AuthError | null }> => {
-        this.currentUser = undefined;
-        this.auth.signOut();
+        await this.auth.signOut();
         return { error: null };
     }
 
     signInWithGoogle = async (): Promise<any> => {
         try {
             const provider = new GoogleAuthProvider();
-            const resp = await signInWithPopup(this.auth, provider);
-            this.currentUser = {
-                email: resp.user.email,
-                user_metadata: {
-                    name: resp.user.displayName,
-                    avatar_url: resp.user.photoURL,
-                    email: resp.user.email
-                }
-            } as User;
-
+            await signInWithPopup(this.auth, provider);
             return {
                 data: {
                     url: import.meta.env.VITE_AUTH_DOMAIN
@@ -75,6 +77,3 @@ class FirebaseAuthService implements AuthService {
         }
     }
 }
-
-export { FirebaseAuthService };
-

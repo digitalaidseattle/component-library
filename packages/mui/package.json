@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/mui",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "Material UI components commonly used in DAS ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/mui",
   "main": "dist/digitalaidseattle-mui.cjs.js",
@@ -20,8 +20,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",
-    "react-router": "^6.22.0",
-    "react-router-dom": "^6.22.0",
+    "react-router": "^7.13.0",
+    "react-router-dom": "^7.13.0",
     "typescript": "^5.5.4"
   },
   "scripts": {

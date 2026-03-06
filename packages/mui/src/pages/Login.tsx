@@ -22,9 +22,12 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (searchParams) {
-      switch (searchParams.get('error')) {
+      switch (searchParams.get('code ')) {
         case 'AccessDenied':
           setErrorMessage('Not authorized to access this application.  Please contact the system administrator.');
+          break;
+        case 'Logout':
+          setErrorMessage('You have successfully been logged out the application.');
           break;
         default:
           setErrorMessage('');

@@ -8,14 +8,13 @@ import { useHelp } from '@digitalaidseattle/core';
 import HelpIcon from '@mui/icons-material/Help';
 import { IconButton } from "@mui/material";
 import React from 'react';
-// import { useHelp } from './HelpContext';
 
 export const HelpButton: React.FC = () => {
     const { setShowHelp } = useHelp();
     return (
         <IconButton color="primary"
             aria-label="Hide Help"
-            onClick={() => { console.log('hit'); setShowHelp(true) }}>
+            onClick={() => setShowHelp(true)}>
             <HelpIcon />
         </IconButton>
     )

@@ -6,6 +6,11 @@
  *
  */
 
+export type StorageFile = File & {
+    fullPath: string;
+    updated?: string;
+}
+
 export interface StorageService {
 
     list(filepath?: string): Promise<any[]>;
