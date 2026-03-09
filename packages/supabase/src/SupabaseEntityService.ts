@@ -194,8 +194,25 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
         }
     }
 
-}
+    async upsert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
+        try {
+            const { data, error } = await supabaseClient
+                .from(this.tableName)
+                .upsert([entity])
+                .select(select ?? '*')
+                .single();
+            if (error) {
+                console.error('Failed to upsert entity', error);
+                throw new Error('Failed to upsert entity');
+            }
+            return data as unknown as T;
+        } catch (err) {
+            console.error('Error inserting entity:', err);
+            throw err;
+        }
+    }
 
+}
 export { SupabaseEntityService };
 export type { Entity };
 
