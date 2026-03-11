@@ -23,10 +23,15 @@ type QueryModel = {
     filterModel?: FilterModel
 }
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
 const supabaseClient = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
+    supabaseUrl || "https://placeholder.supabase.co",
+    supabaseAnonKey || "placeholder-anon-key"
 );
 
 export { supabaseClient };
+export { supabaseConfigured };
 export type { PageInfo, QueryModel }

@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import CreateSurveyPage from "./pages/CreatorSurveyPage";
 import TemplateGalleryPage from "./pages/TemplateGalleryPage";
+import PublishedSurveyPage from "./pages/PublishedSurveyPage";
 
 export default function App() {
   return (
@@ -13,13 +14,15 @@ export default function App() {
       <Route path="/surveys/new" element={<TemplateGalleryPage />} />
 
       {/* Create new survey (blank draft) */}
-      <Route path="/surveys/create" element={<CreateSurveyPage />} />
+      <Route path="/surveys/create/:templateId" element={<CreateSurveyPage />} />
 
       {/* Edit existing draft */}
       <Route
         path="/surveys/edit/:draftId"
         element={<CreateSurveyPage />}
       />
+
+      <Route path="/surveys/:surveyId" element={<PublishedSurveyPage />} />
     </Routes>
   );
 }

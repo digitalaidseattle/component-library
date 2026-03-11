@@ -131,6 +131,9 @@
       ],
       "@digitalaidseattle/content-generation": [
         "packages/content-generation/src"
+      ],
+      "@digitalaidseattle/surveys": [
+        "packages/surveys/src"
       ]
     }
   }
