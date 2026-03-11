@@ -1,13 +1,11 @@
-import { Box } from "@mui/material";
 import {
     BankOutlined,
-    DollarOutlined,
-    FormOutlined,
-    HomeOutlined
+    FormOutlined
 } from '@ant-design/icons';
-import logo from "./assets/logo-light-icon.svg";
 import { defaultTheme, HelpButton, MenuItem } from "@digitalaidseattle/mui";
+import { Box } from "@mui/material";
 import packageJson from "../package.json";
+import logo from "./assets/logo-light-icon.svg";
 
 export const Config = () => {
 
@@ -24,14 +22,7 @@ export const Config = () => {
             title: 'Sections',
             type: 'group',
             children: [
-                {
-                    id: 'home',
-                    title: 'Projects',
-                    type: 'item',
-                    url: '/projects',
-                    icon: <HomeOutlined />,
-                } as MenuItem,
-                {
+               {
                     id: 'Inst',
                     title: 'Institutions',
                     type: 'item',
@@ -40,30 +31,11 @@ export const Config = () => {
                 } as MenuItem,
                 {
                     id: 'GRNT',
-                    title: 'Grant Proposals',
+                    title: 'AI Projects',
                     type: 'item',
-                    url: '/grant-proposals',
+                    url: '/ai-projects',
                     icon: <FormOutlined />,
-                } as MenuItem,
-                {
-                    id: 'DONA',
-                    title: 'Donations',
-                    type: 'item',
-                    url: '/donations',
-                    icon: <DollarOutlined />,
-                } as MenuItem,
-                {
-                    id: 'TEST',
-                    title: 'Test Page',
-                    type: 'item',
-                    url: '/testpage'
-                } as MenuItem,
-                {
-                    id: 'TEST-survey',
-                    title: 'Test  Survey Page',
-                    type: 'item',
-                    url: '/surveys'
-                } as MenuItem
+                } as MenuItem                
             ]
         } as MenuItem],
         toolbarItems: [

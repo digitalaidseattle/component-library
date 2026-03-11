@@ -69,7 +69,7 @@ const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, ent
         {
             name: "description",
             label: 'Description',
-            type: 'debounce',
+            type: 'string',
             disabled: false,
         },
         {

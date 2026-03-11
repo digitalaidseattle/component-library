@@ -13,24 +13,45 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import {
   AuthServiceProvider,
   HelpContextProvider,
+  setCoreServices,
   UserContextProvider
 } from "@digitalaidseattle/core";
-import { FirebaseAuthService } from "@digitalaidseattle/firebase";
+import { FirebaseAuthService, firebaseClient, FirebaseStorageService } from "@digitalaidseattle/firebase";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 
 import "./App.css";
 import { Config } from './Config';
 import { routes } from './routes';
+import {
+  GeminiAiService,
+  GeminiContentService,
+  GeminiProjectService,
+  setContentGenerationServices,
+  TransactionService
+} from '@digitalaidseattle/content-generation';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 const router = createBrowserRouter(routes);
+const authService = new FirebaseAuthService(firebaseClient);
+const storageService = new FirebaseStorageService(firebaseClient);
 
+setCoreServices({
+  authService: authService,
+  storageService: storageService
+});
+
+setContentGenerationServices({
+  aiService: new GeminiAiService(),
+  projectService: new GeminiProjectService(),
+  projectContentService: new GeminiContentService(),
+  projectTransactionService: new TransactionService()
+})
 const App: React.FC = () => {
 
   return (
     <>
-      <AuthServiceProvider authService={new FirebaseAuthService()} >
+      <AuthServiceProvider authService={authService} >
         <UserContextProvider>
           <HelpContextProvider>
             <LayoutConfigurationProvider configuration={Config()}>

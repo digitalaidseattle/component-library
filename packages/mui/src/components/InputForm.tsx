@@ -10,12 +10,12 @@ import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mu
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from 'dayjs';
 import InputRating from './InputRating';
-import { DebouncedInputTextField } from './DebouncedInputTextField';
+import { DebouncedTextField } from './DebouncedTextField';
 
 interface InputOption {
     name: string;
     label: string;
-    type?: 'custom' | 'date' | 'time' | 'datetime' | 'select' | 'rating' | 'string' | 'debounce'; // defaults to string
+    type?: 'custom' | 'date' | 'time' | 'datetime' | 'select' | 'rating' | 'string'; // defaults to string
     disabled: boolean;
     size?: number;
     options?: { label: string, value: string }[];
@@ -94,12 +94,6 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                     value={value}
                     onChange={(field, value) => onChange(field, value)} />
             }
-            case 'debounce':
-                return <DebouncedInputTextField
-                    index={idx}
-                    option={option}
-                    value={value}
-                    onChange={(field, value) => onChange(field, value)} />
             case 'string':
             default:
                 return (
@@ -117,6 +111,15 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
                             fullWidth
                             variant="outlined"
                             onChange={(evt) => onChange(option.name, evt.target.value)}
+                            sx={((option.size ?? 1) > 1)
+                                ? {
+                                    '& .MuiInputBase-input': {
+                                        resize: 'vertical',
+                                        overflow: 'auto',
+                                    }
+                                }
+                                : {}
+                            }
                         />
                     </FormControl>
                 );

@@ -17,10 +17,7 @@
       "path": "./packages/supabase"
     },
     {
-      "path": "./packages/grants"
-    },
-    {
-      "path": "./packages/surveys"
+      "path": "./packages/content-generation"
     }
   ],
   "compilerOptions": {
@@ -132,11 +129,8 @@
       "@digitalaidseattle/airtable": [
         "packages/airtable/src"
       ],
-      "@digitalaidseattle/grants": [
-        "packages/grants/src"
-      ],
-      "@digitalaidseattle/surveys": [
-        "packages/surveys/src"
+      "@digitalaidseattle/content-generation": [
+        "packages/content-generation/src"
       ]
     }
   }

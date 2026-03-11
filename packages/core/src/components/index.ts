@@ -6,3 +6,4 @@ export * from "./UserContext";
 export * from "./StorageServiceContext";
 export * from "./NotificationContext";
 export * from "./HelpContext";
+export * from "./HelpTopicContext";

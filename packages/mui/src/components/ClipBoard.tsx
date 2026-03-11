@@ -9,7 +9,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton } from "@mui/material";
 
-export const Clipboard = (props: { text: string, size?: "large" | "medium" | "small" }) => {
+export const Clipboard = (props: { text: string, size?: "large" | "medium" | "small", parentRef?: HTMLDivElement | null }) => {
     const [copying, setCopying] = React.useState<boolean>(false);
     const [iconSize, setIconSize] = useState<number>(20);
 
@@ -28,7 +28,7 @@ export const Clipboard = (props: { text: string, size?: "large" | "medium" | "sm
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.style.position = 'fixed'; // Prevent scrolling to bottom
-        document.body.appendChild(textarea);
+        (props.parentRef ?? document.body).appendChild(textarea);
         textarea.focus();
         textarea.select();
 
@@ -43,19 +43,21 @@ export const Clipboard = (props: { text: string, size?: "large" | "medium" | "sm
         }
     };
 
-    // TODO add protocol check
-    // Requires https
-    // const copyToClipboardModern = (text: string) => {
-    //     navigator.clipboard.writeText(text)
-    //         .then(() => {
-    //             setCopying(true);
-    //             wait(2).then(() => setCopying(false))
-    //         })
-    //         .catch(err => console.error('Failed to copy: ', err))
-    // }
-
     function copyToClipboard() {
-        copyToClipboardFallback(props.text)
+        try {
+            if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(props.text)
+                    .then(() => {
+                        setCopying(true);
+                        wait(2).then(() => setCopying(false))
+                    })
+                return true;
+            }
+        } catch {
+            // swallow and fallback
+        }
+
+        return copyToClipboardFallback(props.text);
     }
     return (
         <IconButton

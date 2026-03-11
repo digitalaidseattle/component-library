@@ -7,6 +7,7 @@ import {
     getDoc,
     getDocs,
     getFirestore,
+    setDoc,
     updateDoc
 } from "firebase/firestore";
 
@@ -19,7 +20,6 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     constructor(collectionName: string) {
         this.collectionName = collectionName;
     }
-
 
     // Get all documents from a collection
     async getAll(count?: number, select?: string, mapper?: (json: any) => T): Promise<T[]> {
@@ -79,7 +79,7 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     // Update a document to a collection
     async update(
         entityId: Identifier,
-        updatedFields: T,
+        updatedFields: Partial<T>,
         select?: string,
         mapper?: (json: any) => T,
         user?: User): Promise<T> {
@@ -98,9 +98,14 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
         return deleteDoc(doc(this.db, this.collectionName, entityId as string));
     }
 
+    async upsert(entity: T): Promise<T> {
+        await setDoc(doc(this.db, this.collectionName, entity.id as string), entity)
+        return entity;
+    }
+
 }
 
 export { FirestoreService };
 
-    export type { Entity };
+export type { Entity };
 

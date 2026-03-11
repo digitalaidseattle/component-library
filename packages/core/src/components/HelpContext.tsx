@@ -20,9 +20,6 @@ export const HelpContext = createContext<HelpContexType>({
 export const HelpContextProvider = (props: { children: React.ReactNode }) => {
     const [showHelp, setShowHelp] = useState<boolean>(false);
 
-    useEffect(() => {
-        console.log(showHelp)
-    }, [showHelp])
     return (
         <HelpContext.Provider value={{ showHelp, setShowHelp }}>
             {props.children}
