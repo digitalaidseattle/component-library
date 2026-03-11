@@ -1,10 +1,21 @@
 import { FirestoreService } from "@digitalaidseattle/firebase";
 import { ProjectContentService } from "../contentGenerationServices";
 import { ProjectContent } from "../types";
+import { getFirebaseApp, getGeminiConfiguration } from "./GeminiConfiguration";
 
 export class GeminiContentService extends FirestoreService<ProjectContent> implements ProjectContentService {
+
+  private static instance: GeminiContentService;
+
+  static getInstance() {
+    if (!GeminiContentService.instance) {
+      GeminiContentService.instance = new GeminiContentService();
+    }
+    return GeminiContentService.instance;
+  }
+
   constructor() {
-    super("content");
+    super("content", getFirebaseApp());
   }
 
   // Default shape for a new proposal

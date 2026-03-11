@@ -7,7 +7,6 @@
 
 import { getContentGenerationServices } from "../contentGenerationServices";
 import { Project, ProjectContent } from "../types";
-import { saveProject } from "./SaveProject";
 
 async function validate(project: Project) {
 
@@ -21,16 +20,17 @@ async function validate(project: Project) {
 export async function generateProjectContent(project: Project): Promise<ProjectContent> {
     const aiService = getContentGenerationServices().aiService;
     const contentService = getContentGenerationServices().projectContentService;
+    const transactionService = getContentGenerationServices().projectTransactionService;;
 
     await validate(project);
 
-    let savedProject = await saveProject(project);
+    let savedProject = await transactionService.save(project);
 
     // Ask AI for structured JSON using output field names as keys
     const outputs = project.outputs ?? [];
     if (outputs.length === 0) {
         const response = await aiService.query(
-            project.prompt,
+            project,
             project.modelType
         );
         return {
@@ -43,12 +43,9 @@ export async function generateProjectContent(project: Project): Promise<ProjectC
             model: project.modelType
         };
     } else {
-        const schemaParams = outputs.map((o) => o.name);
         const response = await aiService.parameterizedQuery(
-            project.prompt,
-            schemaParams,
-            project.modelType,
-            project.contexts,
+            project,
+            project.modelType
         );
 
         return {

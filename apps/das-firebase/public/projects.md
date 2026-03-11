@@ -12,9 +12,9 @@ The goal of this module is to allow rapid creation of repetitive content. Grant 
 
 A unique name will aid in tracking and tracing additional changes
 
-### Tell the AI model what you what generated
+### Tell the AI model what you want generated
 
-AI services use textual prompts to instruct its systems to generate content.  The project template will be used to from the prompt that will be sent to the AI service.
+AI services use textual prompts to instruct its systems to generate content.  The project template will be used to form the prompt that will be sent to the AI service.
 
 ### Add context files/text
 

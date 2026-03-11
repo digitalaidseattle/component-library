@@ -4,6 +4,7 @@ import {
     collection,
     deleteDoc,
     doc,
+    Firestore,
     getDoc,
     getDocs,
     getFirestore,
@@ -11,14 +12,16 @@ import {
     updateDoc
 } from "firebase/firestore";
 
-import { firebaseClient } from "./firebaseClient";
+import { FirebaseApp } from "firebase/app";
+import { firebaseClient as defaultFirebaseClient } from "./firebaseClient";
 
 class FirestoreService<T extends Entity> implements EntityService<T> {
-    collectionName = "player";
-    db = getFirestore(firebaseClient);
+    collectionName: string;
+    db: Firestore;
 
-    constructor(collectionName: string) {
+    constructor(collectionName: string, firebaseClient?: FirebaseApp) {
         this.collectionName = collectionName;
+        this.db = getFirestore(firebaseClient ?? defaultFirebaseClient);
     }
 
     // Get all documents from a collection
@@ -94,7 +97,6 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
     }
 
     async delete(entityId: Identifier): Promise<void> {
-        console.log('delete', entityId)
         return deleteDoc(doc(this.db, this.collectionName, entityId as string));
     }
 
@@ -106,6 +108,4 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
 }
 
 export { FirestoreService };
-
-export type { Entity };
 

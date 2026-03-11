@@ -6,9 +6,19 @@ import { createProject } from "./CreateProject";
 import { deleteProject } from "./DeleteProject";
 import { generateProjectContent } from "./GenerateProjectContent";
 import { saveProject } from "./SaveProject";
+import { exportProjectContent } from "./ExportProjectContent";
 
 export class TransactionService implements ProjectTransactionService {
 
+  private static instance: TransactionService;
+
+  static getInstance() {
+    if (!TransactionService.instance) {
+      TransactionService.instance = new TransactionService();
+    }
+    return TransactionService.instance;
+  }
+  
   async create(): Promise<Project> {
     return createProject();
   }
@@ -25,6 +35,10 @@ export class TransactionService implements ProjectTransactionService {
 
   async save(project: Project): Promise<Project> {
     return saveProject(project);
+  }
+
+  async exporContent(content: ProjectContent): Promise<void> {
+    return exportProjectContent(content);
   }
 
 }

@@ -12,18 +12,17 @@ import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
 import { SplitButton } from "@digitalaidseattle/mui";
 
 import { getContentGenerationServices } from "../services";
-import { ProjectContent, Project, ProjectOutput } from "../services/types";
-import { saveProject } from "../services/transactions";
+import { TransactionService } from "../services/transactions";
 import { cloneProject } from "../services/transactions/CloneProject";
-import { generateProjectContent } from "../services/transactions/GenerateProjectContent";
+import { Project, ProjectContent, ProjectOutput } from "../services/types";
 import { DateUtils } from "../utils/dateUtils";
 import { AiProjectContext } from "./AiProjectContext";
 import { PlainTextCard } from "./PlainTextCard";
+import { ProjectContentDialog } from "./ProjectContentDialog";
 import { ProjectContextEditor } from "./ProjectContextEditor";
 import { ProjectOutputEditor } from "./ProjectOutputEditor";
 import { ProjectTemplateEditor } from "./ProjectTemplateEditor";
 import { TextEdit } from "./TextEdit";
-import { ProjectContentDialog } from "./ProjectContentDialog";
 
 function getRootPath(pathname: string): string {
   const segments = pathname.split('/').filter(Boolean);
@@ -52,7 +51,7 @@ const ProjectCard: React.FC = () => {
 
   const location = useLocation();
   const detailPath = getRootPath(location.pathname);
-  const models = aiService.getModels();
+  const [models, setModels] = useState<{ label: string, value: string }[]>([]);
 
   const notifications = useNotifications();
   const { loading, setLoading } = React.useContext(LoadingContext);
@@ -61,6 +60,11 @@ const ProjectCard: React.FC = () => {
   const [isValid, setIsValid] = useState<boolean>(false);
 
   const [showContentDialog, setShowContentDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    aiService.getModels()
+      .then((models) => setModels(models))
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -83,7 +87,7 @@ const ProjectCard: React.FC = () => {
 
   function handleSave() {
     setLoading(true);
-    saveProject(project!)
+    TransactionService.getInstance().save(project!)
       .then(saved => {
         setProject(saved);
         setDirty(false);
@@ -114,7 +118,7 @@ const ProjectCard: React.FC = () => {
     if (project) {
       setLoading(true);
       project.modelType = model;
-      generateProjectContent(project)
+      TransactionService.getInstance().generateContent(project)
         .then(content => {
           setContent(content);
           setShowContentDialog(true);
@@ -203,7 +207,8 @@ const ProjectCard: React.FC = () => {
             justifyContent: "flex-end",
           }}>
           <SplitButton
-            options={models.map(m => ({ label: `Generate with ${m}`, value: m }))}
+            popperPlacement="top-start"
+            options={models.map(({ label, value }) => ({ label: `Generate with ${label}`, value: value }))}
             onClick={(model: string) => handleGenerate(model)} />
           <Button variant="contained" disabled={loading || !isValid} onClick={() => handleClone()}>Clone</Button>
           <Divider orientation="vertical" />

@@ -1,4 +1,5 @@
-import { Entity, FirestoreService } from "@digitalaidseattle/firebase";
+import { Entity } from "@digitalaidseattle/core";
+import { firebaseClient, FirestoreService } from "@digitalaidseattle/firebase";
 
 type Project = Entity & {
     airtableId: string;
@@ -12,7 +13,7 @@ type Project = Entity & {
 class ProjectService extends FirestoreService<Project> {
 
     constructor() {
-        super("PROJECTS");
+        super("PROJECTS", firebaseClient);
     }
 
     empty() {

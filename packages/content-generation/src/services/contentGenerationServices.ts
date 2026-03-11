@@ -9,15 +9,12 @@
 
 
 import { EntityService, Identifier, StorageFile } from "@digitalaidseattle/core";
-import { Part } from "@google/genai";
-import { Project, ProjectContent, ProjectContext } from "./types";
+import { Project, ProjectContent } from "./types";
 
 export interface AiService {
-  getModels(): string[];
-  query(prompt: string, modelType?: string, contexts?: ProjectContext[]): Promise<any>;
-  createParts(contexts: ProjectContext[]): Part[];
-  createSchema(schemaParams: string[]): any;
-  parameterizedQuery(prompt: string, schemaParams: string[], modelType?: string, contexts?: ProjectContext[]): Promise<any>;
+  getModels(): Promise<{ label: string, value: string }[]>;
+  query(project: Project, modelType?: string): Promise<any>;
+  parameterizedQuery(project: Project, modelType?: string,): Promise<any>;
   calcTokenCount(model: string, content: string): Promise<number>;
   calcFileTokenCount(model: string, file: File): Promise<number>;
   calcStorageFileTokenCount(model: string, file: StorageFile): Promise<number>;
@@ -30,6 +27,7 @@ export interface ProjectTransactionService {
   save(project: Project): Promise<Project>;
   delete(id: Identifier): Promise<void>;
   generateContent(project: Project): Promise<ProjectContent>;
+  exporContent(content: ProjectContent): Promise<void>;
 }
 
 export interface ProjectService extends EntityService<Project> {

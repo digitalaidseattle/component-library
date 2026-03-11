@@ -1,4 +1,5 @@
-import { Entity, FirestoreService } from "@digitalaidseattle/firebase";
+import { Entity } from "@digitalaidseattle/core";
+import { firebaseClient, FirestoreService } from "@digitalaidseattle/firebase";
 
 type Institution = Entity & {
     createdAt: Date;
@@ -14,7 +15,7 @@ type Institution = Entity & {
 class InstitutionService extends FirestoreService<Institution> {
 
     constructor() {
-        super("INSTITUTIONS");
+        super("INSTITUTIONS", firebaseClient);
     }
 
     empty() {

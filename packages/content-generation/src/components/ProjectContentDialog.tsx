@@ -87,6 +87,7 @@ const ProjectContentDialog = ({ title = "AI Generated Project", project, content
             <DialogTitle sx={{ fontSize: 16, fontWeight: 600 }}>{`${content.name}`}</DialogTitle>
             <DialogContent>
                 <Typography>Total token count: {content.totalTokenCount ?? "N/A"}</Typography>
+                <Typography>Model: {content.model ?? "N/A"}</Typography>
             </DialogContent>
             <DialogContent>
                 <Stack gap={1}>
