@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
-import CreatorCanvas from "../components/canvas/CreatorCanvas";
+import CreatorCanvas from "../components/Canvas/CreatorCanvas";
 
 import type { DraftSurvey, SurveySnapshot } from "../models/DraftSurvey";
 import { getDraft, upsertDraft } from "../storage/DraftSurveyStorage";
@@ -38,17 +38,36 @@ export default function CreateSurveyPage() {
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const [hasChanges, setHasChanges] = useState(false);
+  const [loadingDraft, setLoadingDraft] = useState(Boolean(draftId));
 
   /* ---------- Load existing draft ---------- */
 
   useEffect(() => {
-    if (!draftId) return;
+    if (!draftId) {
+      setLoadingDraft(false);
+      return;
+    }
+    const selectedDraftId = draftId;
 
-    const draft = getDraft(draftId);
-    if (!draft) return;
+    let cancelled = false;
 
-    setHistory(draft.history);
-    setHistoryIndex(draft.historyIndex);
+    async function loadDraft() {
+      const draft = await getDraft(selectedDraftId);
+      if (cancelled || !draft) {
+        setLoadingDraft(false);
+        return;
+      }
+
+      setHistory(draft.history);
+      setHistoryIndex(draft.historyIndex);
+      setLoadingDraft(false);
+    }
+
+    void loadDraft();
+
+    return () => {
+      cancelled = true;
+    };
   }, [draftId]);
 
   /* ---------- Persist ONLY after first change ---------- */
@@ -64,8 +83,12 @@ export default function CreateSurveyPage() {
       historyIndex,
     };
 
-    upsertDraft(draft);
+    void upsertDraft(draft);
   }, [hasChanges, history, historyIndex, id]);
+
+  if (loadingDraft) {
+    return null;
+  }
 
   const current = history[historyIndex];
   const { surveyTitle, surveyDescription, participantFields } = current;

@@ -40,3 +40,28 @@ Material UI (MUI)
 
 This project is actively evolving.
 Upcoming work includes drag-and-drop question ordering, field deletion, styling controls, and workflow logic.
+
+## Persistence (Supabase)
+
+The survey dashboard/creator now use a Supabase-backed draft persistence layer.
+
+1. Add env vars in `apps/das-survey/.env`:
+
+```bash
+VITE_SUPABASE_URL=your-project-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+1. Create table `survey_drafts` in Supabase:
+
+```sql
+create table if not exists public.survey_drafts (
+  id text primary key,
+  status text not null check (status in ('draft', 'published')),
+  updated_at bigint not null,
+  history jsonb not null,
+  history_index integer not null
+);
+```
+
+If Supabase env vars are missing or requests fail, the app falls back to local browser storage.
