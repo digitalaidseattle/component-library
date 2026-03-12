@@ -45,7 +45,7 @@ function MainLayout({ sx }: { sx?: SxProps }) {
         if (user) {
           setUser(user)
         } else {
-          navigate("/login")
+          navigate("/login?code=Unauthenticated")
         }
       })
   }, [navigate])

@@ -106,20 +106,21 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
         return query.then((resp: any) => {
             const data = resp.data ?? [];
             const aMapper = mapper ?? this.mapper;
-            return aMapper ? data.map((json: any) => aMapper(json)) : data
+            return data.map((json: any) => aMapper(json))
         })
     }
 
     async getById(entityId: Identifier, select?: string, mapper?: (json: any) => T): Promise<T | null> {
         try {
-            return supabaseClient.from(this.tableName)
+            const { data, error } = await supabaseClient.from(this.tableName)
                 .select(select ?? this.select)
                 .eq('id', entityId)
-                .single()
-                .then((resp: any) => {
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper(resp.data)!
-                })
+                .single();
+            if (error) {
+                console.error('Unexpected error during select', error);
+                throw new Error('Unexpected error during select');
+            }
+            return mapper ? mapper(data) : this.mapJson(data);
         } catch (err) {
             console.error('Unexpected error during select:', err);
             throw err;
@@ -162,16 +163,17 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     async update(entityId: Identifier, updatedFields: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
         try {
-            return await supabaseClient
+            const { data, error } = await supabaseClient
                 .from(this.tableName)
                 .update(updatedFields)
                 .eq('id', entityId)
                 .select(select ?? this.select)
-                .single()
-                .then((resp: any) => {
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper(resp.data)!
-                })
+                .single();
+            if (error) {
+                console.error('Failed to update entity', error);
+                throw new Error('Failed to update entity');
+            }
+            return mapper ? mapper(data) : this.mapJson(data);
         } catch (err) {
             console.error('Unexpected error during update:', err);
             throw err;
@@ -199,17 +201,21 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
             const { data, error } = await supabaseClient
                 .from(this.tableName)
                 .upsert([entity])
-                .select(select ?? '*')
+                .select(select ?? this.select)
                 .single();
             if (error) {
                 console.error('Failed to upsert entity', error);
                 throw new Error('Failed to upsert entity');
             }
-            return data as unknown as T;
+            return mapper ? mapper(data) : this.mapJson(data);
         } catch (err) {
             console.error('Error inserting entity:', err);
             throw err;
         }
+    }
+
+    mapJson(json: any): T {
+        return this.mapper(json);
     }
 
 }

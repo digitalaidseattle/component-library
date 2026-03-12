@@ -24,12 +24,12 @@ const StorageExamplePage = () => {
       })
   }, []);
 
-  const File = (id: string, name: string, size: number, mimetype: string) => {
+  const getFile = (id: string, name: string, size: number, mimetype: string) => {
     return {
       id: id,
       name: name,
       metadata: { size: size, mimetype: mimetype },
-      created_at: dayjs(new Date())
+      created_at: dayjs(new Date()).format("dd/mm/yyyy")
     }
   }
 
@@ -37,7 +37,7 @@ const StorageExamplePage = () => {
     const file = event.target.files[0];
     storageService.uploadFile(file)
       .then(() => {
-        const fileObject: File = File(uuid(), file.name, file.size, file.type);
+        const fileObject: File = getFile(uuid(), file.name, file.size, file.type);
         setFiles([...files, fileObject]);
       })
       .catch(err => alert(err));

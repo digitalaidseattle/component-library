@@ -22,7 +22,7 @@ class TicketService extends SupabaseEntityService<Ticket> {
 
     empty() {
         return {
-            id: null,
+            id: undefined,
             created_at: new Date(),
             inputSource: '',
             summary: '',

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 
 import { MainCard } from "@digitalaidseattle/mui";
 import { TicketProps } from "./TicketProps";
+import { TicketHistory } from "../types";
 
 const TicketHistoryCard: React.FC<TicketProps> = ({ ticket }) => {
     return (<MainCard title="History">

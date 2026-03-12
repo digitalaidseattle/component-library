@@ -22,9 +22,12 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (searchParams) {
-      switch (searchParams.get('code ')) {
+      switch (searchParams.get('code')) {
         case 'AccessDenied':
-          setErrorMessage('Not authorized to access this application.  Please contact the system administrator.');
+          setErrorMessage('You are not authorized to access this application.  Please contact the system administrator.');
+          break;
+        case 'Unauthenticated':
+          setErrorMessage('You have been logged out this application.  Please try again.');
           break;
         case 'Logout':
           setErrorMessage('You have successfully been logged out the application.');
@@ -36,18 +39,14 @@ const Login: React.FC = () => {
   }, [searchParams])
 
   return (
-    <Container id="cont" sx={{ width: "33%", gap: 2 }}>
-      {(errorMessage !== '') &&
-        <Card>
-          <CardContent sx={{ textAlign: 'center', alignItems: 'center' }}>
-            <Box sx={{ margin: 2 }}>
-              <Typography>{errorMessage}</Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      }
+    <Container id="cont" sx={{ width: "33%", get: 2 }}>
       <Card id="card" sx={{ gap: 2 }}>
         <CardContent sx={{ textAlign: 'center', alignItems: 'center' }}>
+          {(errorMessage !== '') &&
+            <Box sx={{ margin: 2 }}>
+              <Typography fontWeight={600}>{errorMessage}</Typography>
+            </Box>
+          }
           <Box
             sx={{
               display: 'flex',

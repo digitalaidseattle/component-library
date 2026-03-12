@@ -23,6 +23,7 @@ import {
     Typography
 } from '@mui/material';
 import { ticketService, TicketSource } from '../ticketService';
+import { Ticket } from '../types';
 
 interface TicketDialogProps {
     open: boolean,

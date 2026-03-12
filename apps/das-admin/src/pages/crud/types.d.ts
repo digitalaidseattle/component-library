@@ -1,7 +1,7 @@
 import { Identifier } from "@digitalaidseattle/core";
 
 type Ticket = {
-    id: Identifier,
+    id: Identifier | undefined,
     created_at: Date,
     inputSource: string,
     summary: string,

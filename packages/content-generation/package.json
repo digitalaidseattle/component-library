@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/content-generation",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Content generation module",
   "repository": "null//github.com/null/github.com/tree/master/packages/content-generation",
   "main": "dist/digitalaidseattle-content-generation.cjs.js",
@@ -11,7 +11,7 @@
     "@babel/runtime": "^7.25.0",
     "@digitalaidseattle/core": "^1.0.17",
     "@digitalaidseattle/firebase": "^1.0.12",
-    "@digitalaidseattle/mui": "^1.0.36",
+    "@digitalaidseattle/mui": "^1.0.39",
     "@firebase/firestore": "^4.9.2",
     "@google/genai": "^1.38.0",
     "@mui/icons-material": "^7.3.5",

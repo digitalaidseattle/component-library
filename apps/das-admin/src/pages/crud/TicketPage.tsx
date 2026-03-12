@@ -14,6 +14,7 @@ import { Identifier } from '@digitalaidseattle/core';
 import { ticketService } from './ticketService';
 import TicketForm from './components/TicketForm';
 import TicketHistoryCard from './components/TicketHistoryCard';
+import { Ticket } from './types';
 
 const Labels = {
   updateMessage: 'Ticket updated.',
@@ -72,7 +73,7 @@ const TicketPage = () => {
     <>
       <Grid container rowSpacing={4.5} columnSpacing={2.75}>
         {/* row 1 */}
-        <Grid item xs={12} sx={{ mb: -2.25 }}>
+        <Grid size={12} sx={{ mb: -2.25 }}>
           <Stack direction="row" justifyContent={'space-between'} >
             <Typography variant="h5">{`Ticket: ${ticket.summary} (id = ${ticket.id})`}</Typography>
             <Stack direction="row" spacing={'1rem'}>
@@ -96,7 +97,7 @@ const TicketPage = () => {
         </Grid>
 
         {/* row 2 */}
-        <Grid item xs={12} md={7} lg={8}>
+        <Grid size={12}>
           <TicketForm
             ticket={ticket}
             staff={staff!}
@@ -104,7 +105,7 @@ const TicketPage = () => {
             onChanged={handleChange}
           />
         </Grid>
-        <Grid item xs={12} md={5} lg={4}>
+        <Grid size={12}>
           <TicketHistoryCard ticket={ticket} />
         </Grid>
       </Grid>

@@ -32,4 +32,6 @@ export interface EntityService<T extends Entity> {
 
     upsert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T>;
 
+    mapJson(json: any): T;
+
 }
