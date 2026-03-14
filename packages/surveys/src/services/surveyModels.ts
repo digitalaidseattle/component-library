@@ -10,11 +10,7 @@ export type SurveyQuestionKind =
     | "dropdown"
     | "ranking";
 
-export type SurveyTemplateId =
-    | "blank"
-    | "intake"
-    | "customer-feedback"
-    | "program-evaluation";
+export type SurveyTemplateId = string;
 
 export type SurveyOption = {
     id: string;
@@ -145,6 +141,9 @@ export type SurveyTemplate = {
     description: string;
     category: string;
     definition: SurveyDefinition;
+    scope?: "system" | "user";
+    ownerEmail?: string;
+    updatedAt?: number;
 };
 
 export function createOption(label: string): SurveyOption {

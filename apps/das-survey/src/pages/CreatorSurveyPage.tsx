@@ -1,15 +1,16 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   SurveyBuilder,
   SurveyDraft,
   createDraft,
   getSurveyTemplate,
+  mergeSurveyTemplates,
 } from "@digitalaidseattle/surveys";
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
-import { publishSurvey, surveyDraftStore } from "../surveyModule";
+import { getTemplateOwnerKey, publishSurvey, surveyDraftStore, surveyTemplateStore } from "../surveyModule";
 
 export default function CreateSurveyPage() {
   const navigate = useNavigate();
@@ -18,17 +19,17 @@ export default function CreateSurveyPage() {
     templateId?: string;
   }>();
 
-  const selectedTemplate = useMemo(
-    () => getSurveyTemplate(templateId),
-    [templateId]
-  );
-
   const [draft, setDraft] = useState<SurveyDraft | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadDraft() {
+      const ownerKey = await getTemplateOwnerKey();
+      const userTemplates = await surveyTemplateStore.list(ownerKey);
+      const availableTemplates = mergeSurveyTemplates(userTemplates);
+      const selectedTemplate = getSurveyTemplate(availableTemplates, templateId);
+
       if (draftId) {
         const existing = await surveyDraftStore.get(draftId);
         if (!cancelled) {
@@ -58,7 +59,7 @@ export default function CreateSurveyPage() {
     return () => {
       cancelled = true;
     };
-  }, [draftId, selectedTemplate]);
+  }, [draftId, templateId]);
 
   useEffect(() => {
     if (!draft) {

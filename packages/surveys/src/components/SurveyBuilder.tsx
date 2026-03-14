@@ -48,15 +48,39 @@ const questionCategory: DDCategory<string> = {
 export const SurveyBuilder = ({
     draft,
     onChange,
-    onPublish
+    onPublish,
+    primaryActionLabel,
+    onPrimaryAction,
+    primaryActionIcon,
+    title,
+    description,
+    introSectionTitle,
+    titleFieldLabel,
+    descriptionFieldLabel
 }: {
     draft: SurveyDraft;
     onChange: (draft: SurveyDraft) => void;
     onPublish?: (draft: SurveyDraft) => Promise<void> | void;
+    primaryActionLabel?: string;
+    onPrimaryAction?: (draft: SurveyDraft) => Promise<void> | void;
+    primaryActionIcon?: React.ReactNode;
+    title?: string;
+    description?: string;
+    introSectionTitle?: string;
+    titleFieldLabel?: string;
+    descriptionFieldLabel?: string;
 }) => {
     const definition = getCurrentDefinition(draft);
     const [activeTab, setActiveTab] = useState<"build" | "preview">("build");
     const items = useMemo(() => new Map([[questionCategory, definition.questions]]), [definition.questions]);
+    const primaryAction = onPrimaryAction ?? onPublish;
+    const actionLabel = primaryActionLabel ?? "Publish";
+    const actionIcon = primaryActionIcon ?? <PublishIcon />;
+    const headerTitle = title ?? "Survey Builder";
+    const headerDescription = description ?? "Drag questions to reorder them, tune each control, and publish the current draft.";
+    const introTitle = introSectionTitle ?? "Survey Introduction";
+    const introTitleFieldLabel = titleFieldLabel ?? "Survey title";
+    const introDescriptionFieldLabel = descriptionFieldLabel ?? "Survey description";
 
     const updateDefinition = (next: typeof definition) => {
         onChange(commitDefinition(draft, next));
@@ -91,11 +115,11 @@ export const SurveyBuilder = ({
                 </Grid>
                 <Grid size={{ xs: 12, md: 9 }}>
                     <Paper square variant="outlined" sx={{ height: "100%", p: { xs: 2, md: 3 } }}>
-                        <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" gap={2} sx={{ mb: 3 }}>
+                            <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" gap={2} sx={{ mb: 3 }}>
                             <Box>
-                                <Typography variant="h5">Survey Builder</Typography>
+                                <Typography variant="h5">{headerTitle}</Typography>
                                 <Typography color="text.secondary">
-                                    Drag questions to reorder them, tune each control, and publish the current draft.
+                                    {headerDescription}
                                 </Typography>
                             </Box>
                             <Stack direction="row" gap={1}>
@@ -105,9 +129,9 @@ export const SurveyBuilder = ({
                                 <Button variant="outlined" startIcon={<RedoIcon />} disabled={draft.historyIndex >= draft.history.length - 1} onClick={() => onChange(redoDraft(draft))}>
                                     Redo
                                 </Button>
-                                {onPublish && (
-                                    <Button variant="contained" startIcon={<PublishIcon />} onClick={() => onPublish(draft)}>
-                                        Publish
+                                {primaryAction && (
+                                    <Button variant="contained" startIcon={actionIcon} onClick={() => primaryAction(draft)}>
+                                        {actionLabel}
                                     </Button>
                                 )}
                             </Stack>
@@ -118,11 +142,11 @@ export const SurveyBuilder = ({
                         ) : (
                             <Stack gap={3}>
                                 <Paper variant="outlined" sx={{ p: 3 }}>
-                                    <Typography variant="h6" gutterBottom>Survey Introduction</Typography>
+                                    <Typography variant="h6" gutterBottom>{introTitle}</Typography>
                                     <Stack gap={2}>
                                         <TextField
                                             fullWidth
-                                            label="Survey title"
+                                            label={introTitleFieldLabel}
                                             value={definition.surveyTitle ?? ""}
                                             onChange={(event) => updateDefinition({
                                                 ...definition,
@@ -133,7 +157,7 @@ export const SurveyBuilder = ({
                                             fullWidth
                                             multiline
                                             minRows={3}
-                                            label="Survey description"
+                                            label={introDescriptionFieldLabel}
                                             value={definition.surveyDescription ?? ""}
                                             onChange={(event) => updateDefinition({
                                                 ...definition,

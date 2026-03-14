@@ -1,13 +1,16 @@
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Button, Card, CardActions, CardContent, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import { SurveyTemplate } from "../services";
 
 export const SurveyTemplateGallery = ({
     templates,
-    onSelectTemplate
+    onSelectTemplate,
+    onDeleteTemplate
 }: {
     templates: SurveyTemplate[];
     onSelectTemplate: (templateId: string) => void;
+    onDeleteTemplate?: (templateId: string) => void;
 }) => {
     return (
         <Grid container spacing={2}>
@@ -27,6 +30,15 @@ export const SurveyTemplateGallery = ({
                             <Button variant="contained" onClick={() => onSelectTemplate(template.id)}>
                                 Use Template
                             </Button>
+                            {template.scope === "user" && onDeleteTemplate && (
+                                <Button
+                                    color="inherit"
+                                    startIcon={<DeleteOutlineIcon />}
+                                    onClick={() => onDeleteTemplate(template.id)}
+                                >
+                                    Delete
+                                </Button>
+                            )}
                         </CardActions>
                     </Card>
                 </Grid>

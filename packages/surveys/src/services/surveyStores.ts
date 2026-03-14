@@ -4,7 +4,8 @@ import { supabaseConfigured } from "@digitalaidseattle/supabase";
 import {
     PublishedSurvey,
     SurveyDraft,
-    SurveyDefinition
+    SurveyDefinition,
+    SurveyTemplate
 } from "./surveyModels";
 
 type SurveyDraftRow = Entity & {
@@ -43,6 +44,14 @@ export interface PublishedSurveyStore {
     isConfigured(): boolean;
 }
 
+export interface SurveyTemplateStore {
+    list(ownerEmail: string): Promise<SurveyTemplate[]>;
+    get(id: string, ownerEmail: string): Promise<SurveyTemplate | undefined>;
+    upsert(template: SurveyTemplate): Promise<void>;
+    delete(id: string, ownerEmail: string): Promise<void>;
+    isConfigured(): boolean;
+}
+
 class SurveyDraftEntityService extends SupabaseEntityService<SurveyDraftRow> {
     constructor() {
         super("survey_drafts");
@@ -57,6 +66,7 @@ class PublishedSurveyEntityService extends SupabaseEntityService<PublishedSurvey
 
 const DRAFT_STORAGE_KEY = "survey-module:drafts";
 const PUBLISHED_STORAGE_KEY = "survey-module:published";
+const TEMPLATE_STORAGE_KEY = "survey-module:templates";
 
 function loadLocal<T>(key: string): T[] {
     const raw = localStorage.getItem(key);
@@ -161,6 +171,53 @@ export class LocalPublishedSurveyStore implements PublishedSurveyStore {
 
     delete(id: string): Promise<void> {
         saveLocal(PUBLISHED_STORAGE_KEY, loadLocal<PublishedSurvey>(PUBLISHED_STORAGE_KEY).filter((survey) => survey.id !== id));
+        return Promise.resolve();
+    }
+
+    isConfigured(): boolean {
+        return true;
+    }
+}
+
+export class LocalSurveyTemplateStore implements SurveyTemplateStore {
+    list(ownerEmail: string): Promise<SurveyTemplate[]> {
+        return Promise.resolve(
+            loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY)
+                .filter((template) => template.ownerEmail === ownerEmail)
+                .sort((left, right) => (right.updatedAt ?? 0) - (left.updatedAt ?? 0))
+        );
+    }
+
+    get(id: string, ownerEmail: string): Promise<SurveyTemplate | undefined> {
+        return this.list(ownerEmail).then((templates) =>
+            templates.find((template) => template.id === id)
+        );
+    }
+
+    upsert(template: SurveyTemplate): Promise<void> {
+        if (!template.ownerEmail) {
+            return Promise.reject(new Error("User templates must include an ownerEmail."));
+        }
+
+        const templates = loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY);
+        const next = templates.filter(
+            (existing) =>
+                existing.id !== template.id || existing.ownerEmail !== template.ownerEmail
+        );
+
+        next.push(template);
+        saveLocal(TEMPLATE_STORAGE_KEY, next);
+        return Promise.resolve();
+    }
+
+
+    delete(id: string, ownerEmail: string): Promise<void> {
+        saveLocal(
+            TEMPLATE_STORAGE_KEY,
+            loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY).filter(
+                (template) => template.id !== id || template.ownerEmail !== ownerEmail
+            )
+        );
         return Promise.resolve();
     }
 
