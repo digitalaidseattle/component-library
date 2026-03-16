@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@digitalaidseattle/core": "^1.0.17",
     "@digitalaidseattle/supabase": "^1.0.17",
     "@digitalaidseattle/surveys": "^1.0.0",
     "@digitalaidseattle/mui": "1.0.32",
@@ -17,6 +18,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
+    "firebase": "^11.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.0"

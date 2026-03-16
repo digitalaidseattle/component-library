@@ -1,3 +1,4 @@
+import { UserContext, UserContextType } from "@digitalaidseattle/core";
 import {
   Box,
   Chip,
@@ -9,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   SurveyCard,
@@ -24,6 +25,7 @@ type SortOrder = "recent" | "oldest";
 export default function Content() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { user } = React.useContext<UserContextType>(UserContext);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
   const [surveys, setSurveys] = useState<SurveyCardModel[]>([]);
@@ -54,7 +56,9 @@ export default function Content() {
           My Surveys
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Manage reusable survey drafts and published versions from one module dashboard.
+          {user?.email
+            ? `Showing surveys and templates for ${user.email}.`
+            : "Showing surveys and templates stored in this local workspace."}
         </Typography>
       </Box>
 

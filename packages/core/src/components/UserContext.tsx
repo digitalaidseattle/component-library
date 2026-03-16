@@ -12,12 +12,12 @@ import { User } from '../api/AuthService';
 
 export interface UserContextType {
     user: User | undefined,
-    setUser: (user: User) => void
+    setUser: (user: User | undefined) => void
 }
 
 export const UserContext = createContext<UserContextType>({
     user: undefined,
-    setUser: (_user: User) => { }
+    setUser: (_user: User | undefined) => { }
 });
 
 export const UserContextProvider = (props: { children: React.ReactNode }) => {

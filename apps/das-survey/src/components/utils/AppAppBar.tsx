@@ -1,11 +1,19 @@
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { alpha, styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { UserContext, UserContextType, useAuthService } from "@digitalaidseattle/core";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Breadcrumb = {
   label: string;
@@ -39,6 +47,17 @@ export default function AppAppBar({
   sidebarWidth,
   onToggleSidebar,
 }: AppAppBarProps) {
+  const authService = useAuthService();
+  const navigate = useNavigate();
+  const { user, setUser } = React.useContext<UserContextType>(UserContext);
+  const authEnabled = authService.getProviders().length > 0;
+
+  async function handleSignOut() {
+    await authService.signOut();
+    setUser(undefined);
+    navigate("/login?code=Logout");
+  }
+
   return (
     <AppBar
       position="fixed"
@@ -130,8 +149,47 @@ export default function AppAppBar({
           </Box>
         </Box>
 
-        {/* Right side - Empty for future actions */}
-        <Box display="flex" gap={1} />
+        <Box display="flex" gap={1} alignItems="center">
+          {!authEnabled && (
+            <Chip
+              label="Local workspace"
+              size="small"
+              variant="outlined"
+              sx={{ borderRadius: 1.5 }}
+            />
+          )}
+
+          {authEnabled && user && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography
+                variant="caption"
+                sx={{ color: "text.secondary", display: { xs: "none", sm: "block" } }}
+              >
+                {user.email}
+              </Typography>
+              <Button
+                size="small"
+                color="inherit"
+                startIcon={<LogoutIcon />}
+                onClick={() => void handleSignOut()}
+              >
+                Sign out
+              </Button>
+            </Stack>
+          )}
+
+          {authEnabled && !user && (
+            <Button
+              size="small"
+              color="inherit"
+              component={RouterLink}
+              to="/login"
+              startIcon={<LoginIcon />}
+            >
+              Sign in
+            </Button>
+          )}
+        </Box>
       </StyledToolbar>
     </AppBar>
   );

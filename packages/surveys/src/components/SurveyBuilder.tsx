@@ -102,12 +102,12 @@ export const SurveyBuilder = ({
 
     return (
         <Box sx={{ maxWidth: 1500, mx: "auto" }}>
-            <Grid container spacing={0} sx={{ minHeight: "calc(100vh - 220px)" }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} sx={{ minHeight: "calc(100vh - 220px)" }}>
                 <Grid size={{ xs: 12, md: 3 }}>
-                    <Paper square variant="outlined" sx={{ height: "100%", p: 2 }}>
-                        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} sx={{ mb: 2 }}>
-                            <Tab value="build" label="Build" />
-                            <Tab value="preview" icon={<PreviewIcon fontSize="small" />} iconPosition="start" label="Preview" />
+                    <Paper square variant="outlined" sx={{ height: "100%", p: { xs: 2, md: 2.5 } }}>
+                        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} variant="fullWidth" sx={{ mb: 2 }}>
+                            <Tab value="build" label="Build" wrapped sx={{ textTransform: "none", minWidth: 0 }} />
+                            <Tab value="preview" icon={<PreviewIcon fontSize="small" />} iconPosition="start" label="Preview" wrapped sx={{ textTransform: "none", minWidth: 0 }} />
                         </Tabs>
                         <Divider sx={{ mb: 2 }} />
                         <QuestionPalette onAddQuestion={addQuestion} />
@@ -115,14 +115,20 @@ export const SurveyBuilder = ({
                 </Grid>
                 <Grid size={{ xs: 12, md: 9 }}>
                     <Paper square variant="outlined" sx={{ height: "100%", p: { xs: 2, md: 3 } }}>
-                            <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" gap={2} sx={{ mb: 3 }}>
-                            <Box>
-                                <Typography variant="h5">{headerTitle}</Typography>
-                                <Typography color="text.secondary">
+                            <Stack
+                                direction={{ xs: "column", xl: "row" }}
+                                justifyContent="space-between"
+                                alignItems={{ xs: "stretch", xl: "flex-start" }}
+                                gap={2}
+                                sx={{ mb: 3 }}
+                            >
+                            <Box sx={{ maxWidth: { xs: "100%", xl: "52ch" }, minWidth: 0 }}>
+                                <Typography variant="h5" sx={{ mb: 0.5 }}>{headerTitle}</Typography>
+                                <Typography color="text.secondary" variant="body1" sx={{ overflowWrap: "anywhere" }}>
                                     {headerDescription}
                                 </Typography>
                             </Box>
-                            <Stack direction="row" gap={1}>
+                            <Stack direction="row" gap={1} flexWrap="wrap" useFlexGap justifyContent={{ xs: "flex-start", xl: "flex-end" }}>
                                 <Button variant="outlined" startIcon={<UndoIcon />} disabled={draft.historyIndex === 0} onClick={() => onChange(undoDraft(draft))}>
                                     Undo
                                 </Button>
@@ -249,7 +255,19 @@ const PaletteSection = ({ title, children }: { title: string; children: React.Re
 );
 
 const PaletteButton = ({ label, onClick }: { label: string; onClick: () => void }) => (
-    <Button variant="outlined" size="small" startIcon={<AddIcon />} onClick={onClick} sx={{ justifyContent: "flex-start", textTransform: "none" }}>
+    <Button
+        variant="outlined"
+        size="small"
+        startIcon={<AddIcon />}
+        onClick={onClick}
+        sx={{
+            justifyContent: "flex-start",
+            textTransform: "none",
+            textAlign: "left",
+            whiteSpace: "normal",
+            py: 1,
+        }}
+    >
         {label}
     </Button>
 );
