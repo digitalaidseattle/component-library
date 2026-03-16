@@ -9,7 +9,7 @@
  */
 import React, { createContext, useEffect, useState } from 'react';
 
-export const useInterval = (callback: Function, delay: number) => {
+export const useInterval = (callback: Function, delay: number | null) => {
     useEffect(() => {
         if (delay !== null) {
             const id = setInterval(callback, delay);
@@ -28,12 +28,12 @@ export const RefreshContext = createContext<RefreshContextType>({
     setRefresh: () => { }
 });
 
-export const RefreshContextProvider = (props: { children: React.ReactNode }) => {
+export const RefreshContextProvider = (props: { secondsDelay?: number, children: React.ReactNode }) => {
     const [refresh, setRefresh] = useState(Date.now());
-    // Polling, 75% think it is worthwhile
+
     useInterval(() => {
         setRefresh(Date.now());
-    }, 1000 * 10);
+    }, (props.secondsDelay && props.secondsDelay > 0) ? 1000 * props.secondsDelay : null);
 
     return (
         <RefreshContext.Provider value={{ refresh, setRefresh }}>

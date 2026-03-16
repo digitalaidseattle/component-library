@@ -5,17 +5,9 @@
  *
  */
 import { User } from "./AuthService";
+import { Entity, Identifier } from "./DataAccessObject";
 
-export type Identifier = string | number;
-
-export interface Entity {
-    id: Identifier | undefined | null;
-    created_by?: string;
-    created_at?: Date;
-    updated_by?: string;
-    updated_at?: Date;
-}
-
+// @deprecated - use DataAccessObject
 export interface EntityService<T extends Entity> {
 
     getAll(count?: number, select?: string, mapper?: (json: any) => T,): Promise<T[]>;

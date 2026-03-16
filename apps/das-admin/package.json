@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@digitalaidseattle/airtable": "1.0.7",
-    "@digitalaidseattle/core": "1.0.17",
+    "@digitalaidseattle/core": "1.0.18",
     "@digitalaidseattle/draganddrop": "2.0.2",
-    "@digitalaidseattle/mui": "1.0.39",
-    "@digitalaidseattle/supabase": "1.0.17",
+    "@digitalaidseattle/mui": "1.0.40",
+    "@digitalaidseattle/supabase": "1.0.18",
     "@vis.gl/react-maplibre": "^8.1.0",
     "file-saver": "^2.0.5",
     "maplibre-gl": "^5.11.0",

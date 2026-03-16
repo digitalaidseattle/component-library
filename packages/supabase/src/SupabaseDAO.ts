@@ -1,24 +1,26 @@
 /**
- * entityService.ts
+ * SupabaseDAO.ts
  *
  * @copyright 2025 Digital Aid Seattle
  *
  */
 
-import { PageInfo, QueryModel, supabaseClient } from "@digitalaidseattle/supabase";
-import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
+import { DataAccessObject, DataAccessOptions, Entity, Identifier } from "@digitalaidseattle/core";
+import { PageInfo, QueryModel } from "@digitalaidseattle/supabase";
+import { SupabaseClient } from "@supabase/supabase-js";
 
-// @deprecated use SupabaseDAO
-abstract class SupabaseEntityService<T extends Entity> implements EntityService<T> {
+abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
 
+    client: SupabaseClient;
     tableName = '';
     select = '*';
     mapper = (json: any) => (json as T);
 
-    constructor(tableName: string, select?: string, mapper?: (json: any) => T) {
+    constructor(supabaseClient: SupabaseClient, tableName: string, opts?: DataAccessOptions<T>) {
+        this.client = supabaseClient;
         this.tableName = tableName;
-        this.select = select ?? '*';
-        this.mapper = mapper ?? ((json: any) => json);
+        this.select = opts ? opts.select ?? "*" : "*";
+        this.mapper = opts ? opts.mapper ?? ((json: any) => json) : ((json: any) => json);
     }
 
     // MUI datagrid filters
@@ -30,12 +32,22 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
         return ['=', '>', '<', '!=']
     }
 
-    async find(queryModel: QueryModel, select?: string, mapper?: (json: any) => T): Promise<PageInfo<T>> {
-        try {
+    getSelect(opts: DataAccessOptions<T>): string {
+        return opts ? opts.select ?? this.select : this.select;
+    }
 
-            let query: any = supabaseClient
+    getMapper(opts: DataAccessOptions<T>): (json: any) => T {
+        return opts ? opts.mapper ?? this.mapper : this.mapper;
+    }
+
+    async find(queryModel: QueryModel, opts?: DataAccessOptions<T>): Promise<PageInfo<T>> {
+        try {
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            let query: any = this.client
                 .from(this.tableName)
-                .select(select ?? this.select, { count: 'exact' })
+                .select(select, { count: 'exact' })
                 .range(queryModel.page * queryModel.pageSize, (queryModel.page + 1) * queryModel.pageSize - 1)
 
             // add sorting
@@ -85,9 +97,8 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
             }
 
             return query.then((resp: any) => {
-                const aMapper = mapper ?? this.mapper;
                 return {
-                    rows: aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data,
+                    rows: resp.data.map((json: any) => mapper(json)),
                     totalRowCount: resp.count,
                 };
             })
@@ -97,84 +108,91 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
         }
     }
 
-    async getAll(count?: number, select?: string, mapper?: (json: any) => T): Promise<T[]> {
-        let query = supabaseClient
+    async getAll(opts?: DataAccessOptions<T>): Promise<T[]> {
+        const select = this.getSelect(opts!);
+        const mapper = this.getMapper(opts!);
+        const count = opts ? opts.count : undefined;
+
+        let query = this.client
             .from(this.tableName)
             .select(select ?? this.select);
         if (count) {
             query = query.limit(count)
         }
-        return query.then((resp: any) => {
-            const data = resp.data ?? [];
-            const aMapper = mapper ?? this.mapper;
-            return data.map((json: any) => aMapper(json))
-        })
+        return query.then((resp: any) =>
+            (resp.data ?? []).map((json: any) => mapper(json))
+        )
     }
 
-    async getById(entityId: Identifier, select?: string, mapper?: (json: any) => T): Promise<T | null> {
+    async getById(entityId: Identifier, opts?: DataAccessOptions<T>): Promise<T> {
         try {
-            const { data, error } = await supabaseClient.from(this.tableName)
-                .select(select ?? this.select)
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            const { data, error } = await this.client.from(this.tableName)
+                .select(select)
                 .eq('id', entityId)
                 .single();
             if (error) {
                 console.error('Unexpected error during select', error);
                 throw new Error('Unexpected error during select');
             }
-            return mapper ? mapper(data) : this.mapJson(data);
+            return mapper(data);
         } catch (err) {
             console.error('Unexpected error during select:', err);
             throw err;
         }
     }
 
-    async batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]> {
+    async batchInsert(entities: T[], opts?: DataAccessOptions<T>): Promise<T[]> {
         try {
-            return await supabaseClient
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            return await this.client
                 .from(this.tableName)
                 .insert(entities)
                 .select(select ?? this.select)
-                .then((resp: any) => {
-                    const data = resp.data ?? [];
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper ? data.map((json: any) => aMapper(json)) : data
-                })
+                .then((resp: any) => (resp.data ?? []).map((json: any) => mapper(json)))
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
         }
     }
 
-    async insert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
+    async insert(entity: T, opts?: DataAccessOptions<T>): Promise<T> {
         try {
-            return await supabaseClient
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            return await this.client
                 .from(this.tableName)
                 .insert([entity])
-                .select(select ?? this.select)
+                .select(select)
                 .single()
-                .then((resp: any) => {
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper(resp.data)!
-                })
+                .then((resp: any) => mapper(resp.data))
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
         }
     }
 
-    async update(entityId: Identifier, updatedFields: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
+    async update(entityId: Identifier, updatedFields: Partial<T>, opts?: DataAccessOptions<T>): Promise<T> {
         try {
-            const { data, error } = await supabaseClient
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            const { data, error } = await this.client
                 .from(this.tableName)
                 .update(updatedFields)
                 .eq('id', entityId)
-                .select(select ?? this.select)
+                .select(select)
                 .single();
             if (error) {
                 console.error('Failed to update entity', error);
                 throw new Error('Failed to update entity');
             }
-            return mapper ? mapper(data) : this.mapJson(data);
+            return mapper(data);
         } catch (err) {
             console.error('Unexpected error during update:', err);
             throw err;
@@ -183,7 +201,7 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
 
     async delete(entityId: Identifier): Promise<void> {
         try {
-            const { error } = await supabaseClient
+            const { error } = await this.client
                 .from(this.tableName)
                 .delete()
                 .eq('id', entityId);
@@ -197,18 +215,21 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
         }
     }
 
-    async upsert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
+    async upsert(entity: T, opts?: DataAccessOptions<T>): Promise<T> {
         try {
-            const { data, error } = await supabaseClient
+            const select = this.getSelect(opts!);
+            const mapper = this.getMapper(opts!);
+
+            const { data, error } = await this.client
                 .from(this.tableName)
                 .upsert([entity])
-                .select(select ?? this.select)
+                .select(select)
                 .single();
             if (error) {
                 console.error('Failed to upsert entity', error);
                 throw new Error('Failed to upsert entity');
             }
-            return mapper ? mapper(data) : this.mapJson(data);
+            return mapper(data);
         } catch (err) {
             console.error('Error inserting entity:', err);
             throw err;
@@ -220,5 +241,5 @@ abstract class SupabaseEntityService<T extends Entity> implements EntityService<
     }
 
 }
-export { SupabaseEntityService };
+export { SupabaseDAO };
 

@@ -22,8 +22,8 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import { ticketService, TicketSource } from '../ticketService';
-import { Ticket } from '../types';
+import { Ticket, TicketSource } from '../api/types';
+import { TicketsDAO } from '../api/TicketsDAO';
 
 interface TicketDialogProps {
     open: boolean,
@@ -31,6 +31,7 @@ interface TicketDialogProps {
     handleError: (err: Error) => void
 }
 const TicketDialog: React.FC<TicketDialogProps> = ({ open, handleSuccess, handleError }) => {
+    const dao = TicketsDAO.getInstance();
 
     const [source, setSource] = useState("email");
 
@@ -48,7 +49,7 @@ const TicketDialog: React.FC<TicketDialogProps> = ({ open, handleSuccess, handle
                 const formData = new FormData(event.currentTarget);
                 const formJson = Object.fromEntries(formData.entries());
                 // Review: as unknown as Ticket
-                ticketService.insert(formJson as unknown as Ticket)
+                dao.insert(formJson as unknown as Ticket)
                     .then((resp: Ticket) => handleSuccess(resp))
                     .catch(err => handleError(err))
             },
