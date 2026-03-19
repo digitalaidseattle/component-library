@@ -15,9 +15,14 @@ import { useNavigate } from "react-router-dom";
 import {
   SurveyCard,
   SurveyCardModel,
+  toPublishedSurveyCardModel,
   toSurveyCardModel,
 } from "@digitalaidseattle/surveys";
-import { deleteSurvey, surveyDraftStore } from "../../surveyModule";
+import {
+  deleteSurvey,
+  publishedSurveyStore,
+  surveyDraftStore,
+} from "../../surveyModule";
 
 type StatusFilter = "all" | "active" | "draft";
 type SortOrder = "recent" | "oldest";
@@ -32,7 +37,11 @@ export default function Content() {
 
   async function refreshSurveys() {
     const drafts = await surveyDraftStore.list();
-    setSurveys(drafts.map(toSurveyCardModel));
+    const published = await publishedSurveyStore.list();
+    setSurveys([
+      ...drafts.map(toSurveyCardModel),
+      ...published.map(toPublishedSurveyCardModel),
+    ]);
   }
 
   useEffect(() => {
@@ -140,7 +149,7 @@ export default function Content() {
                 if (
                   survey.status === "active" &&
                   !window.confirm(
-                    `Delete the published survey "${survey.title}"? This removes both the published survey and its draft.`
+                    `Delete the published survey "${survey.title}"?`
                   )
                 ) {
                   return;

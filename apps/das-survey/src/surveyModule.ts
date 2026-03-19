@@ -170,7 +170,7 @@ export async function getTemplateOwnerKey(): Promise<string> {
 export async function publishSurvey(draft: SurveyDraft): Promise<PublishedSurvey> {
     const result = publishDraft(draft);
     await publishedSurveyStore.upsert(result.published);
-    await surveyDraftStore.upsert(result.draft);
+    await surveyDraftStore.delete(draft.id);
     return result.published;
 }
 

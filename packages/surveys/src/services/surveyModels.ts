@@ -413,3 +413,15 @@ export function toSurveyCardModel(draft: SurveyDraft): SurveyCardModel {
         collaborators: [{ name: "You" }]
     };
 }
+
+export function toPublishedSurveyCardModel(survey: PublishedSurvey): SurveyCardModel {
+    return {
+        id: survey.id,
+        title: survey.title,
+        description: survey.description ?? "",
+        status: "active",
+        lastOpened: new Date(survey.updatedAt),
+        questionCount: survey.questions.length,
+        collaborators: [{ name: "You" }]
+    };
+}

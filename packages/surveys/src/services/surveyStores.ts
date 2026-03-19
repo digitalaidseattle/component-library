@@ -289,7 +289,16 @@ export class FallbackSurveyDraftStore implements SurveyDraftStore {
             return this.fallback.list();
         }
         try {
-            return await this.primary.list();
+            const drafts = await this.primary.list();
+            if (drafts.length > 0) {
+                return drafts;
+            }
+
+            const fallbackDrafts = await this.fallback.list();
+            if (fallbackDrafts.length > 0) {
+                console.warn("Primary draft store returned no rows; using local fallback list.");
+            }
+            return fallbackDrafts;
         } catch (error) {
             console.error("Falling back to local draft storage", error);
             return this.fallback.list();
@@ -301,7 +310,8 @@ export class FallbackSurveyDraftStore implements SurveyDraftStore {
             return this.fallback.get(id);
         }
         try {
-            return await this.primary.get(id);
+            const draft = await this.primary.get(id);
+            return draft ?? this.fallback.get(id);
         } catch (error) {
             console.error("Falling back to local draft storage", error);
             return this.fallback.get(id);
@@ -348,7 +358,16 @@ export class FallbackPublishedSurveyStore implements PublishedSurveyStore {
             return this.fallback.list();
         }
         try {
-            return await this.primary.list();
+            const surveys = await this.primary.list();
+            if (surveys.length > 0) {
+                return surveys;
+            }
+
+            const fallbackSurveys = await this.fallback.list();
+            if (fallbackSurveys.length > 0) {
+                console.warn("Primary published store returned no rows; using local fallback list.");
+            }
+            return fallbackSurveys;
         } catch (error) {
             console.error("Falling back to local published storage", error);
             return this.fallback.list();
@@ -360,7 +379,8 @@ export class FallbackPublishedSurveyStore implements PublishedSurveyStore {
             return this.fallback.get(id);
         }
         try {
-            return await this.primary.get(id);
+            const survey = await this.primary.get(id);
+            return survey ?? this.fallback.get(id);
         } catch (error) {
             console.error("Falling back to local published storage", error);
             return this.fallback.get(id);
