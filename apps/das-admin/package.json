@@ -16,6 +16,8 @@
     "@digitalaidseattle/draganddrop": "2.0.2",
     "@digitalaidseattle/mui": "1.0.40",
     "@digitalaidseattle/supabase": "1.0.18",
+    "@digitalaidseattle/profile-management": "1.0.0",
+    "@digitalaidseattle/profile-management-supabase": "1.0.0",
     "@vis.gl/react-maplibre": "^8.1.0",
     "file-saver": "^2.0.5",
     "maplibre-gl": "^5.11.0",

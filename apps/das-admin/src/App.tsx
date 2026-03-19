@@ -11,12 +11,13 @@ import { createClient } from '@supabase/supabase-js';
 import {
   AuthServiceProvider,
   RefreshContextProvider,
+  setCoreServices,
   StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
 import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
 import {
-  setConfiguration,
+  setConfiguration as setSupabaseConfiguration,
   SupabaseAuthService,
   SupabaseStorageService
 } from "@digitalaidseattle/supabase";
@@ -31,19 +32,30 @@ import { routes } from './routes';
 const router = createBrowserRouter(routes);
 
 const App: React.FC = () => {
-  setConfiguration(
+  const supabaseClient = createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_ANON_KEY
+  )
+  const authService = new SupabaseAuthService(supabaseClient)
+  const storageService = new SupabaseStorageService()
+
+  setSupabaseConfiguration(
     {
-      supabaseClient: createClient(
-        import.meta.env.VITE_SUPABASE_URL,
-        import.meta.env.VITE_SUPABASE_ANON_KEY
-      )
+      supabaseClient: supabaseClient
+    }
+  )
+
+  setCoreServices(
+    {
+      authService: authService,
+      storageService: storageService
     }
   )
 
   return (
     <>
-      <AuthServiceProvider authService={new SupabaseAuthService()} >
-        <StorageServiceProvider storageService={new SupabaseStorageService()} >
+      <AuthServiceProvider authService={authService} >
+        <StorageServiceProvider storageService={storageService} >
           <RefreshContextProvider>
             <UserContextProvider>
               <LayoutConfigurationProvider configuration={Config}>

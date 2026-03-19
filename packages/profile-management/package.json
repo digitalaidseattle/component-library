@@ -1,0 +1,26 @@
+{
+  "name": "@digitalaidseattle/profile-management",
+  "version": "1.0.0",
+  "description": "Profile management module",
+  "repository": "null//github.com/null/github.com/tree/master/packages/profile-management",
+  "main": "dist/digitalaidseattle-profile-management.cjs.js",
+  "module": "dist/digitalaidseattle-profile-management.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@ant-design/icons": "^5.3.0",
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "^1.0.19",
+    "@digitalaidseattle/mui": "^1.0.40",
+    "@mui/material": "^7.3.5",
+    "@mui/x-data-grid": "^8.17.0",
+    "react": "^18.3.1",
+    "react-router-dom": "^7.13.0",
+    "uuid": "^13.0.0"
+  },
+  "scripts": {
+    "postbuild": "cp src/*.css dist/"
+  },
+  "files": [
+    "dist"
+  ]
+}

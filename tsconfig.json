@@ -18,6 +18,12 @@
     },
     {
       "path": "./packages/content-generation"
+    },
+    {
+      "path": "./packages/profile-management"
+    },
+    {
+      "path": "./packages/profile-management-supabase"
     }
   ],
   "compilerOptions": {
@@ -131,6 +137,12 @@
       ],
       "@digitalaidseattle/content-generation": [
         "packages/content-generation/src"
+      ],
+      "@digitalaidseattle/profile-management": [
+        "packages/profile-management/src"
+      ],
+      "@digitalaidseattle/profile-management-supabase": [
+        "packages/profile-management-supabase/src"
       ]
     }
   }
