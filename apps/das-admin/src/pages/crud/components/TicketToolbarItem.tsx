@@ -20,6 +20,7 @@ import {
 import { ThunderboltOutlined } from '@ant-design/icons';
 import { useLoggingService, UserContext } from '@digitalaidseattle/core';
 import TicketDialog from './TicketDialog';
+import { Ticket } from '../api/types';
 
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 

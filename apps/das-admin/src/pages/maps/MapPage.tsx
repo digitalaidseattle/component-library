@@ -4,7 +4,6 @@
  */
 
 // react
-import { useTheme } from '@mui/material/styles';
 import { ReactNode, useEffect, useState } from 'react';
 
 // material-ui
@@ -67,7 +66,6 @@ function Pin({ size = 20 }) {
 }
 
 const MapPage = () => {
-  const theme = useTheme();
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [people, setPeople] = useState<TeamMember[]>([]);

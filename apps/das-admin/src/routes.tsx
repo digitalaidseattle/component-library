@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 import { DragAndDropExample } from "./pages/DragAndDropExample";
 import CalendarPage from "./pages/calendar/CalendarPage";
-import TicketPage from "./pages/crud/TicketPage";
-import TicketsGrid from "./pages/crud/TicketsPage";
+import TicketPage from "./pages/crud/pages/TicketPage";
+import TicketsGrid from "./pages/crud/pages/TicketsPage";
 import ExcelPage from "./pages/excel/ExcelPage";
 import MapPage from "./pages/maps/MapPage";
 import StorageExamplePage from "./pages/storage/StorageExamplePage";

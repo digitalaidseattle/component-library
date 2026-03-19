@@ -96,7 +96,7 @@ describe('storageService tests', () => {
         const listFilesSpy = vi.spyOn(mockStorageApi, 'list')
             .mockReturnValue(Promise.resolve({ data: data, error: null }) as any)
 
-        const actual = await storageService.listFiles()
+        const actual = await storageService.list()
         expect(fromSpy).toHaveBeenCalledWith('info');
         expect(listFilesSpy).toHaveBeenCalled();
         expect(actual).toEqual(data);

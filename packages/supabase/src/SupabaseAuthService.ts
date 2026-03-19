@@ -5,17 +5,31 @@
  *
  */
 import { AuthService, OAuthResponse, User } from "@digitalaidseattle/core";
-import { AuthError, UserResponse } from '@supabase/supabase-js';
-import { supabaseClient } from './supabaseClient'
+import { AuthError, SupabaseClient, UserResponse } from '@supabase/supabase-js';
+import { supabaseClient as DEFAULT_SUPABASE } from './supabaseClient'
 
 export class SupabaseAuthService implements AuthService {
+
+  private static instance: SupabaseAuthService;
+
+  static getInstance(): SupabaseAuthService {
+    if (!SupabaseAuthService.instance) {
+      SupabaseAuthService.instance = new SupabaseAuthService();
+    }
+    return SupabaseAuthService.instance
+  }
+
+  client: SupabaseClient;
+  constructor(aSupabaseClient?: SupabaseClient) {
+    this.client = aSupabaseClient ?? DEFAULT_SUPABASE;
+  }
 
   getProviders(): string[] {
     return ["google", "microsoft"];
   }
 
   signOut = async (): Promise<{ error: AuthError | null }> => {
-    return supabaseClient.auth.signOut()
+    return this.client.auth.signOut()
   }
 
   hasUser = async (): Promise<boolean> => {
@@ -24,7 +38,7 @@ export class SupabaseAuthService implements AuthService {
   }
 
   getUser = async (): Promise<User | null> => {
-    return supabaseClient.auth.getUser()
+    return this.client.auth.getUser()
       .then((response: UserResponse) => {
         if (response.data.user) {
           return {
@@ -50,7 +64,7 @@ export class SupabaseAuthService implements AuthService {
   }
 
   signInWithGoogle = async (): Promise<any> => {
-    return supabaseClient.auth.signInWithOAuth({
+    return this.client.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: window.location.origin,
@@ -59,7 +73,7 @@ export class SupabaseAuthService implements AuthService {
   }
 
   signInWithAzure = async (): Promise<any> => {
-    return supabaseClient.auth.signInWithOAuth({
+    return this.client.auth.signInWithOAuth({
       provider: 'azure',
       options: {
         scopes: 'email',

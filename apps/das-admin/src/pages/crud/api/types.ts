@@ -1,8 +1,12 @@
-import { Identifier } from "@digitalaidseattle/core";
+import { Entity } from "@digitalaidseattle/core";
 
-type Ticket = {
-    id: Identifier,
-    created_at: Date,
+export const TicketSource = {
+    Email: { value: 'email', label: 'Email' },
+    WalkIn: { value: 'walkin', label: 'Walk-In' },
+    Phone: { value: 'phone', label: 'Phone' }
+};
+
+export type Ticket = Entity & {
     inputSource: string,
     summary: string,
     description: string,
@@ -12,10 +16,10 @@ type Ticket = {
     phone: string,
     email: string,
     clientName: string,
-    ticket_history?: TicketHistory[]
+    ticket_history: TicketHistory[]
 };
 
-type TicketHistory = {
+export type TicketHistory = Entity & {
     service_ticket_id: number
     created_at: Date,
     description: string,
@@ -24,7 +28,7 @@ type TicketHistory = {
     change_by: string
 };
 
-enum TicketStatus {
+export enum TicketStatus {
     Completed = 'completed',
     InProgress = 'inprogress',
     Blocked = 'blocked',

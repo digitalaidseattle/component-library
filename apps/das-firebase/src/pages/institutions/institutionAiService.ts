@@ -59,7 +59,6 @@ class InstitutionAiService {
     // Wrap in an async function so you can use await
     query(prompt: string): Promise<any> {
         // To generate text output, call generateContent with the text input
-        console.log("Querying AI with prompt: ", prompt, this.model);
         return this.model.generateContent(prompt)
             .then(result => JSON.parse(result.response.text()))
             .catch(error => {

@@ -12,7 +12,6 @@ const ProjectsListPage: React.FC<{ detailPath?: string, helpFilePath?: string }>
   const { showHelp } = useHelp();
   const [helpTopic, setHelpTopic] = useState<string | undefined>('default');
 
-  console.log('detailPath', detailPath);
   return (
     <>
       <HelpTopicContext.Provider value={{ helpTopic, setHelpTopic }} >

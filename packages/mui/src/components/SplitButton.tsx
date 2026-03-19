@@ -13,16 +13,17 @@ import Grow from '@mui/material/Grow';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
+import Popper, { PopperPlacementType } from '@mui/material/Popper';
 import * as React from 'react';
 
 interface SplitButtonProp {
     options: string[] | { label: string, value: string }[];
     onClick: (value: string) => void;
     variant?: "contained" | "text" | "outlined"
+    popperPlacement?: PopperPlacementType;
 };
 
-export const SplitButton = ({ options, onClick, variant = "contained" }: SplitButtonProp) => {
+export const SplitButton = ({ options, onClick, variant = "contained", popperPlacement }: SplitButtonProp) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -69,7 +70,7 @@ export const SplitButton = ({ options, onClick, variant = "contained" }: SplitBu
                 ref={anchorRef}
                 aria-label="Button group with a nested menu"
             >
-                <Button onClick={handleClick}>{getOptionLabel(options[selectedIndex])}</Button>
+                <Button onClick={handleClick}>{options.length > 0 && getOptionLabel(options[selectedIndex])}</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -88,6 +89,7 @@ export const SplitButton = ({ options, onClick, variant = "contained" }: SplitBu
                 role={undefined}
                 transition
                 disablePortal
+                placement={popperPlacement}
             >
                 {({ TransitionProps, placement }) => (
                     <Grow

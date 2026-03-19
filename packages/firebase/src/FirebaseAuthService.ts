@@ -17,7 +17,6 @@ export class FirebaseAuthService implements AuthService {
         this.auth = getAuth(firebaseClient);
     }
 
-
     getProviders(): string[] {
         return ["google"];
     }

@@ -2,13 +2,24 @@ import { FirestoreService } from "@digitalaidseattle/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { ProjectService } from "../contentGenerationServices";
 import { Project } from "../types";
+import { getFirebaseApp } from "./GeminiConfiguration";
 
 
 export class GeminiProjectService extends FirestoreService<Project> implements ProjectService {
 
-  constructor() {
-    super("projects");
+  private static instance: GeminiProjectService;
+
+  static getInstance() {
+    if (!GeminiProjectService.instance) {
+      GeminiProjectService.instance = new GeminiProjectService();
+    }
+    return GeminiProjectService.instance;
   }
+
+  constructor() {
+    super("projects", getFirebaseApp());
+  }
+
 
   /**
    * Creates a blank project with default values.

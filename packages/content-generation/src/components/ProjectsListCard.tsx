@@ -99,7 +99,7 @@ const ProjectsListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "pro
     {
       field: "name",
       headerName: "Name",
-      flex: 2
+      width: 300
     },
     {
       field: "tokenCount",

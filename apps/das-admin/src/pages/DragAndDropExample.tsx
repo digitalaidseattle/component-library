@@ -1,7 +1,6 @@
 
-import { DDType, DDCategory } from '@digitalaidseattle/draganddrop/dist/declarations/src/components/types';
 import { DragAndDrop } from '@digitalaidseattle/draganddrop';
-import { MainCard } from '@digitalaidseattle/mui';
+import { DDCategory, DDType } from '@digitalaidseattle/draganddrop/dist/declarations/src/components/types';
 import { Box, Button, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 

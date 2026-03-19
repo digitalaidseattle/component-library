@@ -38,11 +38,12 @@ import {
 import { useNotifications } from '@digitalaidseattle/core';
 import { ConfirmationDialog, InputFormDialog, InputOption } from '@digitalaidseattle/mui';
 import { PageInfo, QueryModel } from '@digitalaidseattle/supabase';
-import TicketContact from './components/TicketContact';
-import TicketLink from './components/TicketLink';
-import TicketStatus from './components/TicketStatus';
-import { ticketService, TicketSource } from './ticketService';
-import { Ticket } from './types';
+import { TicketsDAO } from '../api/TicketsDAO';
+import TicketContact from '../components/TicketContact';
+import TicketLink from '../components/TicketLink';
+import TicketStatus from '../components/TicketStatus';
+import { TicketService } from '../api/ticketService';
+import { Ticket, TicketSource } from '../api/types';
 
 // ==============================|| Tickets Grid ||============================== //
 
@@ -131,6 +132,9 @@ const staffingInputFields: InputOption[] = [
 ];
 
 export default function TicketsPage() {
+    const dao = TicketsDAO.getInstance();
+    const ticketService = TicketService.getInstance();
+
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: PAGE_SIZE });
     const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created_at', sort: 'desc' }])
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>();
@@ -168,7 +172,7 @@ export default function TicketsPage() {
             sortField: sortModel.length === 0 ? 'created_at' : sortModel[0].field,
             sortDirection: sortModel.length === 0 ? 'created_at' : sortModel[0].sort
         } as QueryModel
-        ticketService.find(queryModel)
+        dao.find(queryModel)
             .then((pi) => setPageInfo(pi))
     }
 
@@ -180,7 +184,7 @@ export default function TicketsPage() {
     function handleDelete(): void {
         if (rowSelectionModel) {
             const promises = Array.from(rowSelectionModel.ids)
-                .map((id) => ticketService.delete(id));
+                .map((id) => dao.delete(id));
 
             Promise
                 .all(promises)
@@ -208,7 +212,7 @@ export default function TicketsPage() {
             const json = { ...ticket } as any;
             delete json.id;
             delete json.ticket_history;
-            ticketService.insert(json)
+            dao.insert(json)
                 .then(inserted => {
                     nofications.success(`Ticket inserted: ${inserted.id}`);
                     fetchData();

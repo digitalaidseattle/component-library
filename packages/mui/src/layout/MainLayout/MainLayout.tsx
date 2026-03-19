@@ -9,7 +9,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { Box, Toolbar, useMediaQuery } from '@mui/material';
-import { useTheme, SxProps } from '@mui/material/styles';
+import { SxProps, useTheme } from '@mui/material/styles';
 
 // project import
 import Drawer from './Drawer';
@@ -20,20 +20,19 @@ import type { User } from '@digitalaidseattle/core';
 import {
   LoadingContextProvider,
   NotificationContextProvider,
-  RefreshContextProvider,
   UserContext,
   useAuthService
 } from '@digitalaidseattle/core';
+import Notification from '../../components/Notification';
 import ScrollTop from '../../components/ScrollTop';
 import { DrawerOpenContext } from './DrawerOpenContext';
-import Notification from '../../components/Notification';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 function MainLayout({ sx }: { sx?: SxProps }) {
 
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const [user, setUser] = useState<User>(null as unknown as User);
+  const [user, setUser] = React.useState<User | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -41,11 +40,11 @@ function MainLayout({ sx }: { sx?: SxProps }) {
 
   useEffect(() => {
     authService.getUser()
-      .then((user: User | null) => {
+      .then(user => {
         if (user) {
           setUser(user)
         } else {
-          navigate("/login")
+          navigate("/login?code=Unauthenticated")
         }
       })
   }, [navigate])
@@ -60,37 +59,33 @@ function MainLayout({ sx }: { sx?: SxProps }) {
     setDrawerOpen(!matchDownLG);
   }, [matchDownLG]);
 
-  return (
+  return (user &&
     <UserContext.Provider value={{ user, setUser }} >
-      {user &&
-        <LoadingContextProvider>
-          <DrawerOpenContext.Provider value={{ drawerOpen, setDrawerOpen }} >
-            <RefreshContextProvider >
-              <NotificationContextProvider>
-                <ScrollTop>
-                  <Notification />
-                  <Box sx={{ display: 'flex', width: '100%' }}>
-                    <Header open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
-                    <Drawer open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
-                    <Box component="main"
-                      sx={{
-                        width: '100%',
-                        flexGrow: 1,
-                        p: { xs: 2, sm: 3 },
-                        backgroundColor: theme.palette.background.default,
-                        minHeight: '100vh',
-                        ...sx
-                      }}>
-                      <Toolbar />
-                      <Outlet />
-                    </Box>
-                  </Box>
-                </ScrollTop>
-              </NotificationContextProvider>
-            </RefreshContextProvider>
-          </DrawerOpenContext.Provider>
-        </LoadingContextProvider>
-      }
+      <LoadingContextProvider>
+        <DrawerOpenContext.Provider value={{ drawerOpen, setDrawerOpen }} >
+          <NotificationContextProvider>
+            <ScrollTop>
+              <Notification />
+              <Box sx={{ display: 'flex', width: '100%' }}>
+                <Header open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
+                <Drawer open={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
+                <Box component="main"
+                  sx={{
+                    width: '100%',
+                    flexGrow: 1,
+                    p: { xs: 2, sm: 3 },
+                    backgroundColor: theme.palette.background.default,
+                    minHeight: '100vh',
+                    ...sx
+                  }}>
+                  <Toolbar />
+                  <Outlet />
+                </Box>
+              </Box>
+            </ScrollTop>
+          </NotificationContextProvider>
+        </DrawerOpenContext.Provider>
+      </LoadingContextProvider>
     </UserContext.Provider>
   );
 };

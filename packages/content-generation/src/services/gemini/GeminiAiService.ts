@@ -15,18 +15,15 @@
  * </ol>
  */
 
+import { getCoreServices, StorageFile } from "@digitalaidseattle/core";
 import { createPartFromText, createPartFromUri, createUserContent, GoogleGenAI, Part } from "@google/genai";
 import Handlebars from "handlebars";
-import { Project, ProjectContext } from "../types";
-import { getCoreServices, StorageFile } from "@digitalaidseattle/core";
 import { AiService } from "../contentGenerationServices";
-
-const CLOUD_FOLDER = import.meta.env.VITE_FIREBASE_STORAGE_FOLDER;
-
+import { Project } from "../types";
+import { getGeminiConfiguration } from "./GeminiConfiguration";
 
 class GeminiAiService implements AiService {
 
-    static models = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.5-flash-lite"];
     private static instance: GeminiAiService;
 
     static getInstance() {
@@ -36,34 +33,64 @@ class GeminiAiService implements AiService {
         return GeminiAiService.instance;
     }
 
-    //ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
-    ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+    ai: GoogleGenAI;
+    storageFolder: string;
+    models: { label: string, value: string }[] | undefined = undefined;
 
-    getModels() {
-        return GeminiAiService.models;
+    constructor() {
+        const config = getGeminiConfiguration();
+        this.ai = new GoogleGenAI({ apiKey: config.firebase_options.apiKey });
+        this.storageFolder = config.storage_folder;
     }
+
+    async getModels(): Promise<{ label: string, value: string }[]> {
+        if (!this.models) {
+            let gemModels = await this.ai.models.list();
+            const items: { label: string, value: string }[] = [];
+            let done = false;
+            do {
+                for (let i = 0; i < gemModels.pageSize; i++) {
+                    const mm = gemModels.getItem(i);
+                    if (mm.name && mm.name.startsWith('models/gemini')) {
+                        items.push({
+                            label: mm.displayName!,
+                            value: mm.name!
+                        });
+                    }
+                }
+                if (gemModels.hasNextPage()) {
+                    gemModels.nextPage();
+                } else {
+                    done = true;
+                }
+            } while (!done)
+            this.models = items.sort((mm1, mm2) => mm1.label.localeCompare(mm2.label));
+        }
+        return this.models;
+    }
+
     /**
      * Runs a basic text generation request.
      * This is for prompts where we just want the model to return a text response.
      */
-    async query(prompt: string, modelType?: string, contexts?: ProjectContext[]): Promise<any> {
-        const parts = this.createParts(contexts ?? []);
+    async query(project: Project, modelType?: string): Promise<any> {
+        const parts = this.createParts(project);
         return await this.ai.models.generateContent({
-            model: modelType ?? GeminiAiService.models[0],
+            model: modelType ?? (this.models ? this.models[0].value : ''),
             contents: createUserContent([
-                prompt, ...parts
+                project.prompt, ...parts
             ]),
         });
     }
 
-    createParts(contexts: ProjectContext[]): Part[] {
+    createParts(project: Project): Part[] {
         const parts: Part[] = [];
-        contexts.forEach(async (gc, idx) => {
+        project.contexts.forEach(async (gc, idx) => {
             if (gc.type === 'text') {
                 parts.push(createPartFromText(gc.value!));
             } else {
-                const uri = await getCoreServices().storageService!.getUrlAsync(`${CLOUD_FOLDER}/${gc.name}`);
-                parts.push(createPartFromUri(uri, contexts[idx].type));
+                const uri = await getCoreServices().storageService!.getUrlAsync(`${this.storageFolder}/${project.id}/${gc.name}`);
+                parts.push(createPartFromUri(uri, project.contexts[idx].type));
             }
         });
         return parts;
@@ -86,16 +113,15 @@ class GeminiAiService implements AiService {
      * and the AI will return a JSON object with those fields filled in.
      */
     async parameterizedQuery(
-        prompt: string,
-        schemaParams: string[],
-        modelType?: string,
-        contexts?: ProjectContext[],
+        project: Project,
+        modelType?: string
     ): Promise<any> {
-        const parts = this.createParts(contexts ?? []);
+        const parts = this.createParts(project);
+        const schemaParams = project.outputs.map((o) => o.name);
         const responseSchema = this.createSchema(schemaParams);
         return await this.ai.models.generateContent({
-            model: modelType ?? GeminiAiService.models[0],
-            contents: [prompt, ...parts],
+            model: modelType ?? (this.models ? this.models[0].value : ''),
+            contents: [project.prompt, ...parts],
             config: {
                 responseMimeType: "application/json",
                 responseJsonSchema: responseSchema,
