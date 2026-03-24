@@ -106,3 +106,4 @@ dist
 .tern-port
 packages/firebase/.env.example
 apps/das-firebase/.firebase/hosting.ZGlzdA.cache
+apps/das-admin/.env.production
