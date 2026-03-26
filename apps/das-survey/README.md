@@ -50,24 +50,51 @@ The survey app can store draft and published survey data in Supabase.
 Create `apps/das-survey/.env`:
 
 ```bash
-VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_TARGET=local
 
-# Optional but recommended to avoid auto-detection surprises.
+# Cloud project
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-cloud-anon-key
+
+# Local Docker / Supabase CLI project
+VITE_SUPABASE_LOCAL_URL=http://127.0.0.1:54321
+VITE_SUPABASE_LOCAL_ANON_KEY=your-local-anon-key
+
+# Recommended to avoid falling back to browser-only storage.
 VITE_SURVEY_DATA_PROVIDER=supabase
 
 # Leave auth local if you only want to test persistence.
 # Set to supabase only if you also configure Supabase Auth.
 VITE_SURVEY_AUTH_PROVIDER=local
+
+# When auth is local, use a stable owner key instead of browser storage.
+VITE_SURVEY_OWNER_KEY=local-dev
 ```
+
+Change only `VITE_SUPABASE_TARGET` when you want to switch between the local container and the cloud project:
+
+```bash
+VITE_SUPABASE_TARGET=local
+# or
+VITE_SUPABASE_TARGET=cloud
+```
+
+The app also accepts `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` as a compatibility fallback for the local target, but `VITE_SUPABASE_LOCAL_*` is the preferred format for this Vite app.
 
 ### 2. Create the database tables
 
-The current code writes to both `survey_drafts` and `published_surveys`.
+The current code writes to `survey_drafts`, `published_surveys`, and `survey_templates`.
+The reproducible database files are checked in at:
+
+* `supabase/migrations/20260325193000_survey_workspace.sql`
+* `supabase/schemas/001_survey_workspace.sql`
 
 ```sql
 create table if not exists public.survey_drafts (
   id text primary key,
+  created_by text null,
+  created_at timestamptz null,
+  updated_by text null,
   status text not null check (status in ('draft', 'published')),
   updated_at timestamptz not null,
   template_id text not null,
@@ -77,6 +104,9 @@ create table if not exists public.survey_drafts (
 
 create table if not exists public.published_surveys (
   id text primary key,
+  created_by text null,
+  created_at timestamptz null,
+  updated_by text null,
   draft_id text not null,
   template_id text not null,
   title text not null,
@@ -84,6 +114,20 @@ create table if not exists public.published_surveys (
   questions jsonb not null,
   published_at timestamptz not null,
   updated_at timestamptz not null
+);
+
+create table if not exists public.survey_templates (
+  id text primary key,
+  created_by text null,
+  created_at timestamptz null,
+  updated_by text null,
+  updated_at timestamptz not null,
+  title text not null,
+  description text not null default '',
+  category text not null,
+  definition jsonb not null,
+  scope text not null default 'user' check (scope in ('system', 'user')),
+  owner_email text not null
 );
 ```
 
@@ -99,6 +143,7 @@ For short-lived local testing only, disabling RLS is the fastest option:
 ```sql
 alter table public.survey_drafts disable row level security;
 alter table public.published_surveys disable row level security;
+alter table public.survey_templates disable row level security;
 ```
 
 If you want to keep RLS on, create policies that match your intended access model instead.
@@ -113,4 +158,4 @@ yarn workspace survey-module dev
 
 Create or edit a survey draft, then refresh the page. You should see rows in `survey_drafts`. When you publish a survey, you should also see a row in `published_surveys`.
 
-If Supabase env vars are missing, the tables do not exist, or the client is denied by RLS, the app falls back to local browser storage. In that case the UI may still appear to work, so check the browser console and the Supabase Table Editor to confirm you are actually writing to Supabase.
+If Supabase env vars are missing, the tables do not exist, or the client is denied by RLS, writes will not persist. Check the browser console and the Supabase Table Editor to confirm you are actually writing to Supabase.

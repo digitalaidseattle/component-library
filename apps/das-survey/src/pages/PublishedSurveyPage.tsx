@@ -2,40 +2,27 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { PublishedSurvey, SurveyForm } from "@digitalaidseattle/surveys";
+import { PublishedSurvey, SurveyPage, useSurveySession } from "@digitalaidseattle/surveys";
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
-import { publishedSurveyStore } from "../surveyModule";
 
 export default function PublishedSurveyPage() {
   const navigate = useNavigate();
   const { surveyId } = useParams<{ surveyId: string }>();
+  const { publishedSurveys } = useSurveySession();
   const [survey, setSurvey] = useState<PublishedSurvey | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadPublishedSurvey() {
-      if (!surveyId) {
-        if (!cancelled) {
-          setLoaded(true);
-        }
-        return;
-      }
-      const record = await publishedSurveyStore.get(surveyId);
-      if (!cancelled) {
-        setSurvey(record ?? null);
-        setLoaded(true);
-      }
+    if (!surveyId) {
+      setLoaded(true);
+      return;
     }
 
-    void loadPublishedSurvey();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [surveyId]);
+    const record = publishedSurveys.find((entry) => entry.id === surveyId);
+    setSurvey(record ?? null);
+    setLoaded(true);
+  }, [publishedSurveys, surveyId]);
 
   if (!loaded) {
     return null;
@@ -86,7 +73,7 @@ export default function PublishedSurveyPage() {
         />
       }
     >
-      <SurveyForm
+      <SurveyPage
         definition={{
           surveyTitle: survey.title,
           surveyDescription: survey.description,

@@ -6,16 +6,17 @@ import {
   createDraft,
   createUserSurveyTemplate,
   getCurrentDefinition,
+  useSurveySession,
 } from "@digitalaidseattle/surveys";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/sidebars/Sidebar";
 import AppLayout from "../layouts/AppLayout";
-import { getTemplateOwnerKey, surveyTemplateStore } from "../surveyModule";
 
 export default function CreateTemplatePage() {
   const navigate = useNavigate();
   const [draft, setDraft] = useState(() => createDraft("blank", createDefinition()));
+  const { ownerKey, saveTemplate } = useSurveySession();
 
   return (
     <AppLayout
@@ -45,17 +46,16 @@ export default function CreateTemplatePage() {
         primaryActionLabel="Save Template"
         primaryActionIcon={<SaveIcon />}
         onPrimaryAction={async (currentDraft) => {
-          const ownerKey = await getTemplateOwnerKey();
           const definition = getCurrentDefinition(currentDraft);
           const template = createUserSurveyTemplate(
             definition.surveyTitle?.trim() || "Untitled template",
             definition.surveyDescription?.trim() || "Custom template",
             "Custom",
             definition,
-            ownerKey
+            ownerKey ?? "local-dev"
           );
 
-          await surveyTemplateStore.upsert(template);
+          await saveTemplate(template);
           navigate("/surveys/new");
         }}
       />

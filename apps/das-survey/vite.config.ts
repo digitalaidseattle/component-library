@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 
 // https://vite.dev/config/
 export default defineConfig({
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   resolve: {
     alias: {
       '@digitalaidseattle/core': path.resolve(__dirname, '../../packages/core/src/index.ts'),

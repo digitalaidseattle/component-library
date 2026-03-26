@@ -1,5 +1,5 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   SurveyBuilder,
@@ -7,10 +7,10 @@ import {
   createDraft,
   getSurveyTemplate,
   mergeSurveyTemplates,
+  useSurveySession,
 } from "@digitalaidseattle/surveys";
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
-import { getTemplateOwnerKey, publishSurvey, surveyDraftStore, surveyTemplateStore } from "../surveyModule";
 
 export default function CreateSurveyPage() {
   const navigate = useNavigate();
@@ -20,52 +20,49 @@ export default function CreateSurveyPage() {
   }>();
 
   const [draft, setDraft] = useState<SurveyDraft | null>(null);
+  const { drafts, templates, saveDraft, publishDraft } = useSurveySession();
+  const initializedRouteKey = useRef<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const availableTemplates = mergeSurveyTemplates(templates);
+    const selectedTemplate = getSurveyTemplate(availableTemplates, templateId);
+    const routeKey = draftId ? `draft:${draftId}` : `template:${templateId ?? "blank"}`;
 
-    async function loadDraft() {
-      const ownerKey = await getTemplateOwnerKey();
-      const userTemplates = await surveyTemplateStore.list(ownerKey);
-      const availableTemplates = mergeSurveyTemplates(userTemplates);
-      const selectedTemplate = getSurveyTemplate(availableTemplates, templateId);
-
-      if (draftId) {
-        const existing = await surveyDraftStore.get(draftId);
-        if (!cancelled) {
-          setDraft(
-            existing ??
-              createDraft(
-                selectedTemplate.id,
-                structuredClone(selectedTemplate.definition)
-              )
-          );
-        }
+    if (draftId) {
+      const existing = drafts.find((entry) => entry.id === draftId);
+      if (initializedRouteKey.current === routeKey && draft?.id === existing?.id) {
         return;
       }
 
-      if (!cancelled) {
-        setDraft(
+      setDraft(
+        existing ??
           createDraft(
             selectedTemplate.id,
             structuredClone(selectedTemplate.definition)
           )
-        );
-      }
+      );
+      initializedRouteKey.current = routeKey;
+      return;
     }
 
-    void loadDraft();
+    if (initializedRouteKey.current === routeKey && draft) {
+      return;
+    }
 
-    return () => {
-      cancelled = true;
-    };
-  }, [draftId, templateId]);
+    setDraft(
+      createDraft(
+        selectedTemplate.id,
+        structuredClone(selectedTemplate.definition)
+      )
+    );
+    initializedRouteKey.current = routeKey;
+  }, [draft, draftId, drafts, templateId, templates]);
 
   useEffect(() => {
     if (!draft) {
       return;
     }
-    void surveyDraftStore.upsert(draft);
+    void saveDraft(draft);
   }, [draft]);
 
   if (!draft) {
@@ -92,7 +89,7 @@ export default function CreateSurveyPage() {
         draft={draft}
         onChange={setDraft}
         onPublish={async (currentDraft) => {
-          const published = await publishSurvey(currentDraft);
+          const published = await publishDraft(currentDraft);
           navigate(`/surveys/${published.id}`);
         }}
       />

@@ -1,0 +1,2 @@
+-- Seed data is intentionally empty.
+-- Schema is defined by migrations in ./migrations and mirrored in ./schemas.

@@ -17,6 +17,33 @@ import {
 
 export type SurveyAuthProvider = "firebase" | "supabase" | "local";
 
+function parseProviderList(raw: string | undefined, supportedProviders: string[]): string[] {
+  if (!raw) {
+    return supportedProviders;
+  }
+
+  const configuredProviders = raw
+    .split(",")
+    .map((provider) => provider.trim().toLowerCase())
+    .filter((provider) => provider.length > 0);
+
+  const nextProviders = configuredProviders.filter((provider) =>
+    supportedProviders.includes(provider)
+  );
+
+  return nextProviders.length > 0 ? nextProviders : supportedProviders;
+}
+
+function resolveSupabaseAuthProviders(): string[] {
+  const env = import.meta.env as Record<string, string | undefined>;
+  return parseProviderList(
+    env.VITE_SURVEY_AUTH_PROVIDERS ??
+      env.VITE_SUPABASE_AUTH_PROVIDERS ??
+      env.VITE_AUTH_PROVIDERS,
+    ["google", "microsoft"]
+  );
+}
+
 function isFirebaseConfigured(): boolean {
   const env = import.meta.env as Record<string, string | undefined>;
   return [
@@ -149,7 +176,7 @@ function createAuthService(provider: SurveyAuthProvider): AuthService {
     case "firebase":
       return new FirebaseBrowserAuthService();
     case "supabase":
-      return new SupabaseAuthService();
+      return new SupabaseAuthService(resolveSupabaseAuthProviders());
     default:
       return new LocalAuthService();
   }

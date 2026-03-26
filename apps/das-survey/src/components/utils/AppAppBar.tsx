@@ -41,6 +41,17 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: "8px 12px",
 }));
 
+const authActionButtonSx = {
+  color: "text.primary",
+  borderColor: "divider",
+  backgroundColor: "background.paper",
+  boxShadow: 1,
+  "&:hover": {
+    borderColor: "primary.main",
+    backgroundColor: "background.paper",
+  },
+};
+
 export default function AppAppBar({
   breadcrumbs,
   sidebarOpen,
@@ -169,8 +180,9 @@ export default function AppAppBar({
               </Typography>
               <Button
                 size="small"
-                color="inherit"
+                variant="outlined"
                 startIcon={<LogoutIcon />}
+                sx={authActionButtonSx}
                 onClick={() => void handleSignOut()}
               >
                 Sign out
@@ -181,10 +193,11 @@ export default function AppAppBar({
           {authEnabled && !user && (
             <Button
               size="small"
-              color="inherit"
+              variant="outlined"
               component={RouterLink}
               to="/login"
               startIcon={<LoginIcon />}
+              sx={authActionButtonSx}
             >
               Sign in
             </Button>

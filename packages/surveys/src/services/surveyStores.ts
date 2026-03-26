@@ -1,6 +1,9 @@
 import { Entity } from "@digitalaidseattle/core";
-import { SupabaseEntityService } from "@digitalaidseattle/supabase";
-import { supabaseConfigured } from "@digitalaidseattle/supabase";
+import {
+    supabaseClient,
+    SupabaseEntityService,
+    supabaseConfigured,
+} from "@digitalaidseattle/supabase";
 import {
     PublishedSurvey,
     SurveyDraft,
@@ -25,6 +28,17 @@ type PublishedSurveyRow = Entity & {
     description: string | null;
     questions: PublishedSurvey["questions"];
     published_at: Date;
+    updated_at: Date;
+};
+
+type SurveyTemplateRow = Entity & {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    definition: SurveyDefinition;
+    scope: "system" | "user";
+    owner_email: string;
     updated_at: Date;
 };
 
@@ -64,22 +78,17 @@ class PublishedSurveyEntityService extends SupabaseEntityService<PublishedSurvey
     }
 }
 
-const DRAFT_STORAGE_KEY = "survey-module:drafts";
-const PUBLISHED_STORAGE_KEY = "survey-module:published";
-const TEMPLATE_STORAGE_KEY = "survey-module:templates";
-
-function loadLocal<T>(key: string): T[] {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) as T[] : [];
-}
-
-function saveLocal<T>(key: string, items: T[]) {
-    localStorage.setItem(key, JSON.stringify(items));
-}
+const memoryDrafts = new Map<string, SurveyDraft>();
+const memoryPublishedSurveys = new Map<string, PublishedSurvey>();
+const memoryTemplates = new Map<string, SurveyTemplate[]>();
 
 function rowToDraft(row: SurveyDraftRow): SurveyDraft {
     return {
         id: row.id,
+        created_by: row.created_by,
+        created_at: row.created_at,
+        updated_by: row.updated_by,
+        updated_at: row.updated_at,
         status: row.status,
         updatedAt: new Date(row.updated_at).getTime(),
         templateId: row.template_id as SurveyDraft["templateId"],
@@ -91,8 +100,11 @@ function rowToDraft(row: SurveyDraftRow): SurveyDraft {
 function draftToRow(draft: SurveyDraft): SurveyDraftRow {
     return {
         id: draft.id,
+        created_by: draft.created_by,
+        created_at: draft.created_at,
+        updated_by: draft.updated_by,
+        updated_at: draft.updated_at ?? new Date(draft.updatedAt),
         status: draft.status,
-        updated_at: new Date(draft.updatedAt),
         template_id: draft.templateId,
         history: draft.history,
         history_index: draft.historyIndex
@@ -102,6 +114,10 @@ function draftToRow(draft: SurveyDraft): SurveyDraftRow {
 function rowToPublished(row: PublishedSurveyRow): PublishedSurvey {
     return {
         id: row.id,
+        created_by: row.created_by,
+        created_at: row.created_at,
+        updated_by: row.updated_by,
+        updated_at: row.updated_at,
         draftId: row.draft_id,
         templateId: row.template_id as PublishedSurvey["templateId"],
         title: row.title,
@@ -115,35 +131,67 @@ function rowToPublished(row: PublishedSurveyRow): PublishedSurvey {
 function publishedToRow(survey: PublishedSurvey): PublishedSurveyRow {
     return {
         id: survey.id,
+        created_by: survey.created_by,
+        created_at: survey.created_at,
+        updated_by: survey.updated_by,
+        updated_at: survey.updated_at ?? new Date(survey.updatedAt),
         draft_id: survey.draftId,
         template_id: survey.templateId,
         title: survey.title,
         description: survey.description,
         questions: survey.questions,
-        published_at: new Date(survey.publishedAt),
-        updated_at: new Date(survey.updatedAt)
+        published_at: new Date(survey.publishedAt)
+    };
+}
+
+function rowToTemplate(row: SurveyTemplateRow): SurveyTemplate {
+    return {
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        category: row.category,
+        definition: row.definition,
+        scope: row.scope,
+        ownerEmail: row.owner_email,
+        updatedAt: new Date(row.updated_at).getTime(),
+    };
+}
+
+function templateToRow(template: SurveyTemplate): SurveyTemplateRow {
+    const ownerEmail = template.ownerEmail ?? "local-dev";
+    const updatedAt = new Date(template.updatedAt ?? Date.now());
+
+    return {
+        id: template.id,
+        created_by: ownerEmail,
+        created_at: updatedAt,
+        updated_by: ownerEmail,
+        updated_at: updatedAt,
+        title: template.title,
+        description: template.description,
+        category: template.category,
+        definition: template.definition,
+        scope: template.scope ?? "user",
+        owner_email: ownerEmail,
     };
 }
 
 export class LocalSurveyDraftStore implements SurveyDraftStore {
     list(): Promise<SurveyDraft[]> {
-        return Promise.resolve(loadLocal<SurveyDraft>(DRAFT_STORAGE_KEY));
+        return Promise.resolve([...memoryDrafts.values()]);
     }
 
     get(id: string): Promise<SurveyDraft | undefined> {
-        return this.list().then((drafts) => drafts.find((draft) => draft.id === id));
+        return Promise.resolve(memoryDrafts.get(id));
     }
 
     upsert(draft: SurveyDraft): Promise<void> {
-        const drafts = loadLocal<SurveyDraft>(DRAFT_STORAGE_KEY);
-        const next = drafts.filter((existing) => existing.id !== draft.id);
-        next.push(draft);
-        saveLocal(DRAFT_STORAGE_KEY, next);
+        memoryDrafts.set(draft.id, draft);
         return Promise.resolve();
     }
 
     delete(id: string): Promise<void> {
-        saveLocal(DRAFT_STORAGE_KEY, loadLocal<SurveyDraft>(DRAFT_STORAGE_KEY).filter((draft) => draft.id !== id));
+        memoryDrafts.delete(id);
         return Promise.resolve();
     }
 
@@ -154,23 +202,20 @@ export class LocalSurveyDraftStore implements SurveyDraftStore {
 
 export class LocalPublishedSurveyStore implements PublishedSurveyStore {
     list(): Promise<PublishedSurvey[]> {
-        return Promise.resolve(loadLocal<PublishedSurvey>(PUBLISHED_STORAGE_KEY));
+        return Promise.resolve([...memoryPublishedSurveys.values()]);
     }
 
     get(id: string): Promise<PublishedSurvey | undefined> {
-        return this.list().then((items) => items.find((item) => item.id === id));
+        return Promise.resolve(memoryPublishedSurveys.get(id));
     }
 
     upsert(survey: PublishedSurvey): Promise<void> {
-        const surveys = loadLocal<PublishedSurvey>(PUBLISHED_STORAGE_KEY);
-        const next = surveys.filter((existing) => existing.id !== survey.id);
-        next.push(survey);
-        saveLocal(PUBLISHED_STORAGE_KEY, next);
+        memoryPublishedSurveys.set(survey.id, survey);
         return Promise.resolve();
     }
 
     delete(id: string): Promise<void> {
-        saveLocal(PUBLISHED_STORAGE_KEY, loadLocal<PublishedSurvey>(PUBLISHED_STORAGE_KEY).filter((survey) => survey.id !== id));
+        memoryPublishedSurveys.delete(id);
         return Promise.resolve();
     }
 
@@ -182,9 +227,9 @@ export class LocalPublishedSurveyStore implements PublishedSurveyStore {
 export class LocalSurveyTemplateStore implements SurveyTemplateStore {
     list(ownerEmail: string): Promise<SurveyTemplate[]> {
         return Promise.resolve(
-            loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY)
-                .filter((template) => template.ownerEmail === ownerEmail)
-                .sort((left, right) => (right.updatedAt ?? 0) - (left.updatedAt ?? 0))
+            [...(memoryTemplates.get(ownerEmail) ?? [])].sort(
+                (left, right) => (right.updatedAt ?? 0) - (left.updatedAt ?? 0)
+            )
         );
     }
 
@@ -199,24 +244,20 @@ export class LocalSurveyTemplateStore implements SurveyTemplateStore {
             return Promise.reject(new Error("User templates must include an ownerEmail."));
         }
 
-        const templates = loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY);
-        const next = templates.filter(
-            (existing) =>
-                existing.id !== template.id || existing.ownerEmail !== template.ownerEmail
-        );
-
-        next.push(template);
-        saveLocal(TEMPLATE_STORAGE_KEY, next);
+        const existing = memoryTemplates.get(template.ownerEmail) ?? [];
+        const next = [
+            ...existing.filter((entry) => entry.id !== template.id),
+            template,
+        ];
+        memoryTemplates.set(template.ownerEmail, next);
         return Promise.resolve();
     }
 
-
     delete(id: string, ownerEmail: string): Promise<void> {
-        saveLocal(
-            TEMPLATE_STORAGE_KEY,
-            loadLocal<SurveyTemplate>(TEMPLATE_STORAGE_KEY).filter(
-                (template) => template.id !== id || template.ownerEmail !== ownerEmail
-            )
+        const existing = memoryTemplates.get(ownerEmail) ?? [];
+        memoryTemplates.set(
+            ownerEmail,
+            existing.filter((template) => template.id !== id)
         );
         return Promise.resolve();
     }
@@ -278,6 +319,67 @@ export class SupabasePublishedSurveyStore implements PublishedSurveyStore {
     }
 }
 
+export class SupabaseSurveyTemplateStore implements SurveyTemplateStore {
+    async list(ownerEmail: string): Promise<SurveyTemplate[]> {
+        const { data, error } = await supabaseClient
+            .from("survey_templates")
+            .select("*")
+            .eq("owner_email", ownerEmail)
+            .order("updated_at", { ascending: false });
+
+        if (error) {
+            console.error("Failed to list survey templates", error);
+            throw error;
+        }
+
+        return (data ?? []).map((row) => rowToTemplate(row as SurveyTemplateRow));
+    }
+
+    async get(id: string, ownerEmail: string): Promise<SurveyTemplate | undefined> {
+        const { data, error } = await supabaseClient
+            .from("survey_templates")
+            .select("*")
+            .eq("id", id)
+            .eq("owner_email", ownerEmail)
+            .maybeSingle();
+
+        if (error) {
+            console.error("Failed to fetch survey template", error);
+            throw error;
+        }
+
+        return data ? rowToTemplate(data as SurveyTemplateRow) : undefined;
+    }
+
+    async upsert(template: SurveyTemplate): Promise<void> {
+        const { error } = await supabaseClient
+            .from("survey_templates")
+            .upsert([templateToRow(template)]);
+
+        if (error) {
+            console.error("Failed to upsert survey template", error);
+            throw error;
+        }
+    }
+
+    async delete(id: string, ownerEmail: string): Promise<void> {
+        const { error } = await supabaseClient
+            .from("survey_templates")
+            .delete()
+            .eq("id", id)
+            .eq("owner_email", ownerEmail);
+
+        if (error) {
+            console.error("Failed to delete survey template", error);
+            throw error;
+        }
+    }
+
+    isConfigured(): boolean {
+        return supabaseConfigured;
+    }
+}
+
 export class FallbackSurveyDraftStore implements SurveyDraftStore {
     constructor(
         private readonly primary: SurveyDraftStore | undefined,
@@ -296,11 +398,11 @@ export class FallbackSurveyDraftStore implements SurveyDraftStore {
 
             const fallbackDrafts = await this.fallback.list();
             if (fallbackDrafts.length > 0) {
-                console.warn("Primary draft store returned no rows; using local fallback list.");
+                console.warn("Primary draft store returned no rows; using in-memory fallback list.");
             }
             return fallbackDrafts;
         } catch (error) {
-            console.error("Falling back to local draft storage", error);
+            console.error("Falling back to in-memory draft storage", error);
             return this.fallback.list();
         }
     }
@@ -313,7 +415,7 @@ export class FallbackSurveyDraftStore implements SurveyDraftStore {
             const draft = await this.primary.get(id);
             return draft ?? this.fallback.get(id);
         } catch (error) {
-            console.error("Falling back to local draft storage", error);
+            console.error("Falling back to in-memory draft storage", error);
             return this.fallback.get(id);
         }
     }
@@ -365,11 +467,11 @@ export class FallbackPublishedSurveyStore implements PublishedSurveyStore {
 
             const fallbackSurveys = await this.fallback.list();
             if (fallbackSurveys.length > 0) {
-                console.warn("Primary published store returned no rows; using local fallback list.");
+                console.warn("Primary published store returned no rows; using in-memory fallback list.");
             }
             return fallbackSurveys;
         } catch (error) {
-            console.error("Falling back to local published storage", error);
+            console.error("Falling back to in-memory published storage", error);
             return this.fallback.list();
         }
     }
@@ -382,7 +484,7 @@ export class FallbackPublishedSurveyStore implements PublishedSurveyStore {
             const survey = await this.primary.get(id);
             return survey ?? this.fallback.get(id);
         } catch (error) {
-            console.error("Falling back to local published storage", error);
+            console.error("Falling back to in-memory published storage", error);
             return this.fallback.get(id);
         }
     }

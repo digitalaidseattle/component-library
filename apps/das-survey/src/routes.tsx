@@ -1,5 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import { Error, Login, MinimalLayout } from "@digitalaidseattle/mui";
+import { SurveySessionGate } from "@digitalaidseattle/surveys";
 import AuthGate from "./components/auth/AuthGate";
 import DashboardPage from "./pages/DashboardPage";
 import CreateSurveyPage from "./pages/CreatorSurveyPage";
@@ -13,28 +14,33 @@ export const routes: RouteObject[] = [
     element: <AuthGate />,
     children: [
       {
-        index: true,
-        element: <DashboardPage />,
-      },
-      {
-        path: "templates/create",
-        element: <CreateTemplatePage />,
-      },
-      {
-        path: "surveys/new",
-        element: <TemplateGalleryPage />,
-      },
-      {
-        path: "surveys/create/:templateId",
-        element: <CreateSurveyPage />,
-      },
-      {
-        path: "surveys/edit/:draftId",
-        element: <CreateSurveyPage />,
-      },
-      {
-        path: "surveys/:surveyId",
-        element: <PublishedSurveyPage />,
+        element: <SurveySessionGate />,
+        children: [
+          {
+            index: true,
+            element: <DashboardPage />,
+          },
+          {
+            path: "templates/create",
+            element: <CreateTemplatePage />,
+          },
+          {
+            path: "surveys/new",
+            element: <TemplateGalleryPage />,
+          },
+          {
+            path: "surveys/create/:templateId",
+            element: <CreateSurveyPage />,
+          },
+          {
+            path: "surveys/edit/:draftId",
+            element: <CreateSurveyPage />,
+          },
+          {
+            path: "surveys/:surveyId",
+            element: <PublishedSurveyPage />,
+          },
+        ],
       },
     ],
   },

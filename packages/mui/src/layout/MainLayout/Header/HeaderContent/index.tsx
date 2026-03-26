@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 // material-ui
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 

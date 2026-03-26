@@ -103,7 +103,7 @@ export type SurveyDefinition = {
 
 export type SurveyDraftStatus = "draft" | "published";
 
-export type SurveyDraft = {
+export type SurveyDraft = Entity & {
     id: string;
     status: SurveyDraftStatus;
     updatedAt: number;
