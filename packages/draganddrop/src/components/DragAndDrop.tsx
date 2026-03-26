@@ -11,14 +11,13 @@ import {
   DragOverlay,
   DragStartEvent,
   DropAnimation,
-  KeyboardSensor,
   PointerSensor,
   closestCorners,
   defaultDropAnimation,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { arrayMove } from '@dnd-kit/sortable';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 import BoardSection from './BoardSection';
@@ -52,9 +51,6 @@ const DragAndDrop: React.FC<DragAndDropProps<any>> = <T extends DDType,>({ items
       activationConstraint: {
         distance: 5, // Enable sort function when dragging 5px   💡 here!!!
       },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 

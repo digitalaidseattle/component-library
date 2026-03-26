@@ -32,7 +32,7 @@ export default function AppLayout({
   }, [isMobile]);
 
   return (
-    <Box display="flex" width="100%">
+    <Box display="flex" width="100%" minHeight="100vh" alignItems="flex-start">
       <AppAppBar
         breadcrumbs={breadcrumbs}
         sidebarOpen={sidebarOpen && hasSidebar}
@@ -45,20 +45,31 @@ export default function AppLayout({
           sx={{
             width: SIDEBAR_WIDTH,
             flexShrink: 0,
-            overflow: "auto",
             borderRight: "1px solid",
             borderColor: "divider",
+            backgroundColor: "background.paper",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {sidebarContent}
+          <Box sx={{ flex: 1, minHeight: 0, overflow: "auto" }}>
+            {sidebarContent}
+          </Box>
         </Box>
       )}
 
-      <Box component="main" flexGrow={1} width="100%">
+      <Box component="main" flexGrow={1} width="100%" minWidth={0}>
         {/* Spacer for fixed AppBar */}
         <Toolbar sx={{ minHeight: APPBAR_HEIGHT }} />
 
-        <Box sx={{ p: { xs: 2, sm: 3 }, backgroundColor: "background.default" }}>
+        <Box
+          sx={{
+            p: { xs: 2, sm: 3 },
+            backgroundColor: "background.default",
+            minHeight: `calc(100vh - ${APPBAR_HEIGHT}px)`,
+          }}
+        >
           {children}
         </Box>
       </Box>

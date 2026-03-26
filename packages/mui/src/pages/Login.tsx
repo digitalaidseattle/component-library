@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (searchParams) {
-      switch (searchParams.get('code ')) {
+      switch (searchParams.get('code')) {
         case 'AccessDenied':
           setErrorMessage('Not authorized to access this application.  Please contact the system administrator.');
           break;

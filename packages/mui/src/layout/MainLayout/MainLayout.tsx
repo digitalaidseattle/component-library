@@ -33,7 +33,7 @@ function MainLayout({ sx }: { sx?: SxProps }) {
 
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const [user, setUser] = useState<User>(null as unknown as User);
+  const [user, setUser] = useState<User | undefined>();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
 

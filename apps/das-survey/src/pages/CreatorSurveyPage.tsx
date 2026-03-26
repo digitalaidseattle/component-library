@@ -1,66 +1,57 @@
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { v4 as uuid } from "uuid";
-
+import {
+  SurveyBuilder,
+  SurveyDraft,
+  createDraft,
+  getSurveyTemplate,
+  mergeSurveyTemplates,
+} from "@digitalaidseattle/surveys";
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
-import CreatorCanvas from "../components/Canvas/CreatorCanvas";
-
-import type { DraftSurvey, SurveySnapshot } from "../models/DraftSurvey";
-import { getDraft, upsertDraft } from "../storage/DraftSurveyStorage";
-
-/* ---------- Types ---------- */
-
-export type ParticipantFieldType = "name" | "email" | "address";
-
-export type ParticipantField = {
-  type: ParticipantFieldType;
-  label: string;
-  required: boolean;
-};
-
-/* ---------- Page ---------- */
+import { getTemplateOwnerKey, publishSurvey, surveyDraftStore, surveyTemplateStore } from "../surveyModule";
 
 export default function CreateSurveyPage() {
   const navigate = useNavigate();
-  const { draftId } = useParams<{ draftId: string }>();
+  const { draftId, templateId } = useParams<{
+    draftId?: string;
+    templateId?: string;
+  }>();
 
-  const [id] = useState(draftId ?? uuid());
-
-  const [history, setHistory] = useState<SurveySnapshot[]>([
-    {
-      surveyTitle: null,
-      surveyDescription: null,
-      participantFields: [],
-    },
-  ]);
-  const [historyIndex, setHistoryIndex] = useState(0);
-
-  const [hasChanges, setHasChanges] = useState(false);
-  const [loadingDraft, setLoadingDraft] = useState(Boolean(draftId));
-
-  /* ---------- Load existing draft ---------- */
+  const [draft, setDraft] = useState<SurveyDraft | null>(null);
 
   useEffect(() => {
-    if (!draftId) {
-      setLoadingDraft(false);
-      return;
-    }
-    const selectedDraftId = draftId;
-
     let cancelled = false;
 
     async function loadDraft() {
-      const draft = await getDraft(selectedDraftId);
-      if (cancelled || !draft) {
-        setLoadingDraft(false);
+      const ownerKey = await getTemplateOwnerKey();
+      const userTemplates = await surveyTemplateStore.list(ownerKey);
+      const availableTemplates = mergeSurveyTemplates(userTemplates);
+      const selectedTemplate = getSurveyTemplate(availableTemplates, templateId);
+
+      if (draftId) {
+        const existing = await surveyDraftStore.get(draftId);
+        if (!cancelled) {
+          setDraft(
+            existing ??
+              createDraft(
+                selectedTemplate.id,
+                structuredClone(selectedTemplate.definition)
+              )
+          );
+        }
         return;
       }
 
-      setHistory(draft.history);
-      setHistoryIndex(draft.historyIndex);
-      setLoadingDraft(false);
+      if (!cancelled) {
+        setDraft(
+          createDraft(
+            selectedTemplate.id,
+            structuredClone(selectedTemplate.definition)
+          )
+        );
+      }
     }
 
     void loadDraft();
@@ -68,132 +59,24 @@ export default function CreateSurveyPage() {
     return () => {
       cancelled = true;
     };
-  }, [draftId]);
-
-  /* ---------- Persist ONLY after first change ---------- */
+  }, [draftId, templateId]);
 
   useEffect(() => {
-    if (!hasChanges) return;
-
-    const draft: DraftSurvey = {
-      id,
-      status: "draft",
-      updatedAt: Date.now(),
-      history,
-      historyIndex,
-    };
-
-    void upsertDraft(draft);
-  }, [hasChanges, history, historyIndex, id]);
-
-  if (loadingDraft) {
-    return null;
-  }
-
-  const current = history[historyIndex];
-  const { surveyTitle, surveyDescription, participantFields } = current;
-
-  /* ---------- History helpers ---------- */
-
-  function pushHistory(next: SurveySnapshot) {
-    setHasChanges(true);
-    setHistory((h) => [...h.slice(0, historyIndex + 1), next]);
-    setHistoryIndex((i) => i + 1);
-  }
-
-  function undo() {
-    setHistoryIndex((i) => Math.max(i - 1, 0));
-  }
-
-  function redo() {
-    setHistoryIndex((i) =>
-      Math.min(i + 1, history.length - 1)
-    );
-  }
-
-  /* ---------- Keyboard shortcuts ---------- */
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
-        e.preventDefault();
-        e.shiftKey ? redo() : undo();
-      }
+    if (!draft) {
+      return;
     }
-    window.addEventListener("keydown", handleKeyDown);
-    return () =>
-      window.removeEventListener("keydown", handleKeyDown);
-  });
+    void surveyDraftStore.upsert(draft);
+  }, [draft]);
 
-  /* ---------- Mutators ---------- */
-
-  function addParticipantField(type: ParticipantFieldType) {
-    if (participantFields.some((f) => f.type === type)) return;
-
-    pushHistory({
-      ...current,
-      participantFields: [
-        ...participantFields,
-        {
-          type,
-          label:
-            type === "name"
-              ? "Your name"
-              : type === "email"
-              ? "Email address"
-              : "Mailing address",
-          required: true,
-        },
-      ],
-    });
-  }
-
-  function deleteParticipantField(type: ParticipantFieldType) {
-    pushHistory({
-      ...current,
-      participantFields: participantFields.filter(
-        (f) => f.type !== type
-      ),
-    });
-  }
-
-  function updateSurveyTitle(value: string) {
-    pushHistory({ ...current, surveyTitle: value });
-  }
-
-  function updateSurveyDescription(value: string) {
-    pushHistory({ ...current, surveyDescription: value });
-  }
-
-  function updateParticipantLabel(
-    type: ParticipantFieldType,
-    value: string
-  ) {
-    pushHistory({
-      ...current,
-      participantFields: participantFields.map((f) =>
-        f.type === type ? { ...f, label: value } : f
-      ),
-    });
-  }
-
-  function updateParticipantRequired(
-    type: ParticipantFieldType,
-    required: boolean
-  ) {
-    pushHistory({
-      ...current,
-      participantFields: participantFields.map((f) =>
-        f.type === type ? { ...f, required } : f
-      ),
-    });
+  if (!draft) {
+    return null;
   }
 
   return (
     <AppLayout
       breadcrumbs={[
         { label: "Dashboard", path: "/" },
-        { label: "Create Survey" },
+        { label: draftId ? "Edit Survey" : "Create Survey" },
       ]}
       sidebarContent={
         <Sidebar
@@ -205,16 +88,13 @@ export default function CreateSurveyPage() {
         />
       }
     >
-      <CreatorCanvas
-        surveyTitle={surveyTitle}
-        surveyDescription={surveyDescription}
-        participantFields={participantFields}
-        onAddParticipantField={addParticipantField}
-        onDeleteParticipantField={deleteParticipantField}
-        onUpdateSurveyTitle={updateSurveyTitle}
-        onUpdateSurveyDescription={updateSurveyDescription}
-        onUpdateParticipantLabel={updateParticipantLabel}
-        onUpdateParticipantRequired={updateParticipantRequired}
+      <SurveyBuilder
+        draft={draft}
+        onChange={setDraft}
+        onPublish={async (currentDraft) => {
+          const published = await publishSurvey(currentDraft);
+          navigate(`/surveys/${published.id}`);
+        }}
       />
     </AppLayout>
   );

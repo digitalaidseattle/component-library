@@ -1,36 +1,47 @@
+import { UserContext, UserContextType } from "@digitalaidseattle/core";
 import {
   Box,
   Chip,
-  Typography,
   FormControl,
-  Select,
   MenuItem,
-  useTheme,
   Paper,
+  Select,
   Stack,
+  Typography,
+  useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-
-import { loadDrafts } from "../../storage/DraftSurveyStorage";
-import SurveyCard from "../utils/SurveyCard";
-
-import { draftToCardModel } from "../../models/DraftToCardModel";
-import type { SurveyCardModel } from "../../models/SurveyCardModel";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  SurveyCard,
+  SurveyCardModel,
+  toPublishedSurveyCardModel,
+  toSurveyCardModel,
+} from "@digitalaidseattle/surveys";
+import {
+  deleteSurvey,
+  publishedSurveyStore,
+  surveyDraftStore,
+} from "../../surveyModule";
 
 type StatusFilter = "all" | "active" | "draft";
 type SortOrder = "recent" | "oldest";
 
 export default function Content() {
+  const navigate = useNavigate();
   const theme = useTheme();
-  const [statusFilter, setStatusFilter] =
-    useState<StatusFilter>("all");
-  const [sortOrder, setSortOrder] =
-    useState<SortOrder>("recent");
+  const { user } = React.useContext<UserContextType>(UserContext);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("recent");
   const [surveys, setSurveys] = useState<SurveyCardModel[]>([]);
 
   async function refreshSurveys() {
-    const drafts = await loadDrafts();
-    setSurveys(drafts.map(draftToCardModel));
+    const drafts = await surveyDraftStore.list();
+    const published = await publishedSurveyStore.list();
+    setSurveys([
+      ...drafts.map(toSurveyCardModel),
+      ...published.map(toPublishedSurveyCardModel),
+    ]);
   }
 
   useEffect(() => {
@@ -38,28 +49,28 @@ export default function Content() {
   }, []);
 
   const filteredSurveys = surveys
-    .filter((s) =>
-      statusFilter === "all" ? true : s.status === statusFilter
+    .filter((survey) =>
+      statusFilter === "all" ? true : survey.status === statusFilter
     )
-    .sort((a, b) =>
+    .sort((left, right) =>
       sortOrder === "recent"
-        ? b.lastOpened.getTime() - a.lastOpened.getTime()
-        : a.lastOpened.getTime() - b.lastOpened.getTime()
+        ? right.lastOpened.getTime() - left.lastOpened.getTime()
+        : left.lastOpened.getTime() - right.lastOpened.getTime()
     );
 
   return (
     <Box>
-      {/* Header */}
       <Box mb={4}>
         <Typography variant="h4" fontWeight={700} gutterBottom>
           My Surveys
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Manage and create your surveys
+          {user?.email
+            ? `Showing surveys and templates for ${user.email}.`
+            : "Showing surveys and templates stored in this local workspace."}
         </Typography>
       </Box>
 
-      {/* Filters Section */}
       <Paper
         elevation={0}
         sx={{
@@ -77,7 +88,6 @@ export default function Content() {
           justifyContent="space-between"
           flexWrap="wrap"
         >
-          {/* Status Filters */}
           <Stack direction="row" spacing={1}>
             <Chip
               label="All"
@@ -85,15 +95,13 @@ export default function Content() {
               color={statusFilter === "all" ? "primary" : "default"}
               variant={statusFilter === "all" ? "filled" : "outlined"}
               onClick={() => setStatusFilter("all")}
-              sx={{ fontWeight: 600 }}
             />
             <Chip
-              label="Active"
+              label="Published"
               clickable
               color={statusFilter === "active" ? "primary" : "default"}
               variant={statusFilter === "active" ? "filled" : "outlined"}
               onClick={() => setStatusFilter("active")}
-              sx={{ fontWeight: 600 }}
             />
             <Chip
               label="Drafts"
@@ -101,18 +109,13 @@ export default function Content() {
               color={statusFilter === "draft" ? "primary" : "default"}
               variant={statusFilter === "draft" ? "filled" : "outlined"}
               onClick={() => setStatusFilter("draft")}
-              sx={{ fontWeight: 600 }}
             />
           </Stack>
 
-          {/* Sort Control */}
           <FormControl size="small" sx={{ minWidth: 160 }}>
             <Select
               value={sortOrder}
-              onChange={(e) =>
-                setSortOrder(e.target.value as SortOrder)
-              }
-              sx={{ fontWeight: 500 }}
+              onChange={(event) => setSortOrder(event.target.value as SortOrder)}
             >
               <MenuItem value="recent">Most recent</MenuItem>
               <MenuItem value="oldest">Oldest first</MenuItem>
@@ -121,7 +124,6 @@ export default function Content() {
         </Stack>
       </Paper>
 
-      {/* Surveys Grid */}
       {filteredSurveys.length > 0 ? (
         <Box
           display="grid"
@@ -136,7 +138,25 @@ export default function Content() {
             <SurveyCard
               key={survey.id}
               survey={survey}
-              onDeleted={refreshSurveys}
+              onOpen={() =>
+                navigate(
+                  survey.status === "draft"
+                    ? `/surveys/edit/${survey.id}`
+                    : `/surveys/${survey.id}`
+                )
+              }
+              onDelete={async () => {
+                if (
+                  survey.status === "active" &&
+                  !window.confirm(
+                    `Delete the published survey "${survey.title}"?`
+                  )
+                ) {
+                  return;
+                }
+                await deleteSurvey(survey.id, survey.status);
+                await refreshSurveys();
+              }}
             />
           ))}
         </Box>

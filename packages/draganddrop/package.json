@@ -5,7 +5,7 @@
   "repository": "null//github.com/null/github.com/tree/master/packages/draganddrop",
   "main": "dist/digitalaidseattle-draganddrop.cjs.js",
   "module": "dist/digitalaidseattle-draganddrop.esm.js",
-  "types": "dist/declarations/src/index.d.ts",
+  "types": "dist/digitalaidseattle-draganddrop.cjs.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
     "@changesets/cli": "^2.27.9",

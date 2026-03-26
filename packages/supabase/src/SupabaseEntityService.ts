@@ -5,7 +5,8 @@
  *
  */
 
-import { PageInfo, QueryModel, supabaseClient } from "@digitalaidseattle/supabase";
+import { PageInfo, QueryModel } from "./supabaseClient";
+import { supabaseClient } from "./supabaseClient";
 import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
 
 abstract class SupabaseEntityService<T extends Entity> implements EntityService<T> {

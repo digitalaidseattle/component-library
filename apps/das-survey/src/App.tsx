@@ -1,25 +1,32 @@
-import { Routes, Route } from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import CreateSurveyPage from "./pages/CreatorSurveyPage";
-import TemplateGalleryPage from "./pages/TemplateGalleryPage";
+import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  AuthServiceProvider,
+  HelpContextProvider,
+  UserContextProvider,
+} from "@digitalaidseattle/core";
+import { LayoutConfigurationProvider } from "@digitalaidseattle/mui";
+import "./App.css";
+import { Config } from "./Config";
+import { routes } from "./routes";
+import { configureCoreServices, surveyAppServices } from "./services/appServices";
 
-export default function App() {
+configureCoreServices();
+
+const router = createBrowserRouter(routes);
+
+const App: React.FC = () => {
   return (
-    <Routes>
-      {/* Dashboard */}
-      <Route path="/" element={<DashboardPage />} />
-
-      {/* Template gallery */}
-      <Route path="/surveys/new" element={<TemplateGalleryPage />} />
-
-      {/* Create new survey (blank draft) */}
-      <Route path="/surveys/create" element={<CreateSurveyPage />} />
-
-      {/* Edit existing draft */}
-      <Route
-        path="/surveys/edit/:draftId"
-        element={<CreateSurveyPage />}
-      />
-    </Routes>
+    <AuthServiceProvider authService={surveyAppServices.authService}>
+      <UserContextProvider>
+        <HelpContextProvider>
+          <LayoutConfigurationProvider configuration={Config()}>
+            <RouterProvider router={router} />
+          </LayoutConfigurationProvider>
+        </HelpContextProvider>
+      </UserContextProvider>
+    </AuthServiceProvider>
   );
-}
+};
+
+export default App;

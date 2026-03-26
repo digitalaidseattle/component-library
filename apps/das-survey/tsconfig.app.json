@@ -7,20 +7,26 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@digitalaidseattle/core": ["../../packages/core/src/index.ts"],
+      "@digitalaidseattle/mui": ["../../packages/mui/src/index.ts"],
+      "@digitalaidseattle/supabase": ["../../packages/supabase/src/index.ts"],
+      "@digitalaidseattle/draganddrop": ["../../packages/draganddrop/src/index.ts"],
+      "@digitalaidseattle/surveys": ["../../packages/surveys/src/index.ts"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
