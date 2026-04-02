@@ -6,7 +6,7 @@
  */
 import { AuthService, OAuthResponse, User } from "@digitalaidseattle/core";
 import { AuthError, SupabaseClient, UserResponse } from '@supabase/supabase-js';
-import { getConfiguration } from "./Configuration";
+import { SupabaseConfiguration } from "./SupbaseConfiguration";
 
 export class SupabaseAuthService implements AuthService {
 
@@ -14,15 +14,15 @@ export class SupabaseAuthService implements AuthService {
 
   static getInstance(): SupabaseAuthService {
     if (!SupabaseAuthService.instance) {
-      SupabaseAuthService.instance = new SupabaseAuthService();
+      SupabaseAuthService.instance = new SupabaseAuthService(SupabaseConfiguration.getInstance().supabaseClient);
     }
     return SupabaseAuthService.instance
   }
 
   client: SupabaseClient;
 
-  constructor(aSupabaseClient?: SupabaseClient) {
-    this.client = aSupabaseClient ?? getConfiguration().supabaseClient;
+  constructor(aSupabaseClient: SupabaseClient) {
+    this.client = aSupabaseClient;
   }
 
   isAuthorized(user: User, authorizedRoles: string[]): boolean {

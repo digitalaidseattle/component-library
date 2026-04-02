@@ -2,4 +2,4 @@ export * from "./SupabaseAuthService";
 export * from "./SupabaseDAO";
 export * from "./SupabaseEntityService";
 export * from "./SupabaseStorageService";
-export * from "./Configuration";
+export * from "./SupbaseConfiguration";

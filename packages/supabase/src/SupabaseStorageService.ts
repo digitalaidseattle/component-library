@@ -8,7 +8,7 @@
 
 import { StorageService } from "@digitalaidseattle/core";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { getConfiguration } from "./Configuration";
+import { SupabaseConfiguration } from "./SupbaseConfiguration";
 
 export type File = {
     created_at: string,
@@ -28,7 +28,7 @@ export class SupabaseStorageService implements StorageService {
 
     static getInstance(): SupabaseStorageService {
         if (!SupabaseStorageService.instance) {
-            SupabaseStorageService.instance = new SupabaseStorageService();
+            SupabaseStorageService.instance = new SupabaseStorageService(SupabaseConfiguration.getInstance().supabaseClient);
         }
         return SupabaseStorageService.instance
     }
@@ -36,9 +36,9 @@ export class SupabaseStorageService implements StorageService {
     bucketName: string = BUCKET_NAME;
     client: SupabaseClient;
 
-    constructor(aSupabaseClient?: SupabaseClient, bucketName?: string) {
+    constructor(supabaseClient: SupabaseClient, bucketName?: string) {
         this.bucketName = bucketName ?? BUCKET_NAME;
-        this.client = aSupabaseClient ?? getConfiguration().supabaseClient;
+        this.client = supabaseClient;
     }
 
     async list(): Promise<any[]> {

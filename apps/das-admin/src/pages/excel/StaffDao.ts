@@ -5,7 +5,7 @@
  *
  */
 
-import { getSupabaseClient, SupabaseDAO } from "@digitalaidseattle/supabase";
+import { SupabaseConfiguration, SupabaseDAO } from "@digitalaidseattle/supabase";
 import { Staff } from "./types";
 
 const TABLE_STAFF = 'staff';
@@ -21,6 +21,6 @@ export class StaffDao extends SupabaseDAO<Staff> {
     }
 
     constructor() {
-        super(getSupabaseClient(), TABLE_STAFF, { select: '*, ticket_history(*)' })
+        super(SupabaseConfiguration.getInstance().getSupabaseClient(), TABLE_STAFF, { select: '*, ticket_history(*)' })
     }
 }

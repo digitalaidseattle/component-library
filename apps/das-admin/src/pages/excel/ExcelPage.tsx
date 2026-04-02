@@ -8,12 +8,12 @@ import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from '@
 import { useEffect, useState } from 'react';
 
 import { useNotifications } from '@digitalaidseattle/core';
-import { staffService } from './staffService';
 import StaffTable from './StaffTable';
 import { Staff } from './types';
+import { StaffService } from './staffService';
 
 const ExcelPage = () => {
-
+    const staffService = StaffService.getInstance();
     const [staff, setStaff] = useState<Staff[]>([]);
     // newStaff state is used for rendering newly added rows separately from the rest, so we can highlight them on upload.
     const [newStaff, setNewStaff] = useState<Staff[]>([]);

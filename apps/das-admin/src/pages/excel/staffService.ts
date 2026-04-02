@@ -72,6 +72,5 @@ class StaffService {
 
 }
 
-const staffService = new StaffService()
-export { staffService };
+export { StaffService };
 

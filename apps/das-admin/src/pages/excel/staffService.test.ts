@@ -4,9 +4,9 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { getConfiguration } from '@digitalaidseattle/supabase';
 import { describe, expect, it, vi } from 'vitest';
-import { staffService } from './staffService';
+import { StaffService } from './staffService';
+import { SupabaseConfiguration } from '@digitalaidseattle/supabase';
 
 const mockFilterBuilder = {
     limit: vi.fn(() => Promise.resolve({})),
@@ -22,7 +22,9 @@ const mockQueryBuilder = {
 };
 
 describe('staffService tests', () => {
-    const supabaseClient = getConfiguration().supabaseClient;
+    const staffService = StaffService.getInstance();
+    const supabaseClient = SupabaseConfiguration.getInstance().getSupabaseClient();
+
     it('getAll', async () => {
         const response = { data: [{}], error: null }
 

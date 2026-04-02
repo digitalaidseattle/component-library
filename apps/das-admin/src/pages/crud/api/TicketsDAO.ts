@@ -5,7 +5,7 @@
  *
  */
 
-import { getSupabaseClient, SupabaseDAO } from "@digitalaidseattle/supabase";
+import { SupabaseConfiguration, SupabaseDAO } from "@digitalaidseattle/supabase";
 import { Ticket, TicketHistory } from "./types";
 
 const TABLE_SERVICE_TICKET = 'service_ticket';
@@ -21,7 +21,7 @@ class TicketsDAO extends SupabaseDAO<Ticket> {
     }
 
     constructor() {
-        super(getSupabaseClient(), TABLE_SERVICE_TICKET, { select: '*, ticket_history(*)' })
+        super(SupabaseConfiguration.getInstance().getSupabaseClient(), TABLE_SERVICE_TICKET, { select: '*, ticket_history(*)' })
     }
 
     empty() {

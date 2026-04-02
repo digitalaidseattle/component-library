@@ -6,7 +6,7 @@
  *
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { SupabaseStorageService } from './SupabaseStorageService';
 
 describe('storageService tests', () => {
