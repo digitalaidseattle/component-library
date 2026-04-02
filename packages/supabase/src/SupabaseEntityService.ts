@@ -5,219 +5,48 @@
  *
  */
 
-import { PageInfo, QueryModel, supabaseClient } from "@digitalaidseattle/supabase";
 import { Entity, EntityService, Identifier, User } from "@digitalaidseattle/core";
+import { SupabaseDAO } from "./SupabaseDAO";
 
 // @deprecated use SupabaseDAO
 abstract class SupabaseEntityService<T extends Entity> implements EntityService<T> {
 
-    tableName = '';
-    select = '*';
-    mapper = (json: any) => (json as T);
-
-    constructor(tableName: string, select?: string, mapper?: (json: any) => T) {
-        this.tableName = tableName;
-        this.select = select ?? '*';
-        this.mapper = mapper ?? ((json: any) => json);
+    dao: SupabaseDAO<T>;
+    constructor(dao: SupabaseDAO<T>) {
+        this.dao = dao;
     }
 
-    // MUI datagrid filters
-    supportedStringFilters(): string[] {
-        return ['contains', 'startsWith', 'endsWith', 'equals', 'doesNotEqual']
+    getAll(count?: number, select?: string, mapper?: ((json: any) => T) | undefined): Promise<T[]> {
+        return this.dao.getAll({ count, select, mapper });
     }
 
-    supportedNumberFilters(): string[] {
-        return ['=', '>', '<', '!=']
+    getById(id: Identifier, select?: string, mapper?: ((json: any) => T) | undefined): Promise<T | null> {
+        return this.dao.getById(id, { select, mapper });
     }
 
-    async find(queryModel: QueryModel, select?: string, mapper?: (json: any) => T): Promise<PageInfo<T>> {
-        try {
-
-            let query: any = supabaseClient
-                .from(this.tableName)
-                .select(select ?? this.select, { count: 'exact' })
-                .range(queryModel.page * queryModel.pageSize, (queryModel.page + 1) * queryModel.pageSize - 1)
-
-            // add sorting
-            let sortField = queryModel.sortField
-            const sortOperator = { ascending: queryModel.sortDirection === 'asc' } as any
-            if (sortField.includes('.')) {
-                const split = sortField.split('.');
-                sortField = `${split[0]}(${split[1]})`;
-            }
-            query.order(sortField, sortOperator);
-
-            // add filtering
-            const filterModel = queryModel.filterModel;
-            if (filterModel && filterModel.items) {
-                filterModel.items.forEach((filter: any) => {
-                    const field = filter.field;
-                    const operator = filter.operator;
-                    const value = filter.value;
-                    if (field && operator && value) {
-                        switch (operator) {
-                            case '=':
-                            case 'equals':
-                                query = query.eq(field, value)
-                                break;
-                            case '!=':
-                            case 'doesNotEqual':
-                                query = query.neq(field, value)
-                                break;
-                            case '>':
-                                query = query.gt(field, value)
-                                break;
-                            case '<':
-                                query = query.lt(field, value)
-                                break;
-                            case 'contains':
-                                query = query.ilike(field, `%${value}%`)
-                                break;
-                            case 'startsWith':
-                                query = query.ilike(field, `${value}%`)
-                                break;
-                            case 'endsWith':
-                                query = query.ilike(field, `%${value}`)
-                                break;
-                        }
-                    }
-                })
-            }
-
-            return query.then((resp: any) => {
-                const aMapper = mapper ?? this.mapper;
-                return {
-                    rows: aMapper ? resp.data.map((json: any) => aMapper(json)) : resp.data,
-                    totalRowCount: resp.count,
-                };
-            })
-        } catch (err) {
-            console.error('Unexpected error:', err);
-            throw err;
-        }
+    batchInsert(entities: T[], select?: string, mapper?: ((json: any) => T) | undefined, user?: User): Promise<T[]> {
+        return this.dao.batchInsert(entities, { select, mapper });
     }
 
-    async getAll(count?: number, select?: string, mapper?: (json: any) => T): Promise<T[]> {
-        let query = supabaseClient
-            .from(this.tableName)
-            .select(select ?? this.select);
-        if (count) {
-            query = query.limit(count)
-        }
-        return query.then((resp: any) => {
-            const data = resp.data ?? [];
-            const aMapper = mapper ?? this.mapper;
-            return data.map((json: any) => aMapper(json))
-        })
+    insert(entity: T, select?: string, mapper?: ((json: any) => T) | undefined, user?: User): Promise<T> {
+        return this.dao.insert(entity, { select, mapper });
     }
 
-    async getById(entityId: Identifier, select?: string, mapper?: (json: any) => T): Promise<T | null> {
-        try {
-            const { data, error } = await supabaseClient.from(this.tableName)
-                .select(select ?? this.select)
-                .eq('id', entityId)
-                .single();
-            if (error) {
-                console.error('Unexpected error during select', error);
-                throw new Error('Unexpected error during select');
-            }
-            return mapper ? mapper(data) : this.mapJson(data);
-        } catch (err) {
-            console.error('Unexpected error during select:', err);
-            throw err;
-        }
+    update(id: Identifier, changes: Partial<T>, select?: string, mapper?: ((json: any) => T) | undefined, user?: User): Promise<T> {
+        return this.dao.update(id, changes, { select, mapper });
     }
 
-    async batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]> {
-        try {
-            return await supabaseClient
-                .from(this.tableName)
-                .insert(entities)
-                .select(select ?? this.select)
-                .then((resp: any) => {
-                    const data = resp.data ?? [];
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper ? data.map((json: any) => aMapper(json)) : data
-                })
-        } catch (err) {
-            console.error('Unexpected error during insertion:', err);
-            throw err;
-        }
+    delete(id: Identifier): Promise<void> {
+        return this.dao.delete(id);
     }
-
-    async insert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
-        try {
-            return await supabaseClient
-                .from(this.tableName)
-                .insert([entity])
-                .select(select ?? this.select)
-                .single()
-                .then((resp: any) => {
-                    const aMapper = mapper ?? this.mapper;
-                    return aMapper(resp.data)!
-                })
-        } catch (err) {
-            console.error('Unexpected error during insertion:', err);
-            throw err;
-        }
-    }
-
-    async update(entityId: Identifier, updatedFields: Partial<T>, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
-        try {
-            const { data, error } = await supabaseClient
-                .from(this.tableName)
-                .update(updatedFields)
-                .eq('id', entityId)
-                .select(select ?? this.select)
-                .single();
-            if (error) {
-                console.error('Failed to update entity', error);
-                throw new Error('Failed to update entity');
-            }
-            return mapper ? mapper(data) : this.mapJson(data);
-        } catch (err) {
-            console.error('Unexpected error during update:', err);
-            throw err;
-        }
-    }
-
-    async delete(entityId: Identifier): Promise<void> {
-        try {
-            const { error } = await supabaseClient
-                .from(this.tableName)
-                .delete()
-                .eq('id', entityId);
-            if (error) {
-                console.error('Error deleting entity:', error.message);
-                throw new Error('Failed to delete entity');
-            }
-        } catch (err) {
-            console.error('Unexpected error during deletion:', err);
-            throw err;
-        }
-    }
-
-    async upsert(entity: T, select?: string, mapper?: (json: any) => T, user?: User): Promise<T> {
-        try {
-            const { data, error } = await supabaseClient
-                .from(this.tableName)
-                .upsert([entity])
-                .select(select ?? this.select)
-                .single();
-            if (error) {
-                console.error('Failed to upsert entity', error);
-                throw new Error('Failed to upsert entity');
-            }
-            return mapper ? mapper(data) : this.mapJson(data);
-        } catch (err) {
-            console.error('Error inserting entity:', err);
-            throw err;
-        }
+    upsert(entity: T, select?: string, mapper?: ((json: any) => T) | undefined, user?: User): Promise<T> {
+        return this.dao.upsert(entity, { select, mapper });
     }
 
     mapJson(json: any): T {
-        return this.mapper(json);
+        return this.dao.mapJson(json);
     }
+
 
 }
 export { SupabaseEntityService };

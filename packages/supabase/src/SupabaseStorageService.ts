@@ -2,12 +2,13 @@
 /**
  *  storageService.ts
  *
- *  @copyright 2024 Digital Aid Seattle
+ *  @copyright 2026 Digital Aid Seattle
  *
  */
 
 import { StorageService } from "@digitalaidseattle/core";
-import { supabaseClient } from "./supabaseClient";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { getConfiguration } from "./Configuration";
 
 export type File = {
     created_at: string,
@@ -23,14 +24,25 @@ const BUCKET_NAME = 'info';
 
 export class SupabaseStorageService implements StorageService {
 
-    bucketName: string = BUCKET_NAME;
+    private static instance: SupabaseStorageService;
 
-    constructor(bucketName?: string) {
+    static getInstance(): SupabaseStorageService {
+        if (!SupabaseStorageService.instance) {
+            SupabaseStorageService.instance = new SupabaseStorageService();
+        }
+        return SupabaseStorageService.instance
+    }
+
+    bucketName: string = BUCKET_NAME;
+    client: SupabaseClient;
+
+    constructor(aSupabaseClient?: SupabaseClient, bucketName?: string) {
         this.bucketName = bucketName ?? BUCKET_NAME;
+        this.client = aSupabaseClient ?? getConfiguration().supabaseClient;
     }
 
     async list(): Promise<any[]> {
-        return supabaseClient
+        return this.client
             .storage
             .from(this.bucketName)
             .list()
@@ -43,7 +55,7 @@ export class SupabaseStorageService implements StorageService {
     }
     // Temp methdo that should be move into component library
     getUrl(filepath: string): string {
-        const resp = supabaseClient
+        const resp = this.client
             .storage
             .from(this.bucketName)
             .getPublicUrl(filepath);
@@ -51,7 +63,7 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async getUrlAsync(filepath: string): Promise<string> {
-        const resp = supabaseClient
+        const resp = this.client
             .storage
             .from(this.bucketName)
             .getPublicUrl(filepath);
@@ -59,9 +71,9 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async downloadFile(filepath: string): Promise<string> {
-        return supabaseClient
+        return this.client
             .storage
-            .from(BUCKET_NAME)
+            .from(this.bucketName)
             .download(filepath)
             .then(resp => {
                 if (resp.error) {
@@ -72,7 +84,7 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async downloadBlob(filepath: string): Promise<Blob | null> {
-        return supabaseClient
+        return this.client
             .storage
             .from(this.bucketName)
             .download(filepath)
@@ -85,7 +97,7 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async removeFile(fileName: string): Promise<any> {
-        return supabaseClient
+        return this.client
             .storage
             .from(this.bucketName)
             .remove([fileName])
@@ -98,7 +110,7 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async uploadFile(file: any): Promise<any> {
-        return supabaseClient
+        return this.client
             .storage
             .from(this.bucketName)
             .upload(file.name, file)
@@ -111,7 +123,7 @@ export class SupabaseStorageService implements StorageService {
     }
 
     async upload(path: string, blob: any): Promise<any> {
-        return supabaseClient
+        return this.client
             .storage
             .from(this.bucketName)
             .upload(path, blob)

@@ -11,6 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import {
   AuthServiceProvider,
   RefreshContextProvider,
+  setCoreServices,
   StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
@@ -40,10 +41,15 @@ const App: React.FC = () => {
     }
   )
 
+  setCoreServices({
+    authService: SupabaseAuthService.getInstance(),
+    storageService: SupabaseStorageService.getInstance()
+  })
+
   return (
     <>
-      <AuthServiceProvider authService={new SupabaseAuthService()} >
-        <StorageServiceProvider storageService={new SupabaseStorageService()} >
+      <AuthServiceProvider authService={SupabaseAuthService.getInstance()} >
+        <StorageServiceProvider storageService={SupabaseStorageService.getInstance()} >
           <RefreshContextProvider>
             <UserContextProvider>
               <LayoutConfigurationProvider configuration={Config}>

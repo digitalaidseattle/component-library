@@ -5,7 +5,7 @@
  *
  */
 
-import { supabaseClient } from "@digitalaidseattle/supabase";
+import { TicketsDAO } from "./TicketsDAO";
 import { Ticket, TicketHistory } from "./types";
 
 
@@ -17,6 +17,11 @@ class TicketService {
             TicketService.instance = new TicketService();
         }
         return TicketService.instance;
+    }
+
+    dao: TicketsDAO;
+    constructor() {
+        this.dao = TicketsDAO.getInstance();
     }
 
     empty() {
@@ -49,10 +54,7 @@ class TicketService {
     }
 
     async createTicketHistory(history: TicketHistory): Promise<TicketHistory> {
-        return supabaseClient.from('ticket_history')
-            .insert(history)
-            .select()
-            .then((resp: any) => resp.data![0] as TicketHistory);
+        return this.dao.createTicketHistory(history);
     }
 }
 

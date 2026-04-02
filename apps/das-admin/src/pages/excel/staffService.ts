@@ -5,18 +5,37 @@
  *
  */
 
+import { saveAs } from 'file-saver';
 import { v4 as uuid } from 'uuid';
 import { read, utils, write } from "xlsx";
-import { saveAs } from 'file-saver';
 
-import {
-    SupabaseEntityService
-} from '@digitalaidseattle/supabase';
 import { Staff } from "./types";
+import { StaffDao } from './StaffDao';
 
-const TABLE_STAFF = 'staff';
 
-class StaffService extends SupabaseEntityService<Staff> {
+class StaffService {
+
+    private static instance: StaffService;
+
+    static getInstance() {
+        if (!StaffService.instance) {
+            StaffService.instance = new StaffService();
+        }
+        return StaffService.instance;
+    }
+
+    dao: StaffDao;
+    constructor() {
+        this.dao = StaffDao.getInstance();
+    }
+
+    async batchInsert(newStaffData: Staff[]): Promise<Staff[]> {
+        return this.dao.batchInsert(newStaffData);
+    }
+
+    getAll() {
+        return this.dao.getAll();
+    }
 
     async download(fileName: string, data: any): Promise<boolean> {
         const workbook = utils.book_new();
@@ -53,6 +72,6 @@ class StaffService extends SupabaseEntityService<Staff> {
 
 }
 
-const staffService = new StaffService(TABLE_STAFF)
+const staffService = new StaffService()
 export { staffService };
 

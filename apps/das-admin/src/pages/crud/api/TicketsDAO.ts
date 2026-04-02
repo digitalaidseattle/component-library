@@ -5,7 +5,7 @@
  *
  */
 
-import { getSupabaseClient, supabaseClient, SupabaseDAO } from "@digitalaidseattle/supabase";
+import { getSupabaseClient, SupabaseDAO } from "@digitalaidseattle/supabase";
 import { Ticket, TicketHistory } from "./types";
 
 const TABLE_SERVICE_TICKET = 'service_ticket';
@@ -53,7 +53,7 @@ class TicketsDAO extends SupabaseDAO<Ticket> {
     }
 
     async createTicketHistory(history: TicketHistory): Promise<TicketHistory> {
-        return supabaseClient.from('ticket_history')
+        return this.client.from('ticket_history')
             .insert(history)
             .select()
             .then((resp: any) => resp.data![0] as TicketHistory);
