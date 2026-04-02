@@ -9,7 +9,7 @@ import React from 'react';
 // material-ui
 import { Box, Button, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // project import
 import Logo from '../../Logo';

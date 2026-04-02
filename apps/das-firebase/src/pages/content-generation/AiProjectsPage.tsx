@@ -8,7 +8,7 @@ import { HomeOutlined, MoreOutlined } from "@ant-design/icons";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Breadcrumbs, Grid, IconButton, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Markdown from "react-markdown";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 
 import { ProjectHelpUtils, ProjectsListCard } from "@digitalaidseattle/content-generation";
 import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";

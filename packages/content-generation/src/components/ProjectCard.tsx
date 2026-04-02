@@ -6,7 +6,7 @@
 
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
 import { SplitButton } from "@digitalaidseattle/mui";
