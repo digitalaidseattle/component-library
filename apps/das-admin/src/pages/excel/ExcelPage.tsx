@@ -31,7 +31,8 @@ const ExcelPage = () => {
         // get parsed array from the uploaded excel file
         const newStaffData = await staffService.parse(file)
             .catch(err => notification.error('Error while parsing: ' + err.message));
-        // upload parsed data to supabase
+
+        // upload parsed data to db
         if (newStaffData) {
             staffService.batchInsert(newStaffData)
                 .then(() => {

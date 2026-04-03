@@ -11,11 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@digitalaidseattle/airtable": "1.0.8",
-    "@digitalaidseattle/core": "1.0.21",
+    "@digitalaidseattle/airtable": "1.0.9",
+    "@digitalaidseattle/core": "1.0.22",
     "@digitalaidseattle/draganddrop": "2.0.2",
-    "@digitalaidseattle/mui": "1.0.41",
-    "@digitalaidseattle/supabase": "1.0.21",
+    "@digitalaidseattle/mui": "1.0.42",
+    "@digitalaidseattle/supabase": "1.0.22",
     "@vis.gl/react-maplibre": "^8.1.0",
     "file-saver": "^2.0.5",
     "maplibre-gl": "^5.11.0",

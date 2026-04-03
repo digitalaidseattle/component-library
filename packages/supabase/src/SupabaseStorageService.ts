@@ -6,19 +6,9 @@
  *
  */
 
-import { StorageService } from "@digitalaidseattle/core";
+import { StorageFile, StorageService } from "@digitalaidseattle/core";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { SupabaseConfiguration } from "./SupbaseConfiguration";
-
-export type File = {
-    created_at: string,
-    id: string,
-    name: string,
-    metadata: {
-        size: number,
-        mimetype: string
-    },
-};
 
 const BUCKET_NAME = 'info';
 
@@ -109,7 +99,7 @@ export class SupabaseStorageService implements StorageService {
             })
     }
 
-    async uploadFile(file: any): Promise<any> {
+    async uploadFile(file: StorageFile): Promise<any> {
         return this.client
             .storage
             .from(this.bucketName)

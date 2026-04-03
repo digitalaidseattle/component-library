@@ -17,7 +17,7 @@ export class SupabaseConfiguration {
     SupabaseConfiguration.instance = new SupabaseConfiguration(props);
   }
 
-  supabaseClient: SupabaseClient = undefined as any;
+  supabaseClient: SupabaseClient | undefined;
 
   private constructor(props: { supabaseUrl: string, anonKey: string }) {
     this.supabaseClient = createClient(

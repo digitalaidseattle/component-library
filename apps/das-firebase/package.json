@@ -11,10 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@digitalaidseattle/content-generation": "^1.0.1",
-    "@digitalaidseattle/core": "^1.0.17",
-    "@digitalaidseattle/firebase": "^1.0.12",
-    "@digitalaidseattle/mui": "^1.0.39"
+    "@digitalaidseattle/content-generation": "^1.0.4",
+    "@digitalaidseattle/core": "^1.0.22",
+    "@digitalaidseattle/firebase": "^1.0.15",
+    "@digitalaidseattle/mui": "^1.0.42"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

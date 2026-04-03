@@ -12,8 +12,8 @@ import {
     TableHead,
     TableRow
 } from '@mui/material';
+import { StorageFile } from '@digitalaidseattle/core';
 
-import { File } from '@digitalaidseattle/supabase';
 
 // ==============================|| HEADER CELL ||============================== //
 
@@ -102,7 +102,7 @@ export default function FilesTable(props: { fileList: any, onDelete: Function })
                     <FileTableHead order={order} orderBy={orderBy} />
                     <TableBody>
                         {props.fileList
-                            .map((file: File, id: number) => {
+                            .map((file: StorageFile, id: number) => {
                                 return (
                                     <TableRow
                                         hover
