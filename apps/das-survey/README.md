@@ -44,6 +44,7 @@ Upcoming work includes drag-and-drop question ordering, field deletion, styling 
 ## Persistence (Supabase)
 
 The survey app can store draft and published survey data in Supabase.
+This app's Supabase project lives at `apps/das-survey/supabase` so it stays scoped to the survey app within the monorepo.
 
 ### 1. Add environment variables
 
@@ -86,8 +87,15 @@ The app also accepts `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_K
 The current code writes to `survey_drafts`, `published_surveys`, and `survey_templates`.
 The reproducible database files are checked in at:
 
-* `supabase/migrations/20260325193000_survey_workspace.sql`
-* `supabase/schemas/001_survey_workspace.sql`
+* `apps/das-survey/supabase/migrations/20260325193000_survey_workspace.sql`
+* `apps/das-survey/supabase/schemas/001_survey_workspace.sql`
+
+From the repo root, run Supabase CLI commands from `apps/das-survey`:
+
+```bash
+cd apps/das-survey
+supabase db push
+```
 
 ```sql
 create table if not exists public.survey_drafts (
@@ -159,3 +167,52 @@ yarn workspace survey-module dev
 Create or edit a survey draft, then refresh the page. You should see rows in `survey_drafts`. When you publish a survey, you should also see a row in `published_surveys`.
 
 If Supabase env vars are missing, the tables do not exist, or the client is denied by RLS, writes will not persist. Check the browser console and the Supabase Table Editor to confirm you are actually writing to Supabase.
+
+## Survey email workflow
+
+The app now has a publish-to-contacts flow:
+
+1. Publishing a survey opens `/surveys/:surveyId/contacts`.
+2. Contacts can be selected and sent a survey invitation.
+3. The browser invokes the Supabase Edge Function `send-survey-email`.
+4. Recipients open `/take/:surveyId/contact/:contactId`.
+5. Submitted answers are written to `survey_responses` and appear on `/responses` or `/surveys/:surveyId/responses`.
+
+Apply the email workflow migration:
+
+```bash
+cd apps/das-survey
+supabase db push
+```
+
+Configure the Resend function secrets:
+
+```bash
+supabase secrets set RESEND_API_KEY=your-resend-api-key
+supabase secrets set RESEND_FROM_EMAIL="DAS Surveys <surveys@your-verified-domain.org>"
+```
+
+Deploy the send function:
+
+```bash
+cd apps/das-survey
+supabase functions deploy send-survey-email
+```
+
+For local development, serve the function with:
+
+```bash
+cd apps/das-survey
+supabase functions serve send-survey-email --env-file supabase/.env.local
+```
+
+The email body supports `{{survey_link}}`, which the Edge Function replaces with the generated survey taker URL.
+
+You still need production RLS policies for:
+
+* `survey_contacts`
+* `survey_email_campaigns`
+* `survey_email_recipients`
+* `survey_responses`
+
+For a quick local-only test, you can temporarily disable RLS on those tables, but production should restrict contact/campaign/response reads to the survey owner and allow public response inserts only for published survey links.

@@ -28,6 +28,7 @@ export default function TemplateGalleryPage() {
             icon: <ArrowBackIcon />,
             onClick: () => navigate("/"),
           }}
+          onNavigate={navigate}
         />
       }
     >

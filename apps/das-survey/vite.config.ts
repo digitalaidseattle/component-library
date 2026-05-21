@@ -10,6 +10,7 @@ export default defineConfig({
       '@digitalaidseattle/core': path.resolve(__dirname, '../../packages/core/src/index.ts'),
       '@digitalaidseattle/mui': path.resolve(__dirname, '../../packages/mui/src/index.ts'),
       '@digitalaidseattle/draganddrop': path.resolve(__dirname, '../../packages/draganddrop/src/index.ts'),
+      '@digitalaidseattle/resend': path.resolve(__dirname, '../../packages/resend/src/index.ts'),
       '@digitalaidseattle/surveys': path.resolve(__dirname, '../../packages/surveys/src/index.ts')
     }
   },

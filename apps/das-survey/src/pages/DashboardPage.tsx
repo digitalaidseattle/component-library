@@ -23,6 +23,7 @@ export default function DashboardPage() {
             icon: <AddIcon />,
             onClick: () => navigate("/surveys/new"),
           }}
+          onNavigate={navigate}
         />
       }
     >

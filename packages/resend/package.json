@@ -1,0 +1,19 @@
+{
+  "name": "@digitalaidseattle/resend",
+  "version": "1.0.0",
+  "description": "Survey contact, email campaign, and response workflow services",
+  "repository": "null//github.com/null/github.com/tree/master/packages/resend",
+  "main": "dist/digitalaidseattle-resend.cjs.js",
+  "module": "dist/digitalaidseattle-resend.esm.js",
+  "types": "dist/digitalaidseattle-resend.cjs.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "^1.0.17"
+  },
+  "scripts": {
+    "postbuild": "node ../../scripts/copy-css.cjs"
+  },
+  "files": [
+    "dist"
+  ]
+}

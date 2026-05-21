@@ -82,6 +82,7 @@ export default function CreateSurveyPage() {
             icon: <ArrowBackIcon />,
             onClick: () => navigate("/"),
           }}
+          onNavigate={navigate}
         />
       }
     >
@@ -90,7 +91,7 @@ export default function CreateSurveyPage() {
         onChange={setDraft}
         onPublish={async (currentDraft) => {
           const published = await publishDraft(currentDraft);
-          navigate(`/surveys/${published.id}`);
+          navigate(`/surveys/${published.id}/contacts`);
         }}
       />
     </AppLayout>

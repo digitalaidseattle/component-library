@@ -17,14 +17,16 @@ export type SidebarPrimaryAction = {
 
 export default function Sidebar({
   primaryAction,
+  onNavigate,
 }: {
   primaryAction: SidebarPrimaryAction;
+  onNavigate?: (path: string) => void;
 }) {
   const theme = useTheme();
 
   const cards = [
-    { title: "Contacts", subtitle: "People you commonly survey" },
-    { title: "Responses", subtitle: "View and export survey answers" },
+    { title: "Contacts", subtitle: "People you commonly survey", path: "/contacts" },
+    { title: "Responses", subtitle: "View and export survey answers", path: "/responses" },
     { title: "Tasks", subtitle: "Internal follow-ups and reminders" },
     { title: "Settings", subtitle: "Organization preferences" },
   ];
@@ -86,7 +88,11 @@ export default function Sidebar({
                 },
               }}
             >
-              <CardActionArea sx={{ p: 2 }}>
+              <CardActionArea
+                sx={{ p: 2 }}
+                disabled={!card.path || !onNavigate}
+                onClick={() => card.path && onNavigate?.(card.path)}
+              >
                 <Typography
                   fontWeight={600}
                   variant="body2"

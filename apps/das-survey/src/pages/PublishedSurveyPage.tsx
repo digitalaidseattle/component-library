@@ -42,6 +42,7 @@ export default function PublishedSurveyPage() {
               icon: <ArrowBackIcon />,
               onClick: () => navigate("/"),
             }}
+            onNavigate={navigate}
           />
         }
       >
@@ -70,6 +71,7 @@ export default function PublishedSurveyPage() {
             icon: <ArrowBackIcon />,
             onClick: () => navigate("/"),
           }}
+          onNavigate={navigate}
         />
       }
     >
