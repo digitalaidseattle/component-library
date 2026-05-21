@@ -1,12 +1,7 @@
-import { supabaseConfigured } from "@digitalaidseattle/supabase";
 import {
-    LocalSurveyTemplateStore,
     PublishedSurveyStore,
     SurveyDraftStore,
     SurveyTemplateStore,
-    SupabasePublishedSurveyStore,
-    SupabaseSurveyDraftStore,
-    SupabaseSurveyTemplateStore,
 } from "./surveyStores";
 import {
     PublishedSurvey,
@@ -28,6 +23,7 @@ import {
     upsertCachedPublishedSurvey,
     upsertCachedTemplate,
 } from "./surveyWorkspaceCache";
+import { getSurveyWorkspacePersistence } from "./surveyWorkspaceConfig";
 
 export type SurveyWorkspaceSnapshot = {
     ownerKey: string;
@@ -39,44 +35,12 @@ export type SurveyWorkspaceSnapshot = {
 type SaveDraftOptions = {
     syncRemote?: boolean;
 };
-
-type SurveyDataProvider = "supabase" | "local";
 type OwnableEntity = {
     created_by?: string;
     created_at?: Date;
     updated_by?: string;
     updated_at?: Date;
 };
-
-const localTemplateStore = new LocalSurveyTemplateStore();
-
-function resolveSurveyDataProvider(): SurveyDataProvider {
-    const configuredProvider = (
-        import.meta.env.VITE_SURVEY_DATA_PROVIDER ??
-        import.meta.env.VITE_DATA_PROVIDER ??
-        "auto"
-    ).toLowerCase();
-
-    if (configuredProvider === "local") {
-        return "local";
-    }
-
-    if (configuredProvider === "supabase") {
-        return supabaseConfigured ? "supabase" : "local";
-    }
-
-    return supabaseConfigured ? "supabase" : "local";
-}
-
-const surveyDataProvider = resolveSurveyDataProvider();
-const remoteDraftStore: SurveyDraftStore | undefined =
-    surveyDataProvider === "supabase" ? new SupabaseSurveyDraftStore() : undefined;
-const remotePublishedStore: PublishedSurveyStore | undefined =
-    surveyDataProvider === "supabase" ? new SupabasePublishedSurveyStore() : undefined;
-const templateStore: SurveyTemplateStore =
-    surveyDataProvider === "supabase"
-        ? new SupabaseSurveyTemplateStore()
-        : localTemplateStore;
 
 function sortDrafts(drafts: SurveyDraft[]): SurveyDraft[] {
     return [...drafts].sort((left, right) => right.updatedAt - left.updatedAt);
@@ -100,7 +64,7 @@ function resolveWorkspaceItems<T>(
     }
 
     console.warn(
-        `Supabase returned no owned ${itemLabel}; preserving cached workspace items instead.`
+        `The configured provider returned no owned ${itemLabel}; preserving cached workspace items instead.`
     );
     return cachedItems;
 }
@@ -131,13 +95,18 @@ async function loadTemplates(
 export async function bootstrapSurveyWorkspace(
     ownerKey: string
 ): Promise<SurveyWorkspaceSnapshot> {
+    const {
+        draftStore,
+        publishedSurveyStore,
+        templateStore,
+    } = getSurveyWorkspacePersistence();
     const cachedDrafts = sortDrafts(loadCachedDrafts(ownerKey));
     const cachedPublishedSurveys = sortPublishedSurveys(
         loadCachedPublishedSurveys(ownerKey)
     );
     const cachedTemplates = sortTemplates(loadCachedTemplates(ownerKey));
 
-    if (!remoteDraftStore || !remotePublishedStore) {
+    if (!draftStore || !publishedSurveyStore) {
         const templates = await loadTemplates(templateStore, ownerKey).catch(() => cachedTemplates);
         return {
             ownerKey,
@@ -149,8 +118,8 @@ export async function bootstrapSurveyWorkspace(
 
     try {
         const [remoteDrafts, remotePublishedSurveys, templates] = await Promise.all([
-            remoteDraftStore.list(),
-            remotePublishedStore.list(),
+            draftStore.list(),
+            publishedSurveyStore.list(),
             loadTemplates(templateStore, ownerKey),
         ]);
 
@@ -181,7 +150,7 @@ export async function bootstrapSurveyWorkspace(
             templates,
         };
     } catch (error) {
-        console.error("Unable to bootstrap survey workspace from Supabase", error);
+        console.error("Unable to bootstrap survey workspace from the configured provider", error);
         return {
             ownerKey,
             drafts: cachedDrafts,
@@ -196,17 +165,18 @@ export async function saveSurveyDraft(
     draft: SurveyDraft,
     options: SaveDraftOptions = {}
 ): Promise<SurveyDraft> {
+    const { draftStore } = getSurveyWorkspacePersistence();
     const nextDraft = stampOwnership(draft, ownerKey);
     upsertCachedDraft(ownerKey, nextDraft);
 
-    if (!remoteDraftStore || options.syncRemote === false) {
+    if (!draftStore || options.syncRemote === false) {
         return nextDraft;
     }
 
     try {
-        await remoteDraftStore.upsert(nextDraft);
+        await draftStore.upsert(nextDraft);
     } catch (error) {
-        console.error("Unable to sync survey draft to Supabase", error);
+        console.error("Unable to sync survey draft to the configured provider", error);
     }
 
     return nextDraft;
@@ -216,6 +186,7 @@ export async function publishSurveyDraft(
     ownerKey: string,
     draft: SurveyDraft
 ): Promise<PublishedSurvey> {
+    const { draftStore, publishedSurveyStore } = getSurveyWorkspacePersistence();
     const stampedDraft = stampOwnership(draft, ownerKey);
     const result = publishDraft(stampedDraft);
     const publishedSurvey = stampOwnership(result.published, ownerKey);
@@ -223,17 +194,17 @@ export async function publishSurveyDraft(
     deleteCachedDraft(ownerKey, draft.id);
     upsertCachedPublishedSurvey(ownerKey, publishedSurvey);
 
-    if (!remoteDraftStore || !remotePublishedStore) {
+    if (!draftStore || !publishedSurveyStore) {
         return publishedSurvey;
     }
 
     try {
         await Promise.all([
-            remotePublishedStore.upsert(publishedSurvey),
-            remoteDraftStore.delete(draft.id),
+            publishedSurveyStore.upsert(publishedSurvey),
+            draftStore.delete(draft.id),
         ]);
     } catch (error) {
-        console.error("Unable to publish survey to Supabase", error);
+        console.error("Unable to publish survey to the configured provider", error);
     }
 
     return publishedSurvey;
@@ -244,30 +215,31 @@ export async function deleteSurveyWorkspaceEntry(
     id: string,
     status: "draft" | "active"
 ): Promise<void> {
+    const { draftStore, publishedSurveyStore } = getSurveyWorkspacePersistence();
     deleteCachedDraft(ownerKey, id);
 
     if (status === "active") {
         deleteCachedPublishedSurvey(ownerKey, id);
     }
 
-    if (!remoteDraftStore) {
+    if (!draftStore) {
         return;
     }
 
     try {
-        await remoteDraftStore.delete(id);
+        await draftStore.delete(id);
     } catch (error) {
-        console.error("Unable to delete draft from Supabase", error);
+        console.error("Unable to delete draft from the configured provider", error);
     }
 
-    if (status !== "active" || !remotePublishedStore) {
+    if (status !== "active" || !publishedSurveyStore) {
         return;
     }
 
     try {
-        await remotePublishedStore.delete(id);
+        await publishedSurveyStore.delete(id);
     } catch (error) {
-        console.error("Unable to delete published survey from Supabase", error);
+        console.error("Unable to delete published survey from the configured provider", error);
     }
 }
 
@@ -275,6 +247,7 @@ export async function saveSurveyTemplate(
     ownerKey: string,
     template: SurveyTemplate
 ): Promise<SurveyTemplate> {
+    const { templateStore } = getSurveyWorkspacePersistence();
     const nextTemplate = {
         ...template,
         ownerEmail: ownerKey,
@@ -290,6 +263,7 @@ export async function deleteSurveyTemplate(
     ownerKey: string,
     id: string
 ): Promise<void> {
+    const { templateStore } = getSurveyWorkspacePersistence();
     deleteCachedTemplate(ownerKey, id);
     await templateStore.delete(id, ownerKey);
 }

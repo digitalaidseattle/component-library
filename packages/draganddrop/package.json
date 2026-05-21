@@ -20,7 +20,7 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "postbuild": "cp src/*.css dist/"
+    "postbuild": "node ../../scripts/copy-css.cjs"
   },
   "files": [
     "dist"

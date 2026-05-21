@@ -30,7 +30,7 @@
     "zod": "^4.1.12"
   },
   "scripts": {
-    "postbuild": "cp src/*.css dist/"
+    "postbuild": "node ../../scripts/copy-css.cjs"
   },
   "files": [
     "dist"

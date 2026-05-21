@@ -5,7 +5,6 @@ import {
   User,
   setCoreServices,
 } from "@digitalaidseattle/core";
-import { SupabaseAuthService, supabaseConfigured } from "@digitalaidseattle/supabase";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -14,6 +13,15 @@ import {
   signInWithPopup,
   type Auth,
 } from "firebase/auth";
+import {
+  configureSurveyPersistence,
+  resolveSurveyDataProvider,
+  type SurveyDataProvider,
+} from "./surveyPersistence";
+import {
+  SurveySupabaseAuthService,
+  surveySupabaseConfigured,
+} from "./surveySupabase";
 
 export type SurveyAuthProvider = "firebase" | "supabase" | "local";
 
@@ -153,7 +161,7 @@ function resolveAuthProvider(): SurveyAuthProvider {
   }
 
   if (requestedProvider === "supabase") {
-    return supabaseConfigured ? "supabase" : "local";
+    return surveySupabaseConfigured ? "supabase" : "local";
   }
 
   if (requestedProvider === "local" || requestedProvider === "none") {
@@ -164,7 +172,7 @@ function resolveAuthProvider(): SurveyAuthProvider {
     return "firebase";
   }
 
-  if (supabaseConfigured) {
+  if (surveySupabaseConfigured) {
     return "supabase";
   }
 
@@ -176,7 +184,7 @@ function createAuthService(provider: SurveyAuthProvider): AuthService {
     case "firebase":
       return new FirebaseBrowserAuthService();
     case "supabase":
-      return new SupabaseAuthService(resolveSupabaseAuthProviders());
+      return new SurveySupabaseAuthService(resolveSupabaseAuthProviders());
     default:
       return new LocalAuthService();
   }
@@ -184,16 +192,19 @@ function createAuthService(provider: SurveyAuthProvider): AuthService {
 
 const authProvider = resolveAuthProvider();
 const authService = createAuthService(authProvider);
+const dataProvider: SurveyDataProvider = resolveSurveyDataProvider();
 
 export const surveyAppServices = {
   authProvider,
   authService,
+  dataProvider,
 };
 
 export function configureCoreServices() {
   setCoreServices({
     authService,
   });
+  configureSurveyPersistence(dataProvider);
 
   return surveyAppServices;
 }

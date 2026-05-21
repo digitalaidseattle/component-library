@@ -10,15 +10,14 @@
     "@babel/runtime": "^7.25.0",
     "@digitalaidseattle/core": "^1.0.17",
     "@digitalaidseattle/draganddrop": "^2.0.2",
-    "@digitalaidseattle/mui": "^1.0.36",
-    "@digitalaidseattle/supabase": "^1.0.17",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "react": "^18.3.1",
+    "react-router-dom": "^6.22.0",
     "uuid": "^13.0.0"
   },
   "scripts": {
-    "postbuild": "cp src/*.css dist/"
+    "postbuild": "node ../../scripts/copy-css.cjs"
   },
   "files": [
     "dist"

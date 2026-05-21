@@ -11,7 +11,6 @@
     "paths": {
       "@digitalaidseattle/core": ["../../packages/core/src/index.ts"],
       "@digitalaidseattle/mui": ["../../packages/mui/src/index.ts"],
-      "@digitalaidseattle/supabase": ["../../packages/supabase/src/index.ts"],
       "@digitalaidseattle/draganddrop": ["../../packages/draganddrop/src/index.ts"],
       "@digitalaidseattle/surveys": ["../../packages/surveys/src/index.ts"]
     },
