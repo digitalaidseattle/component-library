@@ -1,4 +1,5 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -16,6 +17,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -37,6 +39,7 @@ export default function ContactsPage() {
   const { surveyId } = useParams<{ surveyId?: string }>();
   const { ownerKey, publishedSurveys } = useSurveySession();
   const survey = publishedSurveys.find((entry) => entry.id === surveyId);
+  const isSurveyContactsView = Boolean(surveyId);
   const [contacts, setContacts] = useState<SurveyContact[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [email, setEmail] = useState("");
@@ -97,6 +100,11 @@ export default function ContactsPage() {
 
     setContacts((current) => [contact, ...current]);
     setSelectedIds((current) => [...current, contact.id]);
+    setStatusMessage(
+      isSurveyContactsView
+        ? `${contact.email} was added and selected for this survey.`
+        : `${contact.email} was added to contacts.`
+    );
     setEmail("");
     setName("");
     setOrganization("");
@@ -132,7 +140,28 @@ export default function ContactsPage() {
           `${window.location.origin}/take/${surveyId}/contact/${contact.id}`,
       });
 
-      setStatusMessage(`Prepared ${result.recipients.length} survey email${result.recipients.length === 1 ? "" : "s"}.`);
+      const failedRecipients = result.recipients.filter(
+        (recipient) => recipient.status === "failed"
+      );
+      const sentCount = result.recipients.length - failedRecipients.length;
+
+      if (failedRecipients.length === result.recipients.length) {
+        setErrorMessage(
+          failedRecipients
+            .map(
+              (recipient) =>
+                `${recipient.email}: ${recipient.errorMessage || "Unable to send email."}`
+            )
+            .join("\n")
+        );
+        return;
+      }
+
+      setStatusMessage(
+        failedRecipients.length > 0
+          ? `Sent ${sentCount} survey email${sentCount === 1 ? "" : "s"}; ${failedRecipients.length} failed.`
+          : `Sent ${sentCount} survey email${sentCount === 1 ? "" : "s"}.`
+      );
       await refreshContacts();
       navigate(`/surveys/${surveyId}/responses`);
     } catch (error) {
@@ -162,11 +191,11 @@ export default function ContactsPage() {
       <Stack gap={2}>
         <Box>
           <Typography variant="h5" fontWeight={700}>
-            Contacts
+            {survey ? `${survey.title} Contacts` : "Contacts"}
           </Typography>
           <Typography color="text.secondary">
             {survey
-              ? "Choose who should receive this survey."
+              ? "Add or select contacts for this survey invitation."
               : "Manage the people you commonly survey."}
           </Typography>
         </Box>
@@ -194,9 +223,28 @@ export default function ContactsPage() {
               onChange={(event) => setOrganization(event.target.value)}
               fullWidth
             />
-            <Button variant="contained" onClick={() => void handleAddContact()} sx={{ borderRadius: 1 }}>
-              Add
-            </Button>
+            {isSurveyContactsView ? (
+              <Tooltip title="Add this contact and select them for this survey">
+                <span>
+                  <IconButton
+                    color="primary"
+                    disabled={!email.trim()}
+                    aria-label="Add and select contact"
+                    onClick={() => void handleAddContact()}
+                    sx={{
+                      alignSelf: { xs: "flex-end", md: "center" },
+                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                    }}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            ) : (
+              <Button variant="contained" onClick={() => void handleAddContact()} sx={{ borderRadius: 1 }}>
+                Add
+              </Button>
+            )}
           </Stack>
         </Paper>
 

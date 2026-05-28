@@ -72,6 +72,11 @@ export default function SurveyTakerPage() {
             <Typography color="text.secondary">
               This survey is not available from the configured public survey store.
             </Typography>
+            {surveyId && (
+              <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+                Survey ID: {surveyId}
+              </Typography>
+            )}
           </Paper>
         )}
 

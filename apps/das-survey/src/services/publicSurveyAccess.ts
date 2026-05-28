@@ -1,4 +1,9 @@
 import { PublishedSurvey } from "@digitalaidseattle/surveys";
+import {
+    getLocalWorkspaceOwnerKey,
+    getSurveyWorkspacePersistence,
+    loadCachedPublishedSurveys,
+} from "@digitalaidseattle/surveys";
 import { surveySupabaseClient, surveySupabaseConfigured } from "./surveySupabase";
 
 type PublishedSurveyRow = {
@@ -37,19 +42,33 @@ function rowToPublished(row: PublishedSurveyRow): PublicSurveyRecord {
 export async function loadPublicSurvey(
     surveyId: string
 ): Promise<PublicSurveyRecord | null> {
+    const cachedSurvey = loadCachedPublishedSurveys(getLocalWorkspaceOwnerKey()).find(
+        (survey) => survey.id === surveyId
+    );
+    const { publishedSurveyStore } = getSurveyWorkspacePersistence();
+
     if (!surveySupabaseConfigured) {
-        return null;
+        return cachedSurvey ?? await publishedSurveyStore?.get(surveyId) ?? null;
     }
 
-    const { data, error } = await surveySupabaseClient
-        .from("published_surveys")
-        .select("*")
-        .eq("id", surveyId)
-        .maybeSingle();
+    try {
+        const { data, error } = await surveySupabaseClient
+            .from("published_surveys")
+            .select("*")
+            .eq("id", surveyId)
+            .maybeSingle();
 
-    if (error) {
-        throw error;
+        if (error) {
+            throw error;
+        }
+
+        if (data) {
+            return rowToPublished(data as PublishedSurveyRow);
+        }
+
+        return cachedSurvey ?? await publishedSurveyStore?.get(surveyId) ?? null;
+    } catch (error) {
+        console.error("Unable to load public survey from Supabase", error);
+        return cachedSurvey ?? await publishedSurveyStore?.get(surveyId) ?? null;
     }
-
-    return data ? rowToPublished(data as PublishedSurveyRow) : null;
 }

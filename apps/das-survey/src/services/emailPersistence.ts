@@ -1,6 +1,5 @@
 import {
     configureSurveyEmailPersistence,
-    createId,
     SendSurveyEmailInput,
     SendSurveyEmailResult,
     SurveyContact,
@@ -413,6 +412,39 @@ class SupabaseSurveyResponseStore implements SurveyResponseStore {
 }
 
 class SupabaseSurveyEmailSender implements SurveyEmailSender {
+    private async getFunctionErrorMessage(error: unknown): Promise<string> {
+        const context = (error as { context?: Response | { json?: () => Promise<unknown>; text?: () => Promise<string> } })?.context;
+
+        if (context?.json) {
+            try {
+                const body = await context.json();
+                if (
+                    body &&
+                    typeof body === "object" &&
+                    "error" in body &&
+                    typeof body.error === "string"
+                ) {
+                    return body.error;
+                }
+            } catch {
+                // Fall through to the text body or generic message.
+            }
+        }
+
+        if (context?.text) {
+            try {
+                const text = await context.text();
+                if (text) {
+                    return text;
+                }
+            } catch {
+                // Fall through to the generic message.
+            }
+        }
+
+        return error instanceof Error ? error.message : "Unable to send survey emails.";
+    }
+
     async send(input: SendSurveyEmailInput): Promise<SendSurveyEmailResult> {
         const { data, error } = await surveySupabaseClient.functions.invoke(
             "send-survey-email",
@@ -432,34 +464,14 @@ class SupabaseSurveyEmailSender implements SurveyEmailSender {
         );
 
         if (error) {
-            throw error;
+            throw new Error(await this.getFunctionErrorMessage(error));
         }
 
         if (data?.campaign && Array.isArray(data?.recipients)) {
             return data as SendSurveyEmailResult;
         }
 
-        const sentAt = Date.now();
-        return {
-            campaign: {
-                ...input.campaign,
-                status: "sent",
-                sentAt,
-                updatedAt: sentAt,
-            },
-            recipients: input.contacts.map((contact) => ({
-                id: createId("recipient"),
-                ownerKey: input.ownerKey,
-                campaignId: input.campaign.id,
-                surveyId: input.campaign.surveyId,
-                contactId: contact.id,
-                email: contact.email,
-                name: contact.name,
-                status: "sent",
-                surveyUrl: input.surveyUrlForContact(contact),
-                sentAt,
-            })),
-        };
+        throw new Error("The send-survey-email function returned an invalid response.");
     }
 
     isConfigured(): boolean {
