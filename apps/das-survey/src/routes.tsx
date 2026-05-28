@@ -7,6 +7,9 @@ import CreateSurveyPage from "./pages/CreatorSurveyPage";
 import TemplateGalleryPage from "./pages/TemplateGalleryPage";
 import PublishedSurveyPage from "./pages/PublishedSurveyPage";
 import CreateTemplatePage from "./pages/CreateTemplatePage";
+import ContactsPage from "./pages/ContactsPage";
+import ResponsesPage from "./pages/ResponsesPage";
+import SurveyTakerPage from "./pages/SurveyTakerPage";
 
 export const routes: RouteObject[] = [
   {
@@ -40,6 +43,22 @@ export const routes: RouteObject[] = [
             path: "surveys/:surveyId",
             element: <PublishedSurveyPage />,
           },
+          {
+            path: "contacts",
+            element: <ContactsPage />,
+          },
+          {
+            path: "surveys/:surveyId/contacts",
+            element: <ContactsPage />,
+          },
+          {
+            path: "responses",
+            element: <ResponsesPage />,
+          },
+          {
+            path: "surveys/:surveyId/responses",
+            element: <ResponsesPage />,
+          },
         ],
       },
     ],
@@ -51,6 +70,14 @@ export const routes: RouteObject[] = [
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "take/:surveyId",
+        element: <SurveyTakerPage />,
+      },
+      {
+        path: "take/:surveyId/contact/:contactId",
+        element: <SurveyTakerPage />,
       },
     ],
   },

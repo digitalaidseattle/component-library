@@ -1,5 +1,6 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Box, Typography } from "@mui/material";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PublishedSurvey, SurveyPage, useSurveySession } from "@digitalaidseattle/surveys";
@@ -42,6 +43,7 @@ export default function PublishedSurveyPage() {
               icon: <ArrowBackIcon />,
               onClick: () => navigate("/"),
             }}
+            onNavigate={navigate}
           />
         }
       >
@@ -66,20 +68,33 @@ export default function PublishedSurveyPage() {
       sidebarContent={
         <Sidebar
           primaryAction={{
-            label: "Dashboard",
-            icon: <ArrowBackIcon />,
-            onClick: () => navigate("/"),
+            label: "Add Contacts",
+            icon: <PersonAddAlt1Icon />,
+            onClick: () => navigate(`/surveys/${survey.id}/contacts`),
           }}
+          onNavigate={navigate}
         />
       }
     >
-      <SurveyPage
-        definition={{
-          surveyTitle: survey.title,
-          surveyDescription: survey.description,
-          questions: survey.questions,
-        }}
-      />
+      <Stack gap={2}>
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            variant="contained"
+            startIcon={<PersonAddAlt1Icon />}
+            onClick={() => navigate(`/surveys/${survey.id}/contacts`)}
+            sx={{ borderRadius: 1 }}
+          >
+            Add Contacts
+          </Button>
+        </Box>
+        <SurveyPage
+          definition={{
+            surveyTitle: survey.title,
+            surveyDescription: survey.description,
+            questions: survey.questions,
+          }}
+        />
+      </Stack>
     </AppLayout>
   );
 }

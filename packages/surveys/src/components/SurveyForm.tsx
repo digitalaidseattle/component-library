@@ -19,18 +19,43 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
-    Typography
+    Typography,
+    Button
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { SurveyDefinition, SurveyQuestion, SurveyRankingQuestion } from "../services";
 
 type AnswerMap = Record<string, unknown>;
 
-export const SurveyForm = ({ definition }: { definition: SurveyDefinition }) => {
+export const SurveyForm = ({
+    definition,
+    onSubmit,
+    submitLabel = "Submit"
+}: {
+    definition: SurveyDefinition;
+    onSubmit?: (answers: AnswerMap) => Promise<void> | void;
+    submitLabel?: string;
+}) => {
     const [answers, setAnswers] = useState<AnswerMap>({});
+    const [submitting, setSubmitting] = useState(false);
+
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        if (!onSubmit) {
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            await onSubmit(answers);
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
-        <Stack gap={2}>
+        <Stack component="form" gap={2} onSubmit={handleSubmit}>
             <Paper variant="outlined" sx={{ p: 3 }}>
                 <Typography variant="h5" gutterBottom>{definition.surveyTitle ?? "Untitled survey"}</Typography>
                 <Typography color="text.secondary">{definition.surveyDescription ?? "No introduction provided."}</Typography>
@@ -58,6 +83,19 @@ export const SurveyForm = ({ definition }: { definition: SurveyDefinition }) => 
                     </Stack>
                 </Paper>
             ))}
+
+            {onSubmit && (
+                <Box display="flex" justifyContent="flex-end">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        disabled={submitting}
+                        sx={{ borderRadius: 1 }}
+                    >
+                        {submitting ? "Submitting" : submitLabel}
+                    </Button>
+                </Box>
+            )}
         </Stack>
     );
 };

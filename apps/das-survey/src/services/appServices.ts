@@ -19,6 +19,11 @@ import {
   type SurveyDataProvider,
 } from "./surveyPersistence";
 import {
+  configureSurveyEmail,
+  resolveSurveyEmailProvider,
+  type SurveyEmailProvider,
+} from "./emailPersistence";
+import {
   SurveySupabaseAuthService,
   surveySupabaseConfigured,
 } from "./surveySupabase";
@@ -193,11 +198,13 @@ function createAuthService(provider: SurveyAuthProvider): AuthService {
 const authProvider = resolveAuthProvider();
 const authService = createAuthService(authProvider);
 const dataProvider: SurveyDataProvider = resolveSurveyDataProvider();
+const emailProvider: SurveyEmailProvider = resolveSurveyEmailProvider();
 
 export const surveyAppServices = {
   authProvider,
   authService,
   dataProvider,
+  emailProvider,
 };
 
 export function configureCoreServices() {
@@ -205,6 +212,7 @@ export function configureCoreServices() {
     authService,
   });
   configureSurveyPersistence(dataProvider);
+  configureSurveyEmail(emailProvider);
 
   return surveyAppServices;
 }

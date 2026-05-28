@@ -32,6 +32,7 @@ export default function CreateTemplatePage() {
             icon: <ArrowBackIcon />,
             onClick: () => navigate("/surveys/new"),
           }}
+          onNavigate={navigate}
         />
       }
     >

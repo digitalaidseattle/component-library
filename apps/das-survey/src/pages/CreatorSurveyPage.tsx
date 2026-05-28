@@ -1,5 +1,5 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   SurveyBuilder,
@@ -12,6 +12,8 @@ import {
 import AppLayout from "../layouts/AppLayout";
 import Sidebar from "../components/sidebars/Sidebar";
 
+const DRAFT_AUTOSAVE_DELAY_MS = 700;
+
 export default function CreateSurveyPage() {
   const navigate = useNavigate();
   const { draftId, templateId } = useParams<{
@@ -22,6 +24,22 @@ export default function CreateSurveyPage() {
   const [draft, setDraft] = useState<SurveyDraft | null>(null);
   const { drafts, templates, saveDraft, publishDraft } = useSurveySession();
   const initializedRouteKey = useRef<string | null>(null);
+  const autosaveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingAutosaveDraft = useRef<SurveyDraft | null>(null);
+  const saveDraftRef = useRef(saveDraft);
+
+  useEffect(() => {
+    saveDraftRef.current = saveDraft;
+  }, [saveDraft]);
+
+  const clearAutosaveTimeout = useCallback(() => {
+    if (!autosaveTimeout.current) {
+      return;
+    }
+
+    clearTimeout(autosaveTimeout.current);
+    autosaveTimeout.current = null;
+  }, []);
 
   useEffect(() => {
     const availableTemplates = mergeSurveyTemplates(templates);
@@ -62,8 +80,30 @@ export default function CreateSurveyPage() {
     if (!draft) {
       return;
     }
-    void saveDraft(draft);
-  }, [draft]);
+
+    pendingAutosaveDraft.current = draft;
+    clearAutosaveTimeout();
+    autosaveTimeout.current = setTimeout(() => {
+      const draftToSave = pendingAutosaveDraft.current;
+      pendingAutosaveDraft.current = null;
+      autosaveTimeout.current = null;
+
+      if (draftToSave) {
+        void saveDraftRef.current(draftToSave);
+      }
+    }, DRAFT_AUTOSAVE_DELAY_MS);
+  }, [clearAutosaveTimeout, draft]);
+
+  useEffect(() => {
+    return () => {
+      clearAutosaveTimeout();
+
+      if (pendingAutosaveDraft.current) {
+        void saveDraftRef.current(pendingAutosaveDraft.current);
+        pendingAutosaveDraft.current = null;
+      }
+    };
+  }, [clearAutosaveTimeout]);
 
   if (!draft) {
     return null;
@@ -82,6 +122,7 @@ export default function CreateSurveyPage() {
             icon: <ArrowBackIcon />,
             onClick: () => navigate("/"),
           }}
+          onNavigate={navigate}
         />
       }
     >
@@ -89,8 +130,10 @@ export default function CreateSurveyPage() {
         draft={draft}
         onChange={setDraft}
         onPublish={async (currentDraft) => {
+          clearAutosaveTimeout();
+          pendingAutosaveDraft.current = null;
           const published = await publishDraft(currentDraft);
-          navigate(`/surveys/${published.id}`);
+          navigate(`/surveys/${published.id}/contacts`);
         }}
       />
     </AppLayout>

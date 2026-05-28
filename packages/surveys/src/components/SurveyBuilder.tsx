@@ -24,7 +24,8 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import type { TextFieldProps } from "@mui/material";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DragAndDrop, DDCategory } from "@digitalaidseattle/draganddrop";
 import {
     SurveyDraft,
@@ -44,6 +45,8 @@ const questionCategory: DDCategory<string> = {
     value: "questions",
     label: "Question order"
 };
+
+const TEXT_COMMIT_DELAY_MS = 450;
 
 export const SurveyBuilder = ({
     draft,
@@ -150,24 +153,24 @@ export const SurveyBuilder = ({
                                 <Paper variant="outlined" sx={{ p: 3 }}>
                                     <Typography variant="h6" gutterBottom>{introTitle}</Typography>
                                     <Stack gap={2}>
-                                        <TextField
+                                        <BufferedTextField
                                             fullWidth
                                             label={introTitleFieldLabel}
                                             value={definition.surveyTitle ?? ""}
-                                            onChange={(event) => updateDefinition({
+                                            onCommit={(value) => updateDefinition({
                                                 ...definition,
-                                                surveyTitle: event.target.value
+                                                surveyTitle: value
                                             })}
                                         />
-                                        <TextField
+                                        <BufferedTextField
                                             fullWidth
                                             multiline
                                             minRows={3}
                                             label={introDescriptionFieldLabel}
                                             value={definition.surveyDescription ?? ""}
-                                            onChange={(event) => updateDefinition({
+                                            onCommit={(value) => updateDefinition({
                                                 ...definition,
-                                                surveyDescription: event.target.value
+                                                surveyDescription: value
                                             })}
                                         />
                                     </Stack>
@@ -272,6 +275,74 @@ const PaletteButton = ({ label, onClick }: { label: string; onClick: () => void 
     </Button>
 );
 
+type BufferedTextFieldProps = Omit<TextFieldProps, "value" | "onChange"> & {
+    value: string;
+    onCommit: (value: string) => void;
+};
+
+const BufferedTextField = ({
+    value,
+    onCommit,
+    onBlur,
+    ...props
+}: BufferedTextFieldProps) => {
+    const [draftValue, setDraftValue] = useState(value);
+    const draftValueRef = useRef(value);
+    const committedValueRef = useRef(value);
+    const onCommitRef = useRef(onCommit);
+
+    useEffect(() => {
+        onCommitRef.current = onCommit;
+    }, [onCommit]);
+
+    useEffect(() => {
+        if (value === committedValueRef.current) {
+            return;
+        }
+
+        committedValueRef.current = value;
+        draftValueRef.current = value;
+        setDraftValue(value);
+    }, [value]);
+
+    const commit = useCallback((valueToCommit: string): void => {
+        if (valueToCommit === committedValueRef.current) {
+            return;
+        }
+
+        committedValueRef.current = valueToCommit;
+        onCommitRef.current(valueToCommit);
+    }, []);
+
+    useEffect(() => {
+        draftValueRef.current = draftValue;
+
+        const timeout = setTimeout(() => {
+            commit(draftValue);
+        }, TEXT_COMMIT_DELAY_MS);
+
+        return () => clearTimeout(timeout);
+    }, [commit, draftValue]);
+
+    useEffect(() => {
+        return () => {
+            commit(draftValueRef.current);
+        };
+    }, [commit]);
+
+    return (
+        <TextField
+            {...props}
+            value={draftValue}
+            onChange={(event) => setDraftValue(event.target.value)}
+            onBlur={(event) => {
+                commit(event.target.value);
+                onBlur?.(event);
+            }}
+        />
+    );
+};
+
 const QuestionEditorCard = ({
     question,
     onChange,
@@ -298,24 +369,24 @@ const QuestionEditorCard = ({
         </AccordionSummary>
         <AccordionDetails>
             <Stack gap={2}>
-                <TextField
+                <BufferedTextField
                     fullWidth
                     label="Question title"
                     value={question.title}
-                    onChange={(event) => onChange((current) => ({
+                    onCommit={(value) => onChange((current) => ({
                         ...current,
-                        title: event.target.value
+                        title: value
                     }))}
                 />
-                <TextField
+                <BufferedTextField
                     fullWidth
                     multiline
                     minRows={2}
                     label="Help text"
                     value={question.description ?? ""}
-                    onChange={(event) => onChange((current) => ({
+                    onCommit={(value) => onChange((current) => ({
                         ...current,
-                        description: event.target.value
+                        description: value
                     }))}
                 />
                 <FormControlLabel
@@ -339,13 +410,13 @@ const QuestionSettingsEditor = ({
         case "text":
             return (
                 <Stack gap={2}>
-                    <TextField
+                    <BufferedTextField
                         fullWidth
                         label="Placeholder"
                         value={question.settings.placeholder ?? ""}
-                        onChange={(event) => onChange((current) => current.kind === "text" ? {
+                        onCommit={(value) => onChange((current) => current.kind === "text" ? {
                             ...current,
-                            settings: { ...current.settings, placeholder: event.target.value }
+                            settings: { ...current.settings, placeholder: value }
                         } : current)}
                     />
                     <FormControlLabel
@@ -389,22 +460,22 @@ const QuestionSettingsEditor = ({
                         <MenuItem value="agreement">Agreement</MenuItem>
                         <MenuItem value="satisfaction">Satisfaction</MenuItem>
                     </Select>
-                    <TextField
+                    <BufferedTextField
                         fullWidth
                         label="Low label"
                         value={question.settings.lowLabel}
-                        onChange={(event) => onChange((current) => current.kind === "likert" ? {
+                        onCommit={(value) => onChange((current) => current.kind === "likert" ? {
                             ...current,
-                            settings: { ...current.settings, lowLabel: event.target.value }
+                            settings: { ...current.settings, lowLabel: value }
                         } : current)}
                     />
-                    <TextField
+                    <BufferedTextField
                         fullWidth
                         label="High label"
                         value={question.settings.highLabel}
-                        onChange={(event) => onChange((current) => current.kind === "likert" ? {
+                        onCommit={(value) => onChange((current) => current.kind === "likert" ? {
                             ...current,
-                            settings: { ...current.settings, highLabel: event.target.value }
+                            settings: { ...current.settings, highLabel: value }
                         } : current)}
                     />
                 </Stack>
@@ -495,12 +566,12 @@ const OptionsEditor = ({
     <Stack gap={1.5}>
         {options.map((option) => (
             <Stack key={option.id} direction="row" gap={1}>
-                <TextField
+                <BufferedTextField
                     fullWidth
                     size="small"
                     value={option.label}
-                    onChange={(event) => onChangeOptions(options.map((current) =>
-                        current.id === option.id ? { ...current, label: event.target.value } : current
+                    onCommit={(value) => onChangeOptions(options.map((current) =>
+                        current.id === option.id ? { ...current, label: value } : current
                     ))}
                 />
                 <IconButton onClick={() => onChangeOptions(options.filter((current) => current.id !== option.id))}>
