@@ -5,7 +5,8 @@
  *
  */
 import { describe, expect, it } from 'vitest';
-import { TeamMember, teamMemberService } from './teamMemberService';
+import {  teamMemberService } from './teamMemberService';
+import { Volunteer } from './VolunteerDao';
 
 describe('mappingService tests', () => {
 
@@ -15,10 +16,10 @@ describe('mappingService tests', () => {
             { name: "Bellevue, WA", "latitude": 47.6101, "longitude": -122.2015 },
             { name: "Bellingham, WA, USA", "latitude": 48.7519, "longitude": -122.4787 },
         ];
-        const peeps: TeamMember[] = [
-            { location: "Bellevue, WA", name: 'alice' } as TeamMember,
-            { location: "Bellevue, WA United States", name: 'bob' } as TeamMember,
-            { location: "Bellingham, WA, USA", name: 'carol' } as TeamMember,
+        const peeps: Volunteer[] = [
+            { location: "Bellevue, WA", name: 'alice' } as Volunteer,
+            { location: "Bellevue, WA United States", name: 'bob' } as Volunteer,
+            { location: "Bellingham, WA, USA", name: 'carol' } as Volunteer˝,
         ];
 
         const actual = teamMemberService.getPeopleAt(peeps, places, { name: '1', latitude: 47.6101, longitude: -122.2015 });

@@ -12,13 +12,14 @@
   },
   "dependencies": {
     "@digitalaidseattle/airtable": "1.0.9",
+    "@digitalaidseattle/cartography": "1.0.0",
     "@digitalaidseattle/core": "1.0.22",
     "@digitalaidseattle/draganddrop": "2.0.2",
+    "@digitalaidseattle/firebase": "1.0.15",
     "@digitalaidseattle/mui": "1.0.42",
     "@digitalaidseattle/supabase": "1.0.22",
-    "@vis.gl/react-maplibre": "^8.1.0",
     "file-saver": "^2.0.5",
-    "maplibre-gl": "^5.11.0",
+    "firebase": "^11.2.0",
     "react-dom": "^18.3.1",
     "uuidv4": "^6.2.13",
     "xlsx": "^0.18.5"

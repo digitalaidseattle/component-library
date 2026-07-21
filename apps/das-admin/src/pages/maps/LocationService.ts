@@ -7,8 +7,10 @@
  *
  */
 
-import { Location } from './components/types';
-import { LocationDao } from './LocationDao';
+import { Location } from '@digitalaidseattle/cartography';
+
+import { LocationFinder } from './LocationFinder';
+import { FileLocationDao, LocationDao } from './LocationDao';
 
 class LocationService {
 
@@ -21,7 +23,13 @@ class LocationService {
         return LocationService.instance;
     }
 
-    locationDao = LocationDao.getInstance();
+    locationDao: LocationDao;
+    locationFinder: LocationFinder;
+
+    constructor() {
+        this.locationDao = FileLocationDao.getInstance();
+        this.locationFinder = LocationFinder.getInstance();
+    }
 
     // Many names for the same lat-long (e.g.  "Seattle", "Seattle, WA", "Seattle, WA, USA")
     unique(locations: Location[]): Location[] {
@@ -40,13 +48,22 @@ class LocationService {
     }
 
     async findByName(name: string): Promise<Location | null> {
-        const found = this.locationDao.findByName(name);
+        const found = await this.locationDao.findByName(name);
         if (found) {
             return found;
-        }   
-
-        // const newLocation = await locationFinder.find(name);
+        }
         return null;
+        // try {
+        //     const newLocation = await this.locationFinder.find(name);
+        //     if (newLocation) {
+        //         await this.locationDao.insert(newLocation);
+        //         return newLocation;
+        //     }
+        //     return newLocation;
+        // } catch (err) {
+        //     console.error(`Error finding location for ${name}:`, err);
+        //     return null;
+        // }
     }
 
 }

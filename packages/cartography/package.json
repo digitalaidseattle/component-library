@@ -1,0 +1,33 @@
+{
+  "name": "@digitalaidseattle/cartography",
+  "version": "1.0.0",
+  "description": "Opinionated geo-map",
+  "repository": "null//github.com/null/github.com/tree/master/packages/content-generation",
+  "main": "dist/digitalaidseattle-cartography.cjs.js",
+  "module": "dist/digitalaidseattle-cartography.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "^1.0.22",
+    "@digitalaidseattle/mui": "^1.0.42",
+    "@vis.gl/react-maplibre": "^8.1.1",
+    "maplibre-gl": "^5.24.0",
+    "uuid": "^13.0.0"
+  },
+  "peerDependencies": {
+    "@mui/material": "^7.3.5",
+    "react": "^18.3.1",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "@mui/material": "^7.3.5",
+    "react": "^18.3.1",
+    "react-router-dom": "^7.13.0"
+  },
+  "scripts": {
+    "postbuild": "cp src/*.css dist/"
+  },
+  "files": [
+    "dist"
+  ]
+}

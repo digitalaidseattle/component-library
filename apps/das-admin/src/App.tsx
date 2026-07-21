@@ -22,6 +22,8 @@ import {
 } from "@digitalaidseattle/supabase";
 
 import "./App.css";
+
+import { Configuration as CodaConfiguration } from "./coda/Configuration";
 import { Config } from './Config';
 import { routes } from './routes';
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
@@ -29,16 +31,21 @@ import { routes } from './routes';
 const App: React.FC = () => {
   const [initialized, setInitialized] = React.useState<boolean>(false);
 
-
   useEffect(() => {
     configure();
   }, []);
 
   function configure() {
+    CodaConfiguration.props({
+      apiToken: import.meta.env.VITE_CODA_API_TOKEN,
+      apiBase: import.meta.env.VITE_CODA_API_BASE
+    });
+
     SupabaseConfiguration.props({
       supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
       anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY
     });
+
 
     setCoreServices({
       authService: SupabaseAuthService.getInstance(),
