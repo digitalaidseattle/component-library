@@ -8,6 +8,29 @@ import { User } from "./AuthService";
 
 export type Identifier = string | number;
 
+export type PageInfo<T> = {
+    totalRowCount: number
+    rows: T[]
+}
+
+export type FilterItem = {
+    field: string
+    operator: string,
+    value: any
+}
+
+export type FilterModel = {
+    items: FilterItem[]
+}
+
+export type QueryModel = {
+    page: number
+    pageSize: number,
+    sortField: string,
+    sortDirection: string,
+    filterModel?: FilterModel
+}
+
 export interface Entity {
     id: Identifier | undefined | null;
     created_by?: string;
@@ -37,6 +60,8 @@ export interface DataAccessObject<T extends Entity> {
     delete(id: Identifier): Promise<void>;
 
     upsert(entity: T, opts?: DataAccessOptions<T>): Promise<T>;
+
+    find(queryModel: QueryModel, opts?: DataAccessOptions<T>): Promise<PageInfo<T>>;
 
     mapJson(json: any): T;
 

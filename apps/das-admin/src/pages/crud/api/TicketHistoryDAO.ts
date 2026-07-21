@@ -5,7 +5,7 @@
  *
  */
 
-import { getSupabaseClient, SupabaseDAO } from "@digitalaidseattle/supabase";
+import { SupabaseConfiguration, SupabaseDAO } from "@digitalaidseattle/supabase";
 import { TicketHistory } from "./types";
 
 const TABLE_NAME = 'ticket_history';
@@ -21,7 +21,7 @@ class TicketHistoryDAO extends SupabaseDAO<TicketHistory> {
     }
 
     constructor() {
-        super(getSupabaseClient(), TABLE_NAME)
+        super(SupabaseConfiguration.getInstance().getSupabaseClient(), TABLE_NAME)
     }
 
 

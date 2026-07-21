@@ -1,13 +1,19 @@
 /**
  * SupabaseDAO.ts
  *
- * @copyright 2025 Digital Aid Seattle
+ * @copyright 2026 Digital Aid Seattle
  *
  */
-
-import { DataAccessObject, DataAccessOptions, Entity, Identifier } from "@digitalaidseattle/core";
-import { PageInfo, QueryModel } from "@digitalaidseattle/supabase";
 import { SupabaseClient } from "@supabase/supabase-js";
+
+import {
+    DataAccessObject,
+    DataAccessOptions,
+    Entity,
+    Identifier,
+    PageInfo,
+    QueryModel
+} from "@digitalaidseattle/core";
 
 abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
 

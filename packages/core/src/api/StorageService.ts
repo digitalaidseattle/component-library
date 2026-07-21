@@ -7,8 +7,15 @@
  */
 
 export type StorageFile = File & {
+    id: string,
+    name: string,
     fullPath: string;
     updated?: string;
+    created_at: string,
+    metadata: {
+        size: number,
+        mimetype: string
+    },
 }
 
 export interface StorageService {
@@ -20,6 +27,8 @@ export interface StorageService {
     getUrlAsync(filepath: string): Promise<string>;
 
     upload(path: string, blob: any): Promise<any>
+
+    uploadFile(file: StorageFile): Promise<any>;
 
     downloadFile(filePath: string): Promise<string>;
 
@@ -49,6 +58,10 @@ export class LocalStorageService implements StorageService {
     }
 
     upload(path: string, blob: any): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
+
+    uploadFile(file: StorageFile): Promise<any> {
         throw new Error("Method not implemented.");
     }
 

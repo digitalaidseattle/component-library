@@ -17,7 +17,7 @@ import {
   Typography
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle/core';
 

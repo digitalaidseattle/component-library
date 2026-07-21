@@ -5,8 +5,8 @@
  *
  */
 import { describe, expect, it, vi } from 'vitest';
-import { staffService } from './staffService';
-import { supabaseClient } from '@digitalaidseattle/supabase';
+import { StaffService } from './staffService';
+import { SupabaseConfiguration } from '@digitalaidseattle/supabase';
 
 const mockFilterBuilder = {
     limit: vi.fn(() => Promise.resolve({})),
@@ -22,24 +22,22 @@ const mockQueryBuilder = {
 };
 
 describe('staffService tests', () => {
+    const staffService = StaffService.getInstance();
+    const supabaseClient = SupabaseConfiguration.getInstance().getSupabaseClient();
 
     it('getAll', async () => {
-        const LIMIT = 10;
         const response = { data: [{}], error: null }
 
         const fromSpy = vi.spyOn(supabaseClient, "from")
             .mockReturnValue(mockQueryBuilder as any)
         const selectSpy = vi.spyOn(mockQueryBuilder, "select")
             .mockReturnValue(mockFilterBuilder as any)
-        const limitSpy = vi.spyOn(mockFilterBuilder, "limit")
-            .mockReturnValue(mockFilterBuilder as any)
         const orderSpy = vi.spyOn(mockFilterBuilder, "order")
             .mockReturnValue(Promise.resolve(response))
 
-        const tixs = await staffService.getAll(LIMIT)
+        const tixs = await staffService.getAll()
         expect(fromSpy).toHaveBeenCalledWith('staff')
         expect(selectSpy).toHaveBeenCalled()
-        expect(limitSpy).toHaveBeenCalledWith(LIMIT)
         expect(orderSpy).toHaveBeenCalledWith('created_at', { ascending: false })
         expect(tixs.length).toEqual(1);
     });

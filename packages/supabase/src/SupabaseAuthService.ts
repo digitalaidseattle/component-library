@@ -1,12 +1,12 @@
 /**
- *  authService.ts
+ *  SupabaseAuthService.ts
  *
- *  @copyright 2024 Digital Aid Seattle
+ *  @copyright 2026 Digital Aid Seattle
  *
  */
 import { AuthService, OAuthResponse, User } from "@digitalaidseattle/core";
 import { AuthError, SupabaseClient, UserResponse } from '@supabase/supabase-js';
-import { supabaseClient as DEFAULT_SUPABASE } from './supabaseClient'
+import { SupabaseConfiguration } from "./SupbaseConfiguration";
 
 export class SupabaseAuthService implements AuthService {
 
@@ -14,14 +14,23 @@ export class SupabaseAuthService implements AuthService {
 
   static getInstance(): SupabaseAuthService {
     if (!SupabaseAuthService.instance) {
-      SupabaseAuthService.instance = new SupabaseAuthService();
+      SupabaseAuthService.instance = new SupabaseAuthService(SupabaseConfiguration.getInstance().supabaseClient);
     }
     return SupabaseAuthService.instance
   }
 
   client: SupabaseClient;
-  constructor(aSupabaseClient?: SupabaseClient) {
-    this.client = aSupabaseClient ?? DEFAULT_SUPABASE;
+
+  constructor(aSupabaseClient: SupabaseClient) {
+    this.client = aSupabaseClient;
+  }
+
+  isAuthorized(user: User, authorizedRoles: string[]): boolean {
+    const metadata: any = user.user_metadata;
+    if (metadata.roles) {
+      return (metadata.roles as string[]).some(role => authorizedRoles.includes(role));
+    }
+    return false;
   }
 
   getProviders(): string[] {

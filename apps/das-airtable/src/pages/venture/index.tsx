@@ -8,7 +8,7 @@ import {
 
 // project import
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Venture, ventureService } from '../services/ventureService';
 import { InfoPanel } from './infoPanel';
 

@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/airtable",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Wrapper for airtable that works with DAS Component library",
   "repository": "null//github.com/null/github.com/tree/master/packages/airtable",
   "main": "dist/digitalaidseattle-airtable.cjs.js",
@@ -8,14 +8,17 @@
   "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@digitalaidseattle/core": "1.0.18",
-    "airtable": "^0.12.2",
-    "react": "^19.2.7"
+    "@digitalaidseattle/core": "1.0.22",
+    "airtable": "^0.12.2"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
+    "react": "^19.2.7"
     "vite": "^5.4.10",
     "vitest": "^1.2.2"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
   },
   "scripts": {
     "build": "tsc --project tsconfig.json"

@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { useAuthService, useLoggingService } from '@digitalaidseattle/core';
 import { OAuthResponse } from "@digitalaidseattle/core/src/api/AuthService";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useLayoutConfiguration } from "../layout";
 
 // assets
