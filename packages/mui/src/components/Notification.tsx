@@ -33,20 +33,18 @@ const Notification: React.FC<{ delay?: number }> = (props) => {
                 <Typography fontWeight={500} fontSize={14}>{displayOptions.message}</Typography>
                 {displayOptions.details &&
                     <Accordion
-                        disableGutters
                         slotProps={{ heading: { component: 'h6' } }}
                         sx={{
                             bgcolor: "inherit",
                             color: "inherit",
                             boxShadow: "none",
-                            borderColor: "currentColor",
+                            borderColor: "currentColor"
                         }}
                     >
                         <AccordionSummary
                             aria-controls='details-content'
                             id='details-content'
-                            sx={{ flexDirection: 'row-reverse' }}
-                            expandIcon={<IconButton size="small" ><DownCircleOutlined /></IconButton>}
+                            expandIcon={<DownCircleOutlined />}
                         >
                             <Typography component="span">{LABEL_DETAILS_TITLE}</Typography>
                         </AccordionSummary>
