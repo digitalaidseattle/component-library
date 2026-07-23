@@ -5,15 +5,25 @@
  *
  */
 
-import { AuthError, AuthService, OAuthResponse } from '@digitalaidseattle/core';
 import { FirebaseApp } from 'firebase/app';
 import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import { Configuration } from './Configuration';
+import { AuthError, AuthService, OAuthResponse, User } from '@digitalaidseattle/core';
 
 export class FirebaseAuthService implements AuthService {
 
+    private static instance: FirebaseAuthService;
+
+    static getInstance(): FirebaseAuthService {
+        if (!FirebaseAuthService.instance) {
+            FirebaseAuthService.instance = new FirebaseAuthService(Configuration.getInstance().getClient());
+        }
+        return FirebaseAuthService.instance
+    }
+
     auth: Auth;
 
-    constructor(firebaseClient: FirebaseApp) {
+    private constructor(firebaseClient: FirebaseApp) {
         this.auth = getAuth(firebaseClient);
     }
 
@@ -75,4 +85,9 @@ export class FirebaseAuthService implements AuthService {
             throw error;
         }
     }
+
+    isAuthorized(_user: User, _authorizedRoles: string[]): unknown {
+        throw new Error('Method not implemented.');
+    }
+
 }
