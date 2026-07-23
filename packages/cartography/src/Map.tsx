@@ -71,7 +71,7 @@ export function Map<T>({
     const configuration = Configuration.getInstance();
 
     const [viewState, setViewState] = React.useState(DEFAULT_VIEW);
-    const markerRef = useRef<any>();
+    const markerRef = useRef<any>({current: undefined});
     const theme = useTheme();
     const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
 
