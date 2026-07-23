@@ -6,7 +6,7 @@
  *
  */
 
-import { StorageService } from "@digitalaidseattle/core";
+import { StorageFile, StorageService } from "@digitalaidseattle/core";
 import { FirebaseApp } from "firebase/app";
 import { deleteObject, FirebaseStorage, getBytes, getDownloadURL, getMetadata, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
@@ -19,6 +19,7 @@ export class FirebaseStorageService implements StorageService {
         this.storage = getStorage(firebaseClient);
         this.decoder = new TextDecoder("utf-8");
     }
+
 
     downloadFile = async (filepath: string): Promise<string> => {
         const fileRef = ref(this.storage, filepath);
@@ -79,6 +80,10 @@ export class FirebaseStorageService implements StorageService {
             };
         }));
         return files;
+    }
+
+    uploadFile(file: StorageFile): Promise<any> {
+        throw new Error("Method not implemented.");
     }
 
     async upload(path: string, file: any): Promise<any> {
