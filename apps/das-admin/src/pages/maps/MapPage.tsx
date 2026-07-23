@@ -27,7 +27,6 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 import { Location, mappingService } from './mappingService';
 import { TeamMember, teamMemberService } from './teamMemberService';
-import { useNotifications } from '@digitalaidseattle/core';
 
 const Labels = {
   title: 'Map Example',
@@ -74,9 +73,6 @@ const MapPage = () => {
   const [pins, setPins] = useState<ReactNode[]>([]);
   const mapStyle = import.meta.env.VITE_MAP_STYLE + '?key=' + import.meta.env.VITE_MAPTILER_API_KEY;
 
-
-  const notifications = useNotifications();
-
   useEffect(() => {
     Promise
       .all([
@@ -121,7 +117,6 @@ const MapPage = () => {
 
   // show that person and center on them
   const handlePeopleSelection = (person: TeamMember) => {
-    notifications.error('Hello', 'From jeff, this is a very wide message')
     const loc = locations.find(l => l.name === person.location.trim());
     if (loc) {
       setViewState({
