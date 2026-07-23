@@ -16,6 +16,8 @@ import ExcelPage from "./pages/excel/ExcelPage";
 import MapPage from "./pages/maps/MapPage";
 import StorageExamplePage from "./pages/storage/StorageExamplePage";
 
+import { Admin as PMAdmin } from "@digitalaidseattle/program-management";
+
 const routes = [
   {
     path: "/",
@@ -61,6 +63,10 @@ const routes = [
         path: "crud-example/ticket/:id",
         element: <TicketPage />,
       },
+      {
+        path: "program-management-page",
+        element: <PMAdmin />,
+      }
     ]
   },
   {
