@@ -7,7 +7,7 @@
  *
  */
 
-import { CodaDao } from "../../coda/CodaDao"
+import { SuperhumanDao } from "@digitalaidseattle/superhuman";
 
 export type Volunteer = {
     id: string,
@@ -18,7 +18,7 @@ export type Volunteer = {
     status: string
 }
 
-export class VolunteerDao extends CodaDao<Volunteer> {
+export class VolunteerDao extends SuperhumanDao<Volunteer> {
 
     private static instance: VolunteerDao;
 
@@ -32,11 +32,11 @@ export class VolunteerDao extends CodaDao<Volunteer> {
                         const values = json.values;
                         return {
                             id: json.id,
-                            name: CodaDao.removeBackTicks(values["Name"]),
+                            name: SuperhumanDao.removeBackTicks(values["Name"]),
                             role: values["Role"] ? values["Role"].name : "",
                             url: values["Pic"] ? values["Pic"][0].url : "",
-                            location: CodaDao.removeBackTicks(values["Location"]),
-                            status: CodaDao.removeBackTicks(values["Status"])
+                            location: SuperhumanDao.removeBackTicks(values["Location"]),
+                            status: SuperhumanDao.removeBackTicks(values["Status"])
                         } as Volunteer
                     }
                 }

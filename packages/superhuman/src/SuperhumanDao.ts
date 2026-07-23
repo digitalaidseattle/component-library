@@ -1,20 +1,20 @@
 /**
- *  codaService.ts
+ *  SuperhumanDao.ts
  *
- *  @copyright 2024 Digital Aid Seattle
+ *  @copyright 2026 Digital Aid Seattle
  *
  */
 
 import { DataAccessObject, DataAccessOptions, Entity, Identifier, PageInfo, QueryModel, User } from "@digitalaidseattle/core";
 import { Configuration } from "./Configuration";
 
-type CodaRow = {
+type SuperhumanRow = {
     id: string;
     name: string;
     values: Record<string, any>;
 }
 
-abstract class CodaDao<T extends Entity> implements DataAccessObject<T> {
+export abstract class SuperhumanDao<T extends Entity> implements DataAccessObject<T> {
 
     static removeBackTicks(value: string | string[]): string | string[] {
         if (Array.isArray(value)) {
@@ -44,8 +44,6 @@ abstract class CodaDao<T extends Entity> implements DataAccessObject<T> {
         this.opts = opts;
         this.apiToken = Configuration.getInstance().apiToken;
     }
-
-
 
     upsert(_entity: T, _opts?: DataAccessOptions<T> | undefined): Promise<T> {
         throw new Error("Method not implemented.");
@@ -186,6 +184,5 @@ abstract class CodaDao<T extends Entity> implements DataAccessObject<T> {
 
 }
 
-export { CodaDao };
-export type { CodaRow }
+export type { SuperhumanRow }
 

@@ -23,7 +23,7 @@ import {
 
 import "./App.css";
 
-import { Configuration as CodaConfiguration } from "./coda/Configuration";
+import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
 import { Config } from './Config';
 import { routes } from './routes';
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
@@ -36,7 +36,7 @@ const App: React.FC = () => {
   }, []);
 
   function configure() {
-    CodaConfiguration.props({
+    SuperhumanConfiguration.props({
       apiToken: import.meta.env.VITE_CODA_API_TOKEN,
       apiBase: import.meta.env.VITE_CODA_API_BASE
     });
