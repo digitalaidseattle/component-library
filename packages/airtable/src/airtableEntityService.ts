@@ -5,7 +5,7 @@ import Airtable, { FieldSet, Record } from 'airtable';
 
 const MAX_RECORDS = 100;
 
-abstract class AirtableEntityService<T extends Entity> implements EntityService<T> {
+export abstract class AirtableEntityService<T extends Entity> implements EntityService<T> {
 
     tableId: string;
     base: Airtable.Base;
@@ -13,6 +13,14 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
     constructor(airtableClient: Airtable, tableId: string) {
         this.tableId = tableId;
         this.base = airtableClient.base(import.meta.env.VITE_AIRTABLE_BASE_ID_DAS);
+    }
+
+    upsert(entity: T, select?: string, mapper?: ((json: any) => T) | undefined, user?: User): Promise<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    mapJson(json: any): T {
+        throw new Error("Method not implemented.");
     }
 
     abstract transform(record: Record<FieldSet>): T;
@@ -84,4 +92,3 @@ abstract class AirtableEntityService<T extends Entity> implements EntityService<
 }
 
 
-export { AirtableEntityService };

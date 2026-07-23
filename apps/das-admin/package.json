@@ -11,18 +11,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@digitalaidseattle/airtable": "1.0.10",
+    "@digitalaidseattle/cartography": "1.0.0",
     "@digitalaidseattle/core": "1.0.23",
     "@digitalaidseattle/draganddrop": "2.0.3",
+    "@digitalaidseattle/firebase": "1.0.17",
     "@digitalaidseattle/mui": "1.0.45",
     "@digitalaidseattle/supabase": "1.0.24",
-    "@vis.gl/react-maplibre": "^8.1.0",
     "file-saver": "^2.0.5",
-    "maplibre-gl": "^5.11.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-router-dom": "^7.13.0",
     "uuidv4": "^6.2.13",
     "xlsx": "^0.18.5"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -34,6 +37,9 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.13.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.18.2",
     "vite": "^5.4.10"

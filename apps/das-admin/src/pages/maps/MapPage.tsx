@@ -4,29 +4,26 @@
  */
 
 // react
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 // material-ui
 import {
+  Avatar,
   Box,
-  Button,
   Card,
   CardHeader,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Paper,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 
-import { FullscreenControl, GeolocateControl, Map, Marker, NavigationControl, Popup, ScaleControl } from '@vis.gl/react-maplibre';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import { Map, Configuration as MapConfiguration } from '@digitalaidseattle/cartography';
+import { Configuration as FirebaseConfiguration } from '@digitalaidseattle/firebase';
 
-import { Location, mappingService } from './mappingService';
-import { TeamMember, teamMemberService } from './teamMemberService';
+import { Location, LocationService } from './LocationService';
+import { TeamMemberService } from './teamMemberService';
+import { Volunteer } from './VolunteerDao';
 
 const Labels = {
   title: 'Map Example',
@@ -34,199 +31,181 @@ const Labels = {
   resetButton: 'Reset',
 }
 
-type PopupInfo = {
-  location: Location;
-  members: TeamMember[];
-}
+const MAP_HEIGHT = 'calc(100dvh - 140px)';
 
-const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`;
-
-const pinStyle = {
-  cursor: 'pointer',
-  fill: '#0aa',
-  stroke: 'none'
-};
-
-const DEFAULT_VIEW = {
-  longitude: -122.4,
-  latitude: 47.6061,
-  zoom: 7
-}
-
-const MAP_HEIGHT = '80vh';
-
-function Pin({ size = 20 }) {
+function VolunteerCard({ volunteer, onClick }: { volunteer: Volunteer, onClick: () => void }) {
   return (
-    <svg height={size} viewBox="0 0 24 24" style={pinStyle}>
-      <path d={ICON} />
-    </svg>
-  );
+    <Card onClick={onClick} >
+      <CardHeader
+        title={volunteer.name}
+        subheader={volunteer.role}
+        avatar={<Avatar alt={volunteer.name} src={volunteer.url} />} >
+      </CardHeader>
+    </Card>
+  )
+}
+
+function MobileVolunteerCard({ volunteer, onClick }: { volunteer: Volunteer, onClick: () => void }) {
+  return (
+    <Card onClick={onClick} sx={{
+      height: 180, width: 240,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center', backgroundImage: `url(${volunteer.url})`
+    }}>
+      <Box flexDirection="column"
+        justifyContent="flex-end"
+        alignItems="flex-start" display="flex"
+        height="100%" width="100%" sx={{
+          backgroundColor: 'rgba(0,0,0,0.4)',
+          // background:
+          //   "linear-gradient(to top, rgba(255,255,255,255), rgba(0,0,0,0.4))",
+
+        }}>
+        <Typography fontWeight={600} marginLeft="5px" color="white" >
+          {volunteer.name}
+        </Typography>
+        <Typography fontWeight={400} marginLeft="5px" color="white">
+          {volunteer.role}
+        </Typography>
+      </Box>
+    </Card>
+  )
 }
 
 const MapPage = () => {
-  const [viewState, setViewState] = useState(DEFAULT_VIEW);
-  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [people, setPeople] = useState<TeamMember[]>([]);
+  const teamMemberService = TeamMemberService.getInstance();
+  const locationService = LocationService.getInstance()
+
+  const [initialized, setInitialized] = useState(false);
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
-  const [pins, setPins] = useState<ReactNode[]>([]);
-  const mapStyle = import.meta.env.VITE_MAP_STYLE + '?key=' + import.meta.env.VITE_MAPTILER_API_KEY;
+  const [uniqueLocations, setUniqueLocations] = useState<Location[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const theme = useTheme();
+  const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
 
-  useEffect(() => {
-    Promise
-      .all([
-        teamMemberService.getAll(),
-        mappingService.getLocations()
-      ])
-      .then(resps => {
-        setPeople(resps[0].sort((p1, p2) => p1.name.localeCompare(p2.name)))
-        setLocations(resps[1]);
+  const fetchMembers = useCallback(() => {
+    if (!initialized) {
+      MapConfiguration.props({
+        apiKey: import.meta.env.VITE_MAPTILER_API_KEY,
+        mapStyle: import.meta.env.VITE_MAP_STYLE
       });
-  }, []);
+
+      FirebaseConfiguration.props({
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.FVITE_IREBASE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID,
+        measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+      });
+
+      teamMemberService.getAll()
+        .then(resp => {
+          setVolunteers(
+            resp
+              .filter(v => v.status === 'Active')
+              .sort((p1, p2) => p1.name.localeCompare(p2.name)));
+          setInitialized(true);
+        });
+    }
+  }, [initialized])
 
   useEffect(() => {
-    setPins(mappingService
-      .unique(locations)
-      .map((loc, index) => (
-        <Marker
-          key={`marker-${index}`}
-          longitude={loc.longitude}
-          latitude={loc.latitude}
-          anchor="bottom"
-          onClick={e => {
-            // If we let the click event propagates to the map, it will immediately close the popup
-            // with `closeOnClick: true`
-            e.originalEvent.stopPropagation();
-            handleMarkerSelection(loc);
-          }}
-        >
-          <Pin />
-        </Marker>
-      )))
-  }, [locations])
+    fetchMembers();
+  }, [initialized]);
 
-  const handleMarkerSelection = (loc: Location) => {
+  useEffect(() => {
+    fetchLocations();
+  }, [volunteers]);
 
-    const peeps = teamMemberService.getPeopleAt(people, locations, loc)
-    setPopupInfo({
-      location: loc,
-      members: peeps
-    });
+  async function fetchLocations() {
+    const locs: Location[] = [];
+    for (const v of volunteers) {
+      const loc = await teamMemberService.getLocation(v);
+      if (loc) {
+        locs.push(loc);
+      }
+    }
+    setLocations(locs);
+    setUniqueLocations(locationService.unique(locations));
   }
 
-  // show that person and center on them
-  const handlePeopleSelection = (person: TeamMember) => {
-    const loc = locations.find(l => l.name === person.location.trim());
-    if (loc) {
-      setViewState({
-        longitude: loc.longitude,
-        latitude: loc.latitude,
-        zoom: viewState.zoom
-      });
-      setPopupInfo({
-        location: loc,
-        members: [person],
-      });
+  async function handleVolunteerSelection(volunteer: Volunteer | null) {
+    if (volunteer) {
+      const loc = await locationService.findByName(volunteer.location.trim());
+      if (loc) {
+        setSelectedLocation(loc);
+      } else {
+        console.info('location not found', volunteer)
+        setSelectedLocation(null);
+      }
     } else {
-      console.error('location not found', person)
+      setSelectedLocation(null);
     }
   }
 
-  // const handleLocationSelection = (location: Location) => {
-  //   alert(JSON.stringify(location))
-  // }
-
-  const reset = () => {
-    setViewState(DEFAULT_VIEW);
+  function singleVolunteerPopup(volunteer: Volunteer) {
+    return (
+      <Stack>
+        {volunteer.url && volunteer.url !== '' && <img src={volunteer.url} />}
+        <Typography fontWeight={600}>{volunteer.name}</Typography>
+        <Typography fontWeight={400}>{volunteer.role}</Typography>
+        <Typography fontWeight={400}>{volunteer.location}</Typography>
+      </Stack>
+    )
   }
 
-  const save = () => {
-    alert('Save')
+  function multiVolunteersPopup(volunteers: Volunteer[], location: Location) {
+    return (
+      <Stack>
+        <Typography fontWeight={600}>
+          <a target="_new"
+            href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${location.name}`}
+          >{location.name}</a>
+        </Typography>
+        <Typography>Home of volunteers: {volunteers.map(v => v.name).join(', ')}</Typography>
+      </Stack>
+    )
+  }
+
+  async function renderPopup(loc: Location): Promise<ReactNode | null> {
+    if (loc) {
+      const peeps = await teamMemberService.getPeopleAt(volunteers, loc);
+      return peeps.length === 1 ? singleVolunteerPopup(peeps[0]) : multiVolunteersPopup(peeps, loc);
+    }
+    return null;
+  }
+
+  function renderCard(volunteer: Volunteer): ReactNode {
+    return isMobileView
+      ? <MobileVolunteerCard
+        key={volunteer.id}
+        volunteer={volunteer}
+        onClick={() => handleVolunteerSelection(volunteer)} />
+      : <VolunteerCard
+        key={volunteer.id}
+        volunteer={volunteer}
+        onClick={() => handleVolunteerSelection(volunteer)} />
   }
 
   return (
     <Card>
       <CardHeader
         title={Labels.title}
-        action={
-          <Stack direction="row" spacing={'1rem'}>
-            <Button
-              title={Labels.resetButton}
-              variant="outlined"
-              color="secondary"
-              onClick={reset}>
-              {Labels.resetButton}
-            </Button>
-            <Button
-              title={Labels.saveButton}
-              variant="outlined"
-              color="primary"
-              disabled={true}
-              onClick={save}>
-              {Labels.saveButton}
-            </Button>
-          </Stack>
-        }
       />
-      <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-        <Grid size={3}>
-          <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
-            <List >
-              {people.map((p, idx) =>
-                <ListItem key={('p' + idx)}>
-                  <ListItemButton
-                    onClick={() => handlePeopleSelection(p)}>
-                    <ListItemText
-                      primary={p.name} secondary={p.location} />
-                  </ListItemButton>
-                </ListItem>
-              )}
-            </List>
-          </Paper>
-        </Grid>
-        <Grid size={9}>
-          <Box height={MAP_HEIGHT}>
-            <Map
-              {...viewState}
-              onMove={evt => setViewState(evt.viewState)}
-              mapStyle={mapStyle}
-            >
-              <GeolocateControl position="top-left" />
-              <FullscreenControl position="top-left" />
-              <NavigationControl position="top-left" />
-              <ScaleControl />
-              {pins}
-              {popupInfo && (
-                <Popup
-                  anchor="top"
-                  longitude={Number(popupInfo.location.longitude)}
-                  latitude={Number(popupInfo.location.latitude)}
-                  onClose={() => setPopupInfo(null)}
-                >
-                  <Stack>
-                    <Typography fontWeight={600}>
-                      <a target="_new"
-                        href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.location.name}`}
-                      >{popupInfo.location.name}</a>
-                    </Typography>
-
-                    {popupInfo.members.length === 1 ?
-                      <Stack>
-                        <img src={popupInfo.members[0].url} />
-                        <Typography fontWeight={600}>{popupInfo.members[0].name}</Typography>
-                        <Typography fontWeight={400}>{popupInfo.members[0].role}</Typography>
-                      </Stack>
-                      :
-                      <Typography>Home of {popupInfo.members.length} Cadre members</Typography>
-                    }
-                  </Stack>
-                </Popup>
-              )}
-            </Map>
-          </Box>
-        </Grid>
-      </Grid>
+      {initialized && (
+        <Box height={MAP_HEIGHT}>
+          <Map
+            items={volunteers}
+            pins={uniqueLocations}
+            selectedLocation={selectedLocation}
+            renderCard={volunteer => renderCard(volunteer)}
+            renderPopup={async (loc) => await renderPopup(loc)}
+          />
+        </Box>
+      )}
     </Card>
   );
 }

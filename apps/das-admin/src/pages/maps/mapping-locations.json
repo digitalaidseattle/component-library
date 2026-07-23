@@ -10,6 +10,21 @@
         "longitude": -122.2285
     },
     {
+        "name": "Auburn, Washington",
+        "latitude": 47.3073,
+        "longitude": -122.2285
+    },
+    {
+        "name": "Ashland, MA, USA",
+        "latitude": 42.2612,
+        "longitude": -71.4634
+    },
+    {
+        "name": "Austin, Texas, USA",
+        "latitude": 30.2672,
+        "longitude": -97.7431
+    },
+    {
         "name": "Bellevue, WA United States",
         "latitude": 47.6101,
         "longitude": -122.2015
@@ -18,6 +33,26 @@
         "name": "Bellevue, WA",
         "latitude": 47.6101,
         "longitude": -122.2015
+    },
+    {
+        "name": "Bellevue, Washington",
+        "latitude": 47.6101,
+        "longitude": -122.2015
+    },
+    {
+        "name": "Bellevue, WA, USA",
+        "latitude": 47.6101,
+        "longitude": -122.2015
+    },
+    {
+        "name": "Bellevue, WA, United States",
+        "latitude": 47.6101,
+        "longitude": -122.2015
+    },
+    {
+        "name": "Bellingham, WA",
+        "latitude": 48.7519,
+        "longitude": -122.4787
     },
     {
         "name": "Bellingham, WA, USA",
@@ -35,21 +70,59 @@
         "longitude": -122.2054
     },
     {
+        "name": "Bothell, WA, United States",
+        "latitude": 47.7601,
+        "longitude": -122.2054
+    },
+    {
+        "name": "Boston, MA",
+        "latitude": 42.3601,
+        "longitude": -71.0589
+    },
+    {
         "name": "Burbank, CA, USA",
         "latitude": 34.1808,
         "longitude": -118.3090
     },
     {
-        "name": "Claymont, DE, USA", "latitude":  39.801696, "longitude": -75.465319
+        "name": "Campbell, CA, USA",
+        "latitude": 37.2872,
+        "longitude": -121.9549
     },
     {
-        "name": "Dallas, TX", "latitude": 32.775568, "longitude": -96.795595
+        "name": "Cincinnati, OH, USA",
+        "latitude": 39.1031,
+        "longitude": -84.5120
     },
     {
-        "name": "Edmonds, WA, USA", "latitude": 47.811242, "longitude":  -122.376842
+        "name": "Claymont, DE, USA",
+        "latitude": 39.801696,
+        "longitude": -75.465319
     },
     {
-        "name": "Edmonds, WA", "latitude": 47.811242, "longitude":  -122.376842
+        "name": "Columbus, Ohio",
+        "latitude": 39.9625,
+        "longitude": -83.0000
+    },
+    {
+        "name": "Columbus, OH, United States",
+        "latitude": 39.9625,
+        "longitude": -83.0000
+    },
+    {
+        "name": "Dallas, TX",
+        "latitude": 32.775568,
+        "longitude": -96.795595
+    },
+    {
+        "name": "Edmonds, WA, USA",
+        "latitude": 47.811242,
+        "longitude": -122.376842
+    },
+    {
+        "name": "Edmonds, WA",
+        "latitude": 47.811242,
+        "longitude": -122.376842
     },
     {
         "name": "Everett, WA, USA",
@@ -57,9 +130,29 @@
         "longitude": -122.2021
     },
     {
+        "name": "Fort Wayne, Indiana",
+        "latitude": 41.0796,
+        "longitude": -85.1458
+    },
+    {
+        "name": "Garner, North Carolina, US",
+        "latitude": 35.7150,
+        "longitude": -78.6148
+    },
+    {
         "name": "Gig Harbor, Washington",
         "latitude": 47.3293,
         "longitude": -122.5801
+    },
+    {
+        "name": "Houston, Texas",
+        "latitude": 29.7604,
+        "longitude": -95.3698
+    },
+    {
+        "name": "Hyderabad, Telangana, India",
+        "latitude": 17.3850,
+        "longitude": 78.4867
     },
     {
         "name": "Irvine, CA",
@@ -72,14 +165,24 @@
         "longitude": -122.0329
     },
     {
+        "name": "Issaquah,WA,USA",
+        "latitude": 47.5301,
+        "longitude": -122.0329
+    },
+    {
+        "name": "Jersey City, New Jersey, US",
+        "latitude": 40.7191,
+        "longitude": -74.0752
+    },
+    {
         "name": "Kent, WA",
         "latitude": 47.3831,
         "longitude": -122.2348
     },
     {
         "name": "Killeen, TX but will be moving back to Tacoma, WA after my contract is up",
-        "latitude":  31.121182,
-        "longitude":  -97.732589
+        "latitude": 31.121182,
+        "longitude": -97.732589
     },
     {
         "name": "Kirkland, WA",
@@ -87,10 +190,39 @@
         "longitude": -122.2060
     },
     {
-        "name": "Lawrence, Kansas", "latitude":  38.967530, "longitude": -95.238272
+        "name": "Kirkland, WA, USA",
+        "latitude": 47.6769,
+        "longitude": -122.2060
     },
     {
-        "name": "Lynnwood, WA", "latitude":  47.826349,"longitude": -122.292430
+        "name": "Lawrence, Kansas",
+        "latitude": 38.967530,
+        "longitude": -95.238272
+    },
+    {
+        "name": "Los Angeles",
+        "latitude": 34.0549,
+        "longitude": -118.2437
+    },
+    {
+        "name": "Los Angeles, CA, US",
+        "latitude": 34.0549,
+        "longitude": -118.2437
+    },
+    {
+        "name": "Lynnwood, WA",
+        "latitude": 47.826349,
+        "longitude": -122.292430
+    },
+    {
+        "name": "Madison, WI",
+        "latitude": 43.0731,
+        "longitude": -89.4012
+    },
+    {
+        "name": "MIDLAND PARK, NEW JERSEY, USA",
+        "latitude": 40.9958,
+        "longitude": -74.1413
     },
     {
         "name": "Mission Viejo, California, USA",
@@ -108,7 +240,24 @@
         "longitude": -122.0839
     },
     {
-        "name": "Nairobi Kenya", "latitude": -1.283030, "longitude":36.817231
+        "name": "Mountain View, CA, United States",
+        "latitude": 37.3861,
+        "longitude": -122.0839
+    },
+    {
+        "name": "Nairobi Kenya",
+        "latitude": -1.283030,
+        "longitude": 36.817231
+    },
+    {
+        "name": "New York, NY , USA",
+        "latitude": 40.6643,
+        "longitude": -73.9385
+    },
+    {
+        "name": "New York, United States",
+        "latitude": 40.6643,
+        "longitude": -73.9385
     },
     {
         "name": "New York City, NY, USA or Bethesda, Maryland, USA",
@@ -116,9 +265,29 @@
         "longitude": -73.9385
     },
     {
+        "name": "Oak Harbor, WA",
+        "latitude": 48.2975,
+        "longitude": -122.6300
+    },
+    {
+        "name": "Oak Park, IL, USA",
+        "latitude": 41.8803,
+        "longitude": -87.7794
+    },
+    {
+        "name": "Ocala, FL",
+        "latitude": 29.1872,
+        "longitude": -82.1401
+    },
+    {
         "name": "Puyallup, WA",
         "latitude": 47.1854,
         "longitude": -122.2929
+    },
+    {
+        "name": "Redmond, WA",
+        "latitude": 47.6740,
+        "longitude": -122.1215
     },
     {
         "name": "Redmond, WA, USA",
@@ -131,6 +300,16 @@
         "longitude": -122.1215
     },
     {
+        "name": "Renton, WA, US",
+        "latitude": 47.4825,
+        "longitude": -122.2184
+    },
+    {
+        "name": "San Diego, CA, USA",
+        "latitude": 32.7157,
+        "longitude": -117.1628
+    },
+    {
         "name": "San Francisco, CA, US",
         "latitude": 37.7749,
         "longitude": -122.4194
@@ -141,7 +320,27 @@
         "longitude": -122.4194
     },
     {
+        "name": "San Jose",
+        "latitude": 37.3387,
+        "longitude": -121.8853
+    },
+    {
+        "name": "Santa Clara, CA, USA",
+        "latitude": 37.3500,
+        "longitude": -121.9500
+    },
+    {
         "name": "Seattle",
+        "latitude": 47.6205,
+        "longitude": -122.3509
+    },
+    {
+        "name": "Seattle area",
+        "latitude": 47.6205,
+        "longitude": -122.3509
+    },
+    {
+        "name": "Seattle WA",
         "latitude": 47.6205,
         "longitude": -122.3509
     },
@@ -156,7 +355,17 @@
         "longitude": -122.3509
     },
     {
+        "name": "Seattle, WA, U.S.A.",
+        "latitude": 47.6205,
+        "longitude": -122.3509
+    },
+    {
         "name": "Seattle, Washington USA",
+        "latitude": 47.6205,
+        "longitude": -122.3509
+    },
+    {
+        "name": "Seattle, Washington, USA",
         "latitude": 47.6205,
         "longitude": -122.3509
     },
@@ -166,12 +375,39 @@
         "longitude": -122.3509
     },
     {
-     "name": "Shoreline, Washington", "latitude":  47.756360, "longitude":  -122.344330
+        "name": "Shoreline, Washington",
+        "latitude": 47.756360,
+        "longitude": -122.344330
+    },
+    {
+        "name": "Taiwan",
+        "latitude": 23.6978,
+        "longitude": 120.9605
+    },
+    {
+        "name": "Tampa, Florida",
+        "latitude": 27.9506,
+        "longitude": -82.4571
     },
     {
         "name": "Toronto, Ontario, Canada",
         "latitude": 43.651605,
         "longitude": -79.383125
+    },
+    {
+        "name": "Vancouver, BC, Canada",
+        "latitude": 49.2827,
+        "longitude": -123.1207
+    },
+    {
+        "name": "Vancouver, British Columbia, Canada",
+        "latitude": 49.2827,
+        "longitude": -123.1207
+    },
+    {
+        "name": "Vancouver, WA",
+        "latitude": 45.6387,
+        "longitude": -122.6650
     },
     {
         "name": "Washington, DC",

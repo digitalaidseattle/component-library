@@ -4,5 +4,8 @@
     "src",
     "vite-env.d.ts"
   ],
-  
+  "compilerOptions": {
+    "rootDir": "./src",
+    "ignoreDeprecations": "6.0"
+  }
 }

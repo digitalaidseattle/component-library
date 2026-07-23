@@ -1,39 +1,47 @@
 
+import { FirebaseApp, initializeApp } from 'firebase/app';
 
-import { FirebaseApp } from 'firebase/app';
-
-export interface ConfigurationProps {
-  firebaseApp: FirebaseApp;
+export type ConfigurationOpts = {
+    apiKey: string;
+    authDomain: string;
+    projectId: string;
+    storageBucket: string;
+    messagingSenderId: string;
+    appId: string;
+    measurementId: string;
 }
 
 export class Configuration {
 
-  private static instance: Configuration;
+    private static instance: Configuration;
+    private static _props: ConfigurationOpts;
 
-  static getInstance(): Configuration {
-    if (!this.instance) {
-      throw new Error('System needs to be configured.');
+    static getInstance(): Configuration {
+        if (!Configuration.instance) {
+            if (this._props) {
+                Configuration.instance = new Configuration(this._props);
+            } else {
+                throw new Error('Firebase needs to be configured.');
+            }
+        }
+        return Configuration.instance
     }
-    return this.instance
-  }
 
-  static set(props: ConfigurationProps) {
-    Configuration.instance = new Configuration(props);
-  }
-
-  props: ConfigurationProps;
-
-  private constructor(props: ConfigurationProps) {
-    this.props = props;
-  }
-
-  getClient() {
-    if (!this.props.firebaseApp) {
-      console.trace('System needs to be configured.');
-      throw new Error('System needs to be configured.');
+    static props(props: ConfigurationOpts) {
+        this._props = props;
     }
-    return this.props.firebaseApp;
-  }
 
+    client: FirebaseApp;
+
+    private constructor(props: ConfigurationOpts) {
+        this.client = initializeApp(props)
+    }
+
+    getClient() {
+        if (!this.client) {
+            throw new Error('Firebase System needs to be configured.');
+        }
+        return this.client;
+    }
 
 }
