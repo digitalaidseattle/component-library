@@ -1,22 +1,25 @@
 {
-  "name": "@digitalaidseattle/superhuman",
+  "name": "@digitalaidseattle/program-management",
   "version": "1.0.0",
   "description": "Wrapper for Superhuman (formerly Coda) that works with DAS Component library",
-  "repository": "null//github.com/null/github.com/tree/master/packages/superhuman",
-  "main": "dist/digitalaidseattle-superhuman.cjs.js",
-  "module": "dist/digitalaidseattle-superhuman.esm.js",
+  "repository": "null//github.com/null/github.com/tree/master/packages/program-management",
+  "main": "dist/digitalaidseattle-program-management.cjs.js",
+  "module": "dist/digitalaidseattle-program-management.esm.js",
   "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@digitalaidseattle/core": "1.0.23"
+    "@digitalaidseattle/core": "1.0.23",
+    "@digitalaidseattle/mui": "1.0.45"
   },
   "devDependencies": {
+    "@mui/material": "^7.3.5",
     "@testing-library/react": "^16.3.2",
     "react": "^19.2.7",
     "vite": "^5.4.10",
     "vitest": "^1.2.2"
   },
   "peerDependencies": {
+    "@mui/material": "^7.3.5",
     "react": "^19.2.7"
   },
   "scripts": {

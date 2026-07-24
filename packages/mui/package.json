@@ -33,7 +33,6 @@
     "react-router-dom": "^7.13.0",
     "typescript": "^5.5.4"
   },
-  
   "scripts": {
     "build": "tsc --project tsconfig.json"
   },

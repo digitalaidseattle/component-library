@@ -49,10 +49,15 @@ export class SupabaseAuthService implements AuthService {
   getUser = async (): Promise<User | null> => {
     return this.client.auth.getUser()
       .then((response: UserResponse) => {
-        if (response.data.user) {
+        if (response.data.user?.user_metadata) {
           return {
-            email: response.data.user?.user_metadata.email,
-            user_metadata: response.data.user?.user_metadata
+            email: response.data.user.user_metadata.email,
+            user_metadata: {
+              name: response.data.user.user_metadata.name,
+              avatar_url: response.data.user.user_metadata.avatar_url,
+              email: response.data.user.user_metadata.email,
+              roles: response.data.user.user_metadata.roles ?? []
+            }
           } as unknown as User
         }
         else {

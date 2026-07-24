@@ -6,7 +6,7 @@
  *  @copyright 2026 Digital Aid Seattle
  *
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthService, User } from "@digitalaidseattle/core";
@@ -15,29 +15,33 @@ export const AuthGate: React.FC<{ authorizedRoles: string[], children: React.Rea
 
   const authService = useAuthService();
   const navigate = useNavigate();
+  const [checking, setChecking] = useState<boolean>(true);
 
   useEffect(() => {
+    let active = true;
+
     authService.getUser()
       .then(user => {
+        if (!active) {
+          return;
+        }
         if (!user) {
           navigate("/login?code=Unauthenticated");
-        } else {
-          if (!isAuthorized(user)) {
-            navigate("/login?code=AccessDenied");
-          }
+          return;
         }
-      })
-  }, [authService]);
+        if (!authService.isAuthorized(user, authorizedRoles)) {
+          navigate("/login?code=AccessDenied");
+          return;
+        }
+        setChecking(false);
+      });
 
-  function isAuthorized(user: User): boolean {
-    const metadata: any = user.user_metadata;
-    if (metadata.roles) {
-      return (metadata.roles as string[]).some(role => authorizedRoles.includes(role));
-    }
-    return false;
-  }
+    return () => {
+      active = false;
+    };
+  }, [authService, authorizedRoles, navigate]);
 
-  return (
+  return (!checking &&
     <>
       {children}
     </>

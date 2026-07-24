@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src",
+    "vite-env.d.ts"
+  ],
+  "compilerOptions": {
+    "rootDir": ".",
+    "ignoreDeprecations": "6.0"
+  }
+}
