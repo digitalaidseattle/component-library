@@ -10,7 +10,6 @@ import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mu
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from 'dayjs';
 import InputRating from './InputRating';
-import { DebouncedTextField } from './DebouncedTextField';
 
 interface InputOption {
     name: string;
@@ -19,7 +18,7 @@ interface InputOption {
     disabled: boolean;
     size?: number;
     options?: { label: string, value: string }[];
-    inputRenderer?: (idx: number, option: InputOption, value: any) => ReactNode;
+    inputRenderer?: (idx: number, option: InputOption, value: any, onChange: (value: any) => void) => ReactNode;
 }
 
 interface InputFormProps<T> {
@@ -41,7 +40,11 @@ const InputForm: React.FC<InputFormProps<any>> = <T,>({ entity, inputFields, onC
     const inputField = (idx: number, option: InputOption, value: any) => {
         switch (option.type) {
             case 'custom':
-                return option.inputRenderer!(idx, option, value)
+                return option.inputRenderer!(idx,
+                    option,
+                    value,
+                    (value: any) => onChange(option.name, value)
+                )
             case 'date':
                 return <DatePicker
                     key={`${idx}-${option.name}`}

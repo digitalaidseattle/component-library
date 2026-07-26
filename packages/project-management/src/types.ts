@@ -19,6 +19,7 @@ export type Program = Entity & {
     node_types: string[];
     statuses: string[];
     nodes: Node[];
+    members: Profile[]
 }
 
 export type Comment = Entity & {

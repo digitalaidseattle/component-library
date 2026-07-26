@@ -12,10 +12,12 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Stack
+    Stack,
+    TextField
 } from "@mui/material";
 
 import { Profile } from "../types";
+import { InputFormDialog } from "@digitalaidseattle/mui";
 
 const UI_STRINGS = {
     CANCEL: 'Cancel',
@@ -25,6 +27,7 @@ const UI_STRINGS = {
 interface Props {
     title: string;
     opened: boolean;
+
     onClose: () => void;
     onSubmit: (profiles: Profile[]) => void;
 }
@@ -40,51 +43,13 @@ export const ProgramModal: React.FC<Props> = ({
         onClose();
     }
 
-    return (<Dialog
-        open={opened}
-        onClose={onClose}
-        PaperProps={{
-            sx: { width: '40rem', maxWidth: '90vw' },
-        }}
-    >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-            <Stack sx={{ display: "flex", flexWrap: "wrap" }}>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    {/* <Select
-                        sx={{ m: 1, width: "100%" }}
-                        multiple
-                        value={selectedProfiles}
-                        onChange={handleChange}
-                        input={<OutlinedInput label="Tag" />}
-                        renderValue={(selected) =>
-                            selected.map((s_id) => findFacilitator(s_id)!.name).join(", ")
-                        }
-                    >
-                        {profiles.map((prof) => (
-                            <MenuItem key={prof.id as string | undefined} value={prof.id as string | undefined}>
-                                <Checkbox
-                                    checked={
-                                        selectedProfiles.find((s_id) => s_id === prof.id) !==
-                                        undefined
-                                    }
-                                />
-                                <ListItemText primary={prof.name} />
-                            </MenuItem>
-                        ))}
-                    </Select> */}
-                </FormControl>
-            </Stack>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={onClose}>{UI_STRINGS.CANCEL}</Button>
-            <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                onClick={handleSubmit}>{UI_STRINGS.SUBMIT}</Button>
-        </DialogActions>
-    </Dialog >
-    );
+    return (<InputFormDialog
+        open={false}
+        title={""}
+        inputFields={[]}
+        entity={undefined}
+        onChange={function (resp: unknown): void {
+            throw new Error("Function not implemented.");
+        }} />);
 }
 

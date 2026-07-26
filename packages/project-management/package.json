@@ -9,9 +9,11 @@
   "dependencies": {
     "@babel/runtime": "^7.25.0",
     "@digitalaidseattle/core": "1.0.23",
-    "@digitalaidseattle/mui": "1.0.45"
+    "@digitalaidseattle/mui": "1.0.45",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@ant-design/icons": "^5.3.0",
     "@mui/material": "^7.3.5",
     "@testing-library/react": "^16.3.2",
     "react": "^19.2.7",
@@ -19,6 +21,7 @@
     "vitest": "^1.2.2"
   },
   "peerDependencies": {
+    "@ant-design/icons": "^5.3.0",
     "@mui/material": "^7.3.5",
     "react": "^19.2.7"
   },
