@@ -71,10 +71,10 @@ export const Config: LayoutConfiguration = ({
                 icon: <DatabaseOutlined />
             } as MenuItem,
             {
-                id: 'program-management-page',
-                title: 'Jira Lite',
+                id: 'programs',
+                title: 'Program Tracking',
                 type: 'item',
-                url: '/program-management-page',
+                url: '/programs',
                 icon: <ClusterOutlined />
             } as MenuItem
         ]

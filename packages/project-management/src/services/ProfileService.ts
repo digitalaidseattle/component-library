@@ -3,6 +3,7 @@ import { Configuration } from "../Configuration";
 import { Profile } from "../types";
 
 export class ProfileService {
+
     private static instance: ProfileService;
 
     public static getInstance(): ProfileService {
@@ -20,5 +21,10 @@ export class ProfileService {
 
     async getAll(): Promise<Profile[]> {
         return this.dao.getAll();
+    }
+
+    async getAllActive(): Promise<Profile[]> {
+        return this.getAll()
+            .then(profs => profs.filter(p => 'Active' === p.status))
     }
 }

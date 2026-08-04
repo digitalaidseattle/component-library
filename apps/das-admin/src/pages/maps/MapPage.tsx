@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 
 import { Map, Configuration as MapConfiguration } from '@digitalaidseattle/cartography';
-import { Configuration as FirebaseConfiguration } from '@digitalaidseattle/firebase';
 
 import { Location, LocationService } from './LocationService';
 import { TeamMemberService } from './teamMemberService';
@@ -89,16 +88,6 @@ const MapPage = () => {
       MapConfiguration.props({
         apiKey: import.meta.env.VITE_MAPTILER_API_KEY,
         mapStyle: import.meta.env.VITE_MAP_STYLE
-      });
-
-      FirebaseConfiguration.props({
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.FVITE_IREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID,
-        measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
       });
 
       teamMemberService.getAll()

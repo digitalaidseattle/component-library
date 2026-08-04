@@ -9,7 +9,13 @@
 // Avoid importing from the monorepo package to prevent TypeScript "rootDir" errors.
 // Provide a lightweight local declaration for the DataAccessObject used here.
 type DataAccessObject<T> = any;
-import { Profile } from "./types";
+import { Profile, Program } from "./types";
+
+export type ConfigurationProps = {
+    profileDao: DataAccessObject<Profile>;
+    programDao: DataAccessObject<Program>;
+    nodeDao: DataAccessObject<Node>;
+}
 
 export class Configuration {
 
@@ -22,14 +28,18 @@ export class Configuration {
         return Configuration.instance;
     }
 
-    static props(props: { profileDao: DataAccessObject<Profile> }) {
+    static props(props: ConfigurationProps) {
         Configuration.instance = new Configuration(props);
     }
 
     profileDao: DataAccessObject<Profile>;
+    programDao: DataAccessObject<Program>;
+    nodeDao: DataAccessObject<Node>;
 
-    private constructor(props: { profileDao: DataAccessObject<Profile> }) {
+    private constructor(props: ConfigurationProps) {
         this.profileDao = props.profileDao;
+        this.programDao = props.programDao;
+        this.nodeDao = props.nodeDao;
     }
 
     getProfileDao(): DataAccessObject<Profile> {

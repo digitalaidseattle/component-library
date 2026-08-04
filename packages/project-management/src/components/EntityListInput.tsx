@@ -65,7 +65,7 @@ export default function EntityListInput<T extends Entity>({
     };
 
     return (
-        <FormControl>
+        <FormControl fullWidth={fullWidth}>
             <InputLabel id="multiple-checkbox-label">{label}</InputLabel>
             <Select
                 labelId="multiple-checkbox-label"

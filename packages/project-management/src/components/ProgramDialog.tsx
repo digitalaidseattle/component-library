@@ -1,0 +1,123 @@
+/**
+ * ProgramDialog.tsx
+ * 
+ * @copyright Digital Aid Seattle 2026
+ */
+import React, { useEffect, useState } from "react";
+
+import {
+    Chip
+} from "@mui/material";
+
+import { InputFormDialog, InputOption } from "@digitalaidseattle/mui";
+import { ProfileService } from "../services";
+import { Profile, Program } from "../types";
+import DelimitedListInput from "./DelmitedListInput";
+import EntityListInput from "./EntityListInput";
+
+interface Props {
+    program: Program;
+    title: string;
+    opened: boolean;
+
+    onClose: () => void;
+    onSubmit: (updated: Program) => void;
+}
+
+export const ProgramDialog: React.FC<Props> = ({
+    program,
+    title,
+    opened,
+    onClose,
+    onSubmit
+}) => {
+    const profileService = ProfileService.getInstance();
+    const [activeProfiles, setActiveProfiles] = useState<Profile[]>([]);
+
+    useEffect(() => {
+        profileService.getAllActive()
+            .then(profiles => setActiveProfiles(profiles.sort((a, b) => a.name.localeCompare(b.name))));
+    }, [profileService])
+
+    const programInputFields: InputOption[] = [
+        {
+            name: "name",
+            label: 'Name',
+            disabled: false
+        },
+        {
+            name: "prefix",
+            label: 'Prefix',
+            disabled: false
+        },
+        {
+            name: "description",
+            label: 'Description',
+            size: 4,
+            disabled: false,
+        },
+        {
+            name: "node_types",
+            label: 'Tracking Levels (highest-to-lowest)',
+            type: 'custom',
+            disabled: false,
+            inputRenderer: (idx, option, value, onChange) => {
+                return <DelimitedListInput
+                    label={option.label}
+                    value={value}
+                    placeholder={'Epic, Feature, Story, Task'}
+                    onChange={onChange}
+                />
+            }
+        },
+        {
+            name: "statuses",
+            label: 'Statuses (soonest-to-lastest)',
+            type: 'custom',
+            disabled: false,
+            inputRenderer: (idx, option, value, onChange) => {
+                return <DelimitedListInput
+                    label={option.label}
+                    value={value}
+                    placeholder={'Backlog, ToDo, In Progress'}
+                    onChange={onChange}
+                />
+            }
+        },
+        {
+            name: "members",
+            label: 'Members',
+            type: 'custom',
+            disabled: false,
+            inputRenderer: (idx, option, value, onChange) => {
+                return <EntityListInput
+                    source={activeProfiles}
+                    label={option.label}
+                    value={value}
+                    onChange={onChange}
+                    entityRender={e => <Chip label={e.name}></Chip>}
+                />
+            }
+        }
+
+    ];
+
+
+    function handleChange(updated: Program | null) {
+        if (updated === null) {
+            onClose();
+        } else {
+            onSubmit(updated);
+        }
+    }
+
+    return (
+        <InputFormDialog
+            entity={program}
+            open={opened}
+            title={title}
+            inputFields={programInputFields}
+            onChange={handleChange} />
+    );
+}
+
