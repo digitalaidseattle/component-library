@@ -1,19 +1,19 @@
-import { CopyOutlined, DeleteOutlined, HomeOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Box, Breadcrumbs, Card, CardContent, CardHeader, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { CopyOutlined, DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Box, Card, CardContent, CardHeader, IconButton, Toolbar, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
-import { getContentGenerationServices } from "../services/contentGenerationServices";
-import { Project } from "../services/types";
+import { Configuration } from "../services";
 import { createProject } from "../services/transactions";
 import { cloneProject } from "../services/transactions/CloneProject";
-import { DateUtils } from "../utils/dateUtils";
 import { deleteProject } from "../services/transactions/DeleteProject";
+import { Project } from "../services/types";
+import { DateUtils } from "../utils/dateUtils";
 
 const ProjectsListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "projects" }) => {
-  const projectService = getContentGenerationServices().projectService;
+  const projectService = Configuration.getInstance().projectService;
 
   const notifications = useNotifications();
   const navigate = useNavigate();

@@ -18,9 +18,9 @@
 import { getCoreServices, StorageFile } from "@digitalaidseattle/core";
 import { createPartFromText, createPartFromUri, createUserContent, GoogleGenAI, Part } from "@google/genai";
 import Handlebars from "handlebars";
-import { AiService } from "../contentGenerationServices";
 import { Project } from "../types";
-import { getGeminiConfiguration } from "./GeminiConfiguration";
+import { Configuration } from "./Configuration";
+import { AiService } from "../Configuration";
 
 class GeminiAiService implements AiService {
 
@@ -38,7 +38,7 @@ class GeminiAiService implements AiService {
     models: { label: string, value: string }[] | undefined = undefined;
 
     constructor() {
-        const config = getGeminiConfiguration();
+        const config = Configuration.getInstance();
         this.ai = new GoogleGenAI({ apiKey: config.firebase_options.apiKey });
         this.storageFolder = config.storage_folder;
     }

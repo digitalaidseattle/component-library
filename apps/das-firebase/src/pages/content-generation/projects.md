@@ -16,7 +16,7 @@ AI services use textual prompts to instruct its systems to generate content.  Th
 
 ### Add context files/text
 
-While optional, adding context files and/or text will help inform the AI service to adapt its responses to align with DAS's ibackground.  Text can include simple information like the url of DAS's website.  Files can include previous content examples.
+While optional, adding context files and/or text will help inform the AI service to adapt its responses to align with DAS's background.  Text can include simple information like the url of DAS's website.  Files can include previous content examples.
 
 ### Specify output
 

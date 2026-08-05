@@ -6,15 +6,15 @@
  */
 import React, { useContext, useEffect, useState } from 'react';
 
-import { DeleteOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, CardContent, CardHeader, FormControl, IconButton, OutlinedInput, Stack, Toolbar, Typography } from "@mui/material";
+import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Card, CardContent, CardHeader, FormControl, IconButton, Stack, Typography } from "@mui/material";
 
 import { HelpTopicContext, StorageFile, useHelp, useNotifications } from '@digitalaidseattle/core';
-import { getContentGenerationServices } from '../services';
+import { SplitButton, StableCursorTextField } from '@digitalaidseattle/mui';
+import { Configuration } from '../services';
 import { Project, ProjectContext } from '../services/types';
 import { AiProjectContext as ContentGenerationProjectContext } from './AiProjectContext';
 import { FileUploadDialog } from './FileUploadDialog';
-import { SplitButton, StableCursorTextField } from '@digitalaidseattle/mui';
 
 const SUPPORTED_FILE_TYPES = [
     "text/plain",
@@ -88,7 +88,7 @@ type ProjectContextEditorProps = {
 
 export const ProjectContextEditor: React.FC<ProjectContextEditorProps> = ({ title, onChange }) => {
 
-    const aiService = getContentGenerationServices().aiService;
+    const aiService = Configuration.getInstance().aiService;
     const notifications = useNotifications();
 
     const { setHelpTopic } = useContext(HelpTopicContext);

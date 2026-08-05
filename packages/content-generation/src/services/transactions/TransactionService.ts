@@ -1,5 +1,4 @@
 import { Identifier } from "@digitalaidseattle/core";
-import { ProjectTransactionService } from "../contentGenerationServices";
 import { Project, ProjectContent } from "../types";
 import { cloneProject } from "./CloneProject";
 import { createProject } from "./CreateProject";
@@ -7,6 +6,7 @@ import { deleteProject } from "./DeleteProject";
 import { generateProjectContent } from "./GenerateProjectContent";
 import { saveProject } from "./SaveProject";
 import { exportProjectContent } from "./ExportProjectContent";
+import { ProjectTransactionService } from "../Configuration";
 
 export class TransactionService implements ProjectTransactionService {
 

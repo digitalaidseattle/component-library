@@ -1,11 +1,8 @@
 {
   "name": "@digitalaidseattle/content-generation",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Content generation module",
   "repository": "null//github.com/null/github.com/tree/master/packages/content-generation",
-  "main": "dist/digitalaidseattle-content-generation.cjs.js",
-  "module": "dist/digitalaidseattle-content-generation.esm.js",
-  "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
     "@babel/runtime": "^7.25.0",
@@ -32,6 +29,16 @@
     "postbuild": "cp src/*.css dist/"
   },
   "files": [
-    "dist"
-  ]
+    "dist",
+    "gemini"
+  ],
+  "main": "dist/digitalaidseattle-content-generation.cjs.js",
+  "module": "dist/digitalaidseattle-content-generation.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "gemini.ts"
+    ]
+  }
 }
