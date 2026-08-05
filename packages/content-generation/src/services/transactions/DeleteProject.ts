@@ -6,7 +6,7 @@
  */
 
 import { getCoreServices, Identifier } from "@digitalaidseattle/core";
-import { getContentGenerationServices } from "..";
+import { Configuration } from "..";
 import { Project } from "../types";
 
 const DEFAULT_FOLDER = import.meta.env.VITE_FIREBASE_STORAGE_FOLDER;
@@ -22,7 +22,7 @@ async function removeFiles(project: Project): Promise<void> {
 
 export async function deleteProject(id: Identifier): Promise<void> {
     const authService = getCoreServices().authService!;
-    const projectService = getContentGenerationServices().projectService!;
+    const projectService = Configuration.getInstance().projectService!;
 
     const user = await authService.getUser();
 
