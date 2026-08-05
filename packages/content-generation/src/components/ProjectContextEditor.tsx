@@ -6,7 +6,7 @@
  */
 import React, { useContext, useEffect, useState } from 'react';
 
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Card, CardContent, CardHeader, FormControl, IconButton, Stack, Typography } from "@mui/material";
 
 import { HelpTopicContext, StorageFile, useHelp, useNotifications } from '@digitalaidseattle/core';
@@ -178,7 +178,7 @@ export const ProjectContextEditor: React.FC<ProjectContextEditorProps> = ({ titl
                 slotProps={{ title: { fontWeight: 600, fontSize: 16 } }}
                 avatar={<IconButton
                     onClick={() => { setHelpTopic(HELP_TOPIC); setShowHelp(true) }}
-                    color="primary"><InfoCircleOutlined /></IconButton>} />
+                    color="primary"><QuestionCircleOutlined /></IconButton>} />
             <CardContent>
                 <Stack gap={2}>
                     {(contexts ?? []).map((context, idx) => (
