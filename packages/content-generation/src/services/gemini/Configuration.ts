@@ -12,17 +12,15 @@ export class Configuration {
         return Configuration.instance;
     }
 
-    static props(props: { storage_folder: string, firebase_options: FirebaseOptions }) {
+    static props(props: { storage_folder: string, apiKey: string }) {
         Configuration.instance = new Configuration(props);
     }
 
     storage_folder: string;
-    firebase_options: FirebaseOptions;
-    firebaseApp: FirebaseApp;
+    apiKey: string;
 
-    private constructor(props: { storage_folder: string, firebase_options: FirebaseOptions }) {
+    private constructor(props: { storage_folder: string, apiKey: string }) {
         this.storage_folder = props.storage_folder;
-        this.firebase_options = props.firebase_options;
-        this.firebaseApp = initializeApp(props.firebase_options);
+        this.apiKey = props.apiKey;
     }
 }

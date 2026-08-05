@@ -4,9 +4,9 @@
  * @copyright Digital Aid Seattle 2026
  */
 
-import { FirestoreService } from "@digitalaidseattle/firebase";
+import { Configuration, FirestoreService } from "@digitalaidseattle/firebase";
 import { ProjectContent } from "../types";
-import { Configuration } from "./Configuration";
+import {  } from "./Configuration";
 import { ProjectContentService } from "../Configuration";
 
 export class GeminiContentService extends FirestoreService<ProjectContent> implements ProjectContentService{
@@ -21,7 +21,7 @@ export class GeminiContentService extends FirestoreService<ProjectContent> imple
   }
 
   constructor() {
-    super("content", Configuration.getInstance().firebaseApp);
+    super("content", Configuration.getInstance().getClient());
   }
 
   mapJson(json: any): ProjectContent {

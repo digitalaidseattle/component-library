@@ -39,7 +39,7 @@ class GeminiAiService implements AiService {
 
     constructor() {
         const config = Configuration.getInstance();
-        this.ai = new GoogleGenAI({ apiKey: config.firebase_options.apiKey });
+        this.ai = new GoogleGenAI({ apiKey: config.apiKey });
         this.storageFolder = config.storage_folder;
     }
 

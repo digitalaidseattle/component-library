@@ -4,10 +4,9 @@
  * @copyright Digital Aid Seattle 2026
  */
 
-import { FirestoreService } from "@digitalaidseattle/firebase";
+import { Configuration, FirestoreService } from "@digitalaidseattle/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Project } from "../types";
-import { Configuration } from "./Configuration";
 import { ProjectService } from "../Configuration";
 
 export class GeminiProjectService extends FirestoreService<Project> implements ProjectService {
@@ -23,7 +22,7 @@ export class GeminiProjectService extends FirestoreService<Project> implements P
   }
 
   constructor() {
-    super("projects", Configuration.getInstance().firebaseApp);
+    super("projects", Configuration.getInstance().getClient());
   }
 
   mapJson(json: any): Project {
