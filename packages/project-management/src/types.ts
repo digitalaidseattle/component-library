@@ -47,6 +47,8 @@ export type Node = Entity & {
     name: string;
     type: string;
     status: string;
+    priority: string;
+    due_date: Date;
     description: string | undefined;
     assignee_id: Identifier | undefined;
 

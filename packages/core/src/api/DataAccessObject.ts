@@ -43,6 +43,7 @@ export type DataAccessOptions<T extends Entity> = {
     count?: number;
     select?: string;
     mapper?: (json: any) => T;
+    unmapper?: (entity: T) => any;
 }
 
 export interface DataAccessObject<T extends Entity> {

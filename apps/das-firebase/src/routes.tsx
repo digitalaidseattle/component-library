@@ -16,6 +16,7 @@ import {
 } from "@digitalaidseattle/mui";
 import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
 import InstitutionsPage from "./pages/institutions";
+import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
 
 const routes: RouteObject[] = [
   {
@@ -40,6 +41,18 @@ const routes: RouteObject[] = [
       {
         path: "privacy",
         element: <MarkdownPage filepath='privacy.md' />,
+      },
+      {
+        path: "programs",
+        element: <ProgramsPage />,
+      },
+      {
+        path: "programs/:id",
+        element: <ProgramPage />,
+      },
+      {
+        path: "programs/:program_id/nodes/:node_no",
+        element: <NodePage />,
       }
     ]
   },

@@ -22,6 +22,6 @@ While optional, adding context files and/or text will help inform the AI service
 
 If no output is  specified, the AI service will return content in the form of Markdown.  Otherwise the service will return structured JSON.  The structured response can be used for online forms which require sectioned answers to questions.
 
-### Generate then content.
+### Generate the content.
 
-The DAS content generation system can use one of many LLM models to generate the content.
+The DAS content generation system can use one of many Gemini models to generate the content.

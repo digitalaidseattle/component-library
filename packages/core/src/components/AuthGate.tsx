@@ -30,7 +30,7 @@ export const AuthGate: React.FC<{ authorizedRoles: string[], children: React.Rea
           return;
         }
         if (!authService.isAuthorized(user, authorizedRoles)) {
-          navigate("/login?code=AccessDenied");
+          navigate("/error?code=AccessDenied");
           return;
         }
         setChecking(false);

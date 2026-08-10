@@ -8,7 +8,7 @@
 import { DataAccessObject, getCoreServices, Identifier, QueryModel } from "@digitalaidseattle/core";
 import { v4 as uuid } from "uuid";
 import { Configuration } from "../Configuration";
-import { Node, Program } from "../types";
+import { Node, Profile, Program } from "../types";
 import { NodeService } from "./NodeService";
 
 export class ProgramService {
@@ -187,6 +187,10 @@ export class ProgramService {
         return NodeService.getInstance().findNodeById(program.nodes, nodeId);
     }
 
+    findNodeByNo(program: Program, nodeNo: string): Node | undefined {
+        return NodeService.getInstance().findNodeByNo(program.nodes, nodeNo);
+    }
+
     // TODO consider moving this to a validation service
     isValid(program: Program): boolean {
         if (!program.name) {
@@ -201,6 +205,21 @@ export class ProgramService {
         return true;
     }
 
-
+    // expect that program is fully hydrated
+    // return root node -> immediate parent
+    findAncestors(program: Program, node: Node): Node[] {
+        const ancestors: Node[] = [];
+        let parentId = node.parent_id;
+        while (parentId) {
+            const parent = this.findNode(program, parentId as string);
+            if (parent) {
+                ancestors.push(parent!);
+                parentId = parent.parent_id;
+            } else {
+                throw new Error('Program has a broken node tree.');
+            }
+        }
+        return ancestors.reverse();
+    }
 
 }

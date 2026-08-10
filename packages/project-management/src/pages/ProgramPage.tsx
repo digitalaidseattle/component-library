@@ -9,19 +9,19 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
+import { HomeOutlined } from '@ant-design/icons';
 import {
   Breadcrumbs,
   IconButton,
   Typography
 } from '@mui/material';
-import { HomeOutlined } from '@ant-design/icons';
 
 import { RefreshContext } from '@digitalaidseattle/core';
 
+import { ProgramContext } from '../components/ProgramContext';
+import { ProgramDetailCard } from '../components/ProgramDetailCard';
 import { ProgramService } from '../services';
 import { Program } from '../types';
-import { ProgramDetailCard } from '../components/ProgramDetailCard';
-import { ProgramContext } from '../components/ProgramContext';
 
 export const ProgramPage = () => {
   const service = ProgramService.getInstance();
@@ -33,17 +33,11 @@ export const ProgramPage = () => {
 
   useEffect(() => {
     if (id) {
-      let active = true;
       async function load() {
         const program = await service.getById(id!);
-        if (active) {
-          setProgram(program!);
-        }
+        setProgram(program!);
       }
       load();
-      return () => {
-        active = false;
-      };
     }
   }, [id, refresh]);
 

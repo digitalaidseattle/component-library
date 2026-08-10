@@ -4,17 +4,18 @@
  */
 
 // material-ui
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { PlusCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNotifications } from "@digitalaidseattle/core";
+import { TabbedPanels } from "@digitalaidseattle/mui";
 import {
     Card,
-    CardContent,
     CardHeader,
     IconButton,
     Stack,
-    Tooltip
+    Tooltip,
+    Typography
 } from '@mui/material';
 import { ProgramDialog } from "../components";
 import NodeDialog from "../components/NodeDialog";
@@ -22,6 +23,8 @@ import Outline from "../components/Outline";
 import { ProgramContext } from "../components/ProgramContext";
 import { ProgramService } from "../services";
 import { Node, Program } from "../types";
+import { Kanban } from "./Kanban";
+import { Summary } from "./Summary";
 
 //
 export const ProgramDetailCard: React.FC = () => {
@@ -36,7 +39,7 @@ export const ProgramDetailCard: React.FC = () => {
 
     const notifications = useNotifications();
     const { program, setProgram } = React.useContext(ProgramContext);
-
+    
     async function addNode() {
         service.createChild(program!)
             .then(node => {
@@ -51,7 +54,7 @@ export const ProgramDetailCard: React.FC = () => {
             service.insertNode(program!, updated)
                 .then(updatedProgram => {
                     setProgram(updatedProgram);
-                    notifications.success(`Node ${updated.node_no} added.`)
+                    notifications.success(`Added ${updated.node_no}.`)
                 })
         }
         setOpenNodeDialog(false);
@@ -109,15 +112,14 @@ export const ProgramDetailCard: React.FC = () => {
                             </Tooltip>
                         </Stack>
                     } />
-                <CardContent>
-                    {program && <Outline program={program} />}
-                    {/* <DragAndDrop
-                        onChange={(c: Map<string, unknown>, t: TicketWrapper) => handleChange(c, t)}
-                        items={items}
-                        categories={categories}
-                        cardRenderer={cardRenderer}
-                        headerRenderer={headerRenderer} /> */}
-                </CardContent>
+                {program &&
+                    <TabbedPanels panels={[
+                        { header: <Typography>Summary</Typography>, children: <Summary /> },
+                        { header: <Typography>Kanban</Typography>, children: <Kanban /> },
+                        { header: <Typography>Outline</Typography>, children: <Outline /> },
+                    ]}>
+                    </TabbedPanels>
+                }
             </Card >
             <ProgramDialog
                 program={program!}

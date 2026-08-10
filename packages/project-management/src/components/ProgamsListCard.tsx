@@ -131,14 +131,9 @@ export const ProgamsListCard: React.FC = () => {
                 renderCell: (params) => {
                     return <Stack direction={'row'} gap={1}>
                         {params.row.members.map((mem: Profile) =>
-                            // <Chip
-                            //     avatar={<Avatar alt={mem.name} src={mem.pic} />}
-                            //     label={mem.name}
-                            // />  // Too wide?
                             <Tooltip title={mem.name} >
                                 <Avatar alt={mem.name} src={mem.pic} />
                             </Tooltip>
-
                         )}
                     </Stack>
                 }

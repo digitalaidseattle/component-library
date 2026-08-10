@@ -7,12 +7,10 @@
 
 import { DataAccessObject, getCoreServices, Identifier } from "@digitalaidseattle/core";
 import { Configuration } from "../Configuration";
-import { Comment, History, Node } from "../types";
+import { Node } from "../types";
 
 
 export class NodeService {
-
-
 
     private static instance: NodeService;
 
@@ -30,7 +28,6 @@ export class NodeService {
     }
 
     empty(): Node {
-
         return ({
             id: undefined,
             program_id: '',
@@ -41,7 +38,9 @@ export class NodeService {
             type: '',
             status: '',
             description: '',
+            priority: '',
             assignee_id: undefined,
+            due_date: new Date(),
 
             children: [],
             comments: [],
@@ -79,8 +78,14 @@ export class NodeService {
 
     async findByProgramId(id: Identifier | null | undefined): Promise<Node[]> {
         const queryModel = {
-            filter: {
-                program_id: id
+            filterModel: {
+                items: [
+                    {
+                        field: 'program_id',
+                        operator: '==',
+                        value: id
+                    }
+                ]
             },
             page: 1,
             pageSize: 1000,
@@ -131,4 +136,34 @@ export class NodeService {
         }
         return ancestors;
     }
+
+    async changeAttribute(node: Node, attribute: string, value: string): Promise<Node> {
+        const user = await getCoreServices().authService?.getUser();
+        const newHistory = {
+            user: user?.email!,
+            description: `Changed "${attribute}" to "${value}".`,
+            date: new Date().toISOString(),
+        };
+
+        const partial: any = { history: [...node.history, newHistory] };
+        partial[attribute] = value;
+        return this.dao.update(node.id as Identifier, partial);
+    }
+
+    async changeStatus(node: Node, status: string): Promise<Node> {
+        const user = await getCoreServices().authService?.getUser();
+        const newHistory = {
+            user: user?.email!,
+            description: `Changed status to "${status}".`,
+            date: new Date().toISOString(),
+        };
+        const partial: any = { status: status, history: [...node.history, newHistory] };
+        return this.dao.update(node.id as Identifier, partial);
+    }
+
+    getUrl(node: Node): string {
+        return `/programs/${node.program_id}/nodes/${node.node_no}`
+    }
+
+
 }

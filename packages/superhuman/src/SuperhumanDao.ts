@@ -146,13 +146,13 @@ export abstract class SuperhumanDao<T extends Entity> implements DataAccessObjec
 
     }
 
-    async findBy(column: string, name: string): Promise<T[]> {
+    async findBy(column: string, value: any): Promise<T[]> {
         const params = new URLSearchParams({
             limit: "200",
             useColumnNames: "true",
             valueFormat: "rich"
         });
-        const url = `${this.baseUrl}/${this.documentId}/tables/${this.tableName}/rows?query=${column}:"${name}"&${params}`;
+        const url = `${this.baseUrl}/${this.documentId}/tables/${this.tableName}/rows?query=${column}:"${value}"&${params}`;
         const resp = await fetch(encodeURI(url), {
             headers: { 'Authorization': `Bearer ${this.apiToken}` }
         });

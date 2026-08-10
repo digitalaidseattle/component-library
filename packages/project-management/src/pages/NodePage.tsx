@@ -18,19 +18,16 @@ import {
 
 import { RefreshContext } from '@digitalaidseattle/core';
 
+import { NodeContext } from '../components/NodeContext';
+import { NodeDetailCard } from '../components/NodeDetailCard';
 import { ProgramContext } from '../components/ProgramContext';
 import { ProgramService } from '../services';
 import { Node, Program } from '../types';
-import { NodeService } from '../services/NodeService';
-import { NodeContext } from '../components/NodeContext';
-import { NodeDetailCard } from '../components/NodeDetailCard';
 
 export const NodePage = () => {
   const service = ProgramService.getInstance();
-  const nodeService = NodeService.getInstance();
 
   const [program, setProgram] = useState<Program>();
-  const [allNodes, setAllNodes] = useState<Node[]>();
   const [node, setNode] = useState<Node>();
   const [ancestralNodes, setAncestralNodes] = useState<Node[]>();
 
@@ -46,8 +43,6 @@ export const NodePage = () => {
           try {
             service.getById(program_id)
               .then(program => setProgram(program!));
-            nodeService.findByProgramId(program_id)
-              .then(nodes => setAllNodes([...nodes]));
           }
           catch (err) {
             console.error("Error fetching program", err);
@@ -63,23 +58,23 @@ export const NodePage = () => {
   }, [program_id, refresh]);
 
   useEffect(() => {
-    if (allNodes && node_no) {
-      setNode(nodeService.findNodeByNo(allNodes, node_no))
+    if (program && node_no) {
+      setNode(service.findNodeByNo(program, node_no))
     }
-  }, [node_no, allNodes]);
+  }, [program, node_no]);
 
   useEffect(() => {
-    if (node && allNodes) {
-      setAncestralNodes(nodeService.getAncestors(allNodes, node));
+    if (program && node) {
+      setAncestralNodes(service.findAncestors(program, node));
     }
-  }, [node, allNodes]);
+  }, [program, node]);
 
   return (program && node &&
     <ProgramContext.Provider value={{ program, setProgram }} >
       <NodeContext.Provider value={{ node, setNode }} >
         <Breadcrumbs aria-label="breadcrumb">
           <NavLink to="/" ><IconButton size="medium"><HomeOutlined /></IconButton></NavLink>
-          <NavLink to="/programs" >Programs</NavLink>
+          <NavLink to="/programs" >Program Tracking</NavLink>
           <NavLink to={`/programs/${program_id}`} >{program.name}</NavLink>
           {(ancestralNodes ?? []).map(ancestor => (
             <NavLink key={ancestor.id} to={`/programs/${program_id}/nodes/${ancestor.node_no}`} >{ancestor.node_no} {ancestor.name}</NavLink>

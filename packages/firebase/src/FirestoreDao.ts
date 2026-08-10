@@ -21,10 +21,12 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
 
     collectionName: string;
     db: Firestore;
+    opts: DataAccessOptions<T> | undefined;
 
-    constructor(collectionName: string, firebaseClient: FirebaseApp) {
+    constructor(collectionName: string, firebaseClient: FirebaseApp, opts?: DataAccessOptions<T>) {
         this.collectionName = collectionName;
         this.db = getFirestore(firebaseClient);
+        this.opts = opts;
     }
 
     async find(queryModel: QueryModel, opts?: DataAccessOptions<T> | undefined): Promise<PageInfo<T>> {
@@ -74,18 +76,19 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
                 }) as T
 
         );
-        return { rows: elements, totalRowCount: elements.length };
+        return { rows: elements.map(elem => this.mapJson(elem)), totalRowCount: elements.length };
     }
 
     // Get all documents from a collection
     async getAll(opts?: DataAccessOptions<T>): Promise<T[]> {
         const querySnapshot = await getDocs(collection(this.db, this.collectionName));
-        return querySnapshot.docs.map(doc => {
+        const elements = querySnapshot.docs.map(doc => {
             return {
                 ...doc.data(),
                 id: doc.id
             } as T;
         });
+        return elements.map(elem => this.mapJson(elem));
     }
 
     // Update a document to a collection
@@ -93,10 +96,11 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
         try {
             const docRef = await getDoc(doc(this.db, this.collectionName, id as string));
             if (docRef.exists()) {
-                return {
+                const element = {
                     ...docRef.data(),
                     id: docRef.id
                 } as T;
+                return this.mapJson(element);
             } else {
                 throw Error(`entity with id: ${id}, does not exist`)
             }
@@ -150,11 +154,22 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
 
     async upsert(entity: T): Promise<T> {
         await setDoc(doc(this.db, this.collectionName, entity.id as string), entity)
-        return entity;
+        return this.getById(entity.id!);
     }
 
     mapJson(json: any): T {
-        return json
+        if (this.opts && this.opts.mapper) {
+            return this.opts.mapper(json);
+        } else {
+            return json;
+        }
+    }
+
+    unmapEntity(entity: T): any {
+        if (this.opts && this.opts.unmapper) {
+            return this.opts.unmapper(entity);
+        }
+        return entity
     }
 
 }

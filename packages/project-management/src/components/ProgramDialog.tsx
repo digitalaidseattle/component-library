@@ -6,11 +6,15 @@
 import React, { useEffect, useState } from "react";
 
 import {
-    Chip
+    Box,
+    Chip,
+    FormControl,
+    FormLabel
 } from "@mui/material";
 
 import { InputFormDialog, InputOption } from "@digitalaidseattle/mui";
-import { ProfileService } from "../services";
+import { headingsPlugin, listsPlugin, MDXEditor } from "@mdxeditor/editor";
+import { useProfiles } from "../services";
 import { Profile, Program } from "../types";
 import DelimitedListInput from "./DelmitedListInput";
 import EntityListInput from "./EntityListInput";
@@ -31,13 +35,16 @@ export const ProgramDialog: React.FC<Props> = ({
     onClose,
     onSubmit
 }) => {
-    const profileService = ProfileService.getInstance();
     const [activeProfiles, setActiveProfiles] = useState<Profile[]>([]);
+    const { data: profiles } = useProfiles();
 
     useEffect(() => {
-        profileService.getAllActive()
-            .then(profiles => setActiveProfiles(profiles.sort((a, b) => a.name.localeCompare(b.name))));
-    }, [profileService])
+        if (profiles) {
+            const active = profiles.filter(prof => prof.status === 'Active')
+                .sort((a, b) => a.name.localeCompare(b.name));
+            setActiveProfiles(active)
+        }
+    }, [profiles])
 
     const programInputFields: InputOption[] = [
         {
@@ -53,8 +60,26 @@ export const ProgramDialog: React.FC<Props> = ({
         {
             name: "description",
             label: 'Description',
-            size: 4,
+            type: 'custom',
             disabled: false,
+            inputRenderer: (idx, _option, value, onChange) => {
+                return (
+                    <FormControl fullWidth={true}>
+                        <FormLabel>{'Description'}</FormLabel>
+                        <Box border={1} sx={{
+                            borderColor: 'rgba(0, 0, 0, 0.23)',
+                            '&:hover': { borderColor: 'text.primary' },
+                        }
+                        }>
+                            <MDXEditor
+                                key={idx}
+                                markdown={value ?? ""}
+                                plugins={[headingsPlugin(), listsPlugin()]}
+                                onChange={onChange} />
+                        </Box>
+                    </FormControl>
+                )
+            }
         },
         {
             name: "node_types",
