@@ -4,40 +4,33 @@
  */
 
 // material-ui
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { useNotifications } from "@digitalaidseattle/core";
 import {
-    Box,
     Card,
     CardContent,
     CardHeader,
     Chip,
-    IconButton,
+    Grid,
     Stack,
-    Tabs,
-    Tooltip,
     Typography
 } from '@mui/material';
 
-import { ProgramService } from "../../services";
 import { NodeService } from "../../services/NodeService";
-import { Node } from "../../types";
 import { NodeContext } from "../NodeContext";
-import NodeDialog from "../NodeDialog";
 import { ProgramContext } from "../ProgramContext";
-import { TextEdit } from "../TextEdit";
+import { TextEdit } from "./TextEdit";
 
-import '@mdxeditor/editor/style.css';
-import { DateEdit } from "../DateEdit";
-import { MarkdownEdit } from "../MarkdownEdit";
-import { MemberEdit } from "../MemberEdit";
-import { PriorityEdit } from "../PriorityEdit";
-import { StatusEdit } from "../StatusEdit";
 import { TabbedPanels } from "@digitalaidseattle/mui";
-import { SubnodeListCard } from "./SubnodeListCard";
+import '@mdxeditor/editor/style.css';
+import { CommentListCard } from "./CommentListCard";
+import { DateEdit } from "./DateEdit";
 import { HistoryListCard } from "./HistoryListCard";
+import { MarkdownEdit } from "./MarkdownEdit";
+import { MemberEdit } from "./MemberEdit";
+import { PriorityEdit } from "./PriorityEdit";
+import { StatusEdit } from "./StatusEdit";
+import { SubnodeListCard } from "./SubnodeListCard";
 //
 export const NodeDetailCard: React.FC = () => {
 
@@ -54,49 +47,76 @@ export const NodeDetailCard: React.FC = () => {
             .changeAttribute(node, attribute, newDate.toISOString())
     }
 
-    return (program && node &&
-        <>
-            <Card>
-                <CardHeader title={`${node.node_no} ${node.name}`}
-                    action={
-                        <Stack
-                            className="actions"
-                            direction="row"
-                            spacing={0.5}
-                        >
-                            <Chip label={node.type} variant="outlined" color="primary"/>
-                        </Stack>
-                    } />
-                <CardContent>
-                    <Stack gap={1}>
-                        <TextEdit label={'Name'} value={node.name}
-                            onChange={(value) => handleAttributeChange('name', value)} />
-                        <MarkdownEdit label={'Description'} value={node.description ?? ""}
-                            onChange={(value) => handleAttributeChange('description', value)} />
-                        <StatusEdit label={'Status'} value={node.status}
-                            onChange={(value) => handleAttributeChange('status', value)} />
-                        <PriorityEdit label={'Priority'} value={node.priority}
-                            onChange={(value) => handleAttributeChange('priority', value)} />
-                        <DateEdit label={'Due Date'} value={node.due_date}
-                            onChange={(value) => handleDateChange('due_date', value)} />
-                        <MemberEdit label={'Assigned To'} value={node.assignee_id as string}
-                            onChange={(value) => handleAttributeChange('assignee_id', value)} />
-                        <SubnodeListCard />
-                        <TabbedPanels
-                            panels={[
-                                {
-                                    header: <Typography>Comments</Typography>,
-                                    children: <Typography>Comments go here</Typography>
-                                },
-                                {
-                                    header: <Typography>History</Typography>,
-                                    children: <HistoryListCard />
-                                }
-                            ]} />
+    async function handleAssignmentChange(attribute: string, newAssignee: string): Promise<void> {
+        NodeService.getInstance()
+            .changeAttribute(node, attribute, newAssignee)
+    }
 
+     return (program && node &&
+        <Card>
+            <CardHeader title={`${node.node_no} ${node.name}`}
+                action={
+                    <Stack
+                        className="actions"
+                        direction="row"
+                        spacing={0.5}
+                    >
+                        <Chip label={node.type} variant="outlined" color="primary" />
                     </Stack>
-                </CardContent>
-            </Card >
-        </>
+                } />
+            <CardContent>
+                <Stack gap={2}>
+                    <Grid container spacing={2}>
+                        <Grid size={2}><Typography>Name</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <TextEdit value={node.name}
+                                onChange={(value) => handleAttributeChange('name', value)} />
+                        </Grid>
+                        <Grid size={2}><Typography>Description</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <MarkdownEdit value={node.description ?? ""}
+                                onChange={(value) => handleAttributeChange('description', value)} />
+                        </Grid>
+
+                        <Grid size={2}><Typography>Status</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <StatusEdit value={node.status}
+                                onChange={(value) => handleAttributeChange('status', value)} />
+                        </Grid>
+
+                        <Grid size={2}><Typography>Priority</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <PriorityEdit value={node.priority}
+                                onChange={(value) => handleAttributeChange('priority', value)} />
+                        </Grid>
+
+                        <Grid size={2}><Typography>Due Date</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <DateEdit value={node.due_date}
+                                onChange={(value) => handleDateChange('due_date', value)} />
+                        </Grid>
+
+                        <Grid size={2}><Typography>Assigned To</Typography></Grid>
+                        <Grid size={10} display="flex">
+                            <MemberEdit value={node.assignee_id as string}
+                                onChange={(value) => handleAssignmentChange('assignee_id', value)} />
+                        </Grid>
+                    </Grid>
+                    <SubnodeListCard />
+                    <TabbedPanels
+                        panels={[
+                            {
+                                header: <Typography>Comments</Typography>,
+                                children: <CommentListCard />
+                            },
+                            {
+                                header: <Typography>History</Typography>,
+                                children: <HistoryListCard />
+                            }
+                        ]} />
+
+                </Stack>
+            </CardContent>
+        </Card >
     );
 }

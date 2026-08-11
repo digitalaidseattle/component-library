@@ -10,48 +10,35 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Avatar, IconButton, MenuItem, Select, Stack, SxProps, TextField, Tooltip, Typography } from "@mui/material";
-import { ProgramContext } from "./ProgramContext";
-import { Profile } from "../types";
+import { IconButton, MenuItem, Select, Stack, SxProps, Tooltip, Typography } from "@mui/material";
+import { ProgramContext } from "../ProgramContext";
+import { InputEditProps } from "./types";
 
-export type MemberEditProps = {
-    label?: string,
-    value: string,
-    rows?: number,
-    sx?: SxProps,
-    onChange: (text: string) => void
-};
-
-export const MemberEdit: React.FC<MemberEditProps> = ({ label, value, rows, sx, onChange }) => {
+export const StatusEdit: React.FC<InputEditProps<string>> = ({ value, onChange }) => {
     const [edit, setEdit] = useState<boolean>(false);
-    const [memberId, setMemberId] = useState<string>(value ?? "");
-    const [member, setMember] = useState<Profile>();
+    const [text, setText] = useState<string>(value);
     const [active, setActive] = useState<boolean>(false);
 
     const { program } = useContext(ProgramContext);
 
     useEffect(() => {
-        if (program && memberId) {
-            setMember(program.members.find(mem => mem.id === memberId));
-        }
-
-    }, [program, memberId])
+        setText(value);
+    }, [value])
 
     const cancel = () => {
-        setMemberId(value);
+        setText(value);
         setEdit(false);
         setActive(false);
     }
 
     const doSave = () => {
-        onChange(memberId)
+        onChange(text)
         setEdit(false);
         setActive(false);
     }
 
     return (
-        <Stack direction={'row'}>
-            {label && <Typography fontWeight={600} sx={{ marginRight: 2 }} >{label}:</Typography>}
+        <Stack direction={'row'} sx={{ flexGrow: 1 }}>
             {!edit &&
                 <Tooltip title='Click to edit'>
                     <Stack sx={{
@@ -59,20 +46,18 @@ export const MemberEdit: React.FC<MemberEditProps> = ({ label, value, rows, sx, 
                         bgcolor: active ? 'lightgray' : '',
                         cursor: active ? 'pointer' : ''
                     }} onClick={() => setEdit(!edit)} onMouseEnter={() => { setActive(true) }} onMouseLeave={() => { setActive(false) }}>
-                        {member && <Stack direction={"row"}><Avatar src={member.pic} /><Typography>{member.name}</Typography></Stack>}
+                        <Typography >{text}</Typography>
                     </Stack>
                 </Tooltip>
             }
             {edit &&
                 <>
                     <Select
-                        value={memberId}
+                        value={text}
                         fullWidth={true}
-                        onChange={(ev) => setMemberId(ev.target.value as string)}>
-                        {program.members.map(member =>
-                            <MenuItem key={member.id} value={member.id as string} >
-                                <Stack direction={"row"}><Avatar src={member.pic} ></Avatar> <Typography>{member.name}</Typography></Stack>
-                            </MenuItem>
+                        onChange={(ev) => setText(ev.target.value as string)}>
+                        {program.node_statuses.map(status =>
+                            <MenuItem key={status} value={status} >{status}</MenuItem>
                         )}
                     </Select>
                     <IconButton size="small" color="error" onClick={cancel}>

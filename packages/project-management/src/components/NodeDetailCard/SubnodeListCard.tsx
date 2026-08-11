@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
     Avatar,
+    Box,
     Card,
     CardContent,
     CardHeader,
@@ -56,6 +57,7 @@ export const SubnodeListCard: React.FC = () => {
     const [childNode, setChildNode] = useState<Node>();
 
     async function addNode() {
+        console.log(program , node)
         if (program && node) {
             programService.createChild(program!, node.id as string)
                 .then(nn => {
@@ -116,7 +118,9 @@ export const SubnodeListCard: React.FC = () => {
                 ),
                 renderCell: (params) => (
                     <Tooltip title={`Copy link`}>
-                        <Clipboard text={window.location.origin + nodeService.getUrl(params.row)} />
+                        <Box>
+                            <Clipboard text={window.location.origin + nodeService.getUrl(params.row)} />
+                        </Box>
                     </Tooltip>
                 )
             },
@@ -126,7 +130,8 @@ export const SubnodeListCard: React.FC = () => {
             },
             {
                 field: "name",
-                headerName: "Name"
+                headerName: "Name",
+                width: 400
             },
             {
                 field: "status",
@@ -138,13 +143,14 @@ export const SubnodeListCard: React.FC = () => {
                 field: "profile",
                 headerName: "Assigned_to",
                 type: "custom",
+                width: 200,
                 valueGetter: (_params, row) => {
                     return row.profile?.name;
                 },
                 renderCell: (params) => {
                     return params.row.profile &&
-                        <Stack direction={'row'}>
-                            <Avatar alt={params.row.profile?.name} src={params.row.profile?.pic} />
+                        <Stack direction={'row'} justifyItems={'center'}>
+                            <Avatar alt={params.row.profile?.name} src={params.row.profile?.pic} sx={{ width: 24, height: 24 }} />
                             <Typography>{params.row.profile?.name} </Typography>
                         </Stack>
                 }

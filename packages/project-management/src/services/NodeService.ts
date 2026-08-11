@@ -8,6 +8,7 @@
 import { DataAccessObject, getCoreServices, Identifier } from "@digitalaidseattle/core";
 import { Configuration } from "../Configuration";
 import { Node } from "../types";
+import { ProfileService } from "./ProfileService";
 
 
 export class NodeService {
@@ -150,19 +151,48 @@ export class NodeService {
         return this.dao.update(node.id as Identifier, partial);
     }
 
-    async changeStatus(node: Node, status: string): Promise<Node> {
+    async changeAssignment(node: Node, attribute: string, value: string): Promise<Node> {
         const user = await getCoreServices().authService?.getUser();
+        const assignee = await ProfileService.getInstance().getById(value);
         const newHistory = {
             user: user?.email!,
-            description: `Changed status to "${status}".`,
+            description: `Changed "Assignee" to "${assignee?.name}".`,
             date: new Date().toISOString(),
         };
-        const partial: any = { status: status, history: [...node.history, newHistory] };
+
+        const partial: any = { history: [...node.history, newHistory] };
+        partial[attribute] = value;
         return this.dao.update(node.id as Identifier, partial);
     }
 
     getUrl(node: Node): string {
         return `/programs/${node.program_id}/nodes/${node.node_no}`
+    }
+
+    async update(id: Identifier, changes: Partial<Node>): Promise<Node> {
+        return this.dao.update(id, changes);
+    }
+
+    async updateComment(node: Node, commentIndex: number, newContent: string): Promise<Node> {
+        const user = await getCoreServices().authService?.getUser();
+        const newHistory = {
+            user: user?.email!,
+            description: commentIndex === -1 ? 'Comment added.' : 'Comment.updated',
+            date: new Date().toISOString(),
+        };
+        const newComment = {
+            user: user?.email!,
+            content: newContent,
+            date: new Date().toISOString(),
+        };
+
+        if (commentIndex > -1) {
+            node.comments[commentIndex] = newComment
+        }
+
+        const newComments = commentIndex === -1 ? [...node.comments, newComment] : [...node.comments];
+        const partial: any = { comments: newComments, history: [...node.history, newHistory] };
+        return this.dao.update(node.id as Identifier, partial);
     }
 
 

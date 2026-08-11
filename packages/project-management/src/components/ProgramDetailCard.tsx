@@ -114,9 +114,9 @@ export const ProgramDetailCard: React.FC = () => {
                     } />
                 {program &&
                     <TabbedPanels panels={[
-                        { header: <Typography>Summary</Typography>, children: <Summary /> },
                         { header: <Typography>Kanban</Typography>, children: <Kanban /> },
                         { header: <Typography>Outline</Typography>, children: <Outline /> },
+                        { header: <Typography>Summary</Typography>, children: <Summary /> },
                     ]}>
                     </TabbedPanels>
                 }

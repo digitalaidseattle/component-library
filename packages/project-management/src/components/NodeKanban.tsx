@@ -158,7 +158,7 @@ export function NodeKanban({ node, onFocusChange }: { node: Node | undefined, on
 
     const handleStatusChange = (changes: Map<string, unknown>, element: NodeWrapper) => {
         NodeService.getInstance()
-            .changeStatus(element, changes.get("containerId") as string)
+            .changeAttribute(element, "status", changes.get("containerId") as string)
             .then(updated => { console.log('handleStatusChange', updated), setRefresh(0) })
     }
 

@@ -7,27 +7,24 @@
  *
  */
 
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { IconButton, MenuItem, Select, Stack, SxProps, TextField, Tooltip, Typography } from "@mui/material";
-import { ProgramContext } from "./ProgramContext";
+import { IconButton, Stack, SxProps, TextField, Tooltip, Typography } from "@mui/material";
+import { InputEditProps } from "./types";
 
-export type SPriorityEditProps = {
-    label?: string,
-    value: string,
-    rows?: number,
-    sx?: SxProps,
-    onChange: (text: string) => void
+export type TextEditProps = InputEditProps<string> & {
+    rows?: number
 };
 
-export const PriorityEdit: React.FC<SPriorityEditProps> = ({ label, value, rows, sx, onChange }) => {
+export const TextEdit: React.FC<TextEditProps> = ({ value, rows, onChange }) => {
     const [edit, setEdit] = useState<boolean>(false);
-    const [text, setText] = useState<string>(value ?? "");
+    const [text, setText] = useState<string>(value);
     const [active, setActive] = useState<boolean>(false);
 
-    // TODO configurable priorities?
-    const [priorities] = useState<string[]>(["low", "medium", "high"]);
+    useEffect(() => {
+        setText(value);
+    }, [value])
 
     const cancel = () => {
         setText(value);
@@ -43,7 +40,6 @@ export const PriorityEdit: React.FC<SPriorityEditProps> = ({ label, value, rows,
 
     return (
         <Stack direction={'row'}>
-            {label && <Typography fontWeight={600} sx={{ marginRight: 2 }} >{label}:</Typography>}
             {!edit &&
                 <Tooltip title='Click to edit'>
                     <Stack sx={{
@@ -57,14 +53,17 @@ export const PriorityEdit: React.FC<SPriorityEditProps> = ({ label, value, rows,
             }
             {edit &&
                 <>
-                    <Select
+                    <TextField
+                        id="problem"
+                        name="problem"
+                        type="text"
                         value={text}
+                        variant="standard"
                         fullWidth={true}
-                        onChange={(ev) => setText(ev.target.value as string)}>
-                        {priorities.map(status =>
-                            <MenuItem key={status} value={status} >{status}</MenuItem>
-                        )}
-                    </Select>
+                        multiline={rows && rows > 0 ? true : false}
+                        rows={rows ?? 1}
+                        onChange={(ev => setText(ev.target.value))}
+                    />
                     <IconButton size="small" color="error" onClick={cancel}>
                         <CloseCircleOutlined />
                     </IconButton>

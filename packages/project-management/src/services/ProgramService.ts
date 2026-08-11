@@ -121,7 +121,8 @@ export class ProgramService {
                 status: program.node_statuses[0]
             }
         } else {
-            const parent = await nodeService.getById(parentId);
+            const parent = this.findNode(program, parentId);
+            console.log('createChild', program, parentId, parent)
             if (parent) {
                 const childType = this.getChildType(program, parent);
                 if (childType) {

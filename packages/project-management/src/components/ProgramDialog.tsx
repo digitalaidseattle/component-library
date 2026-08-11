@@ -3,7 +3,7 @@
  * 
  * @copyright Digital Aid Seattle 2026
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
     Box,
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { InputFormDialog, InputOption } from "@digitalaidseattle/mui";
-import { headingsPlugin, listsPlugin, MDXEditor } from "@mdxeditor/editor";
+import { BoldItalicUnderlineToggles, headingsPlugin, listsPlugin, ListsToggle, MDXEditor, MDXEditorMethods, toolbarPlugin, UndoRedo } from "@mdxeditor/editor";
 import { useProfiles } from "../services";
 import { Profile, Program } from "../types";
 import DelimitedListInput from "./DelmitedListInput";
@@ -37,6 +37,8 @@ export const ProgramDialog: React.FC<Props> = ({
 }) => {
     const [activeProfiles, setActiveProfiles] = useState<Profile[]>([]);
     const { data: profiles } = useProfiles();
+
+    const ref = useRef<MDXEditorMethods>(null);
 
     useEffect(() => {
         if (profiles) {
@@ -72,9 +74,22 @@ export const ProgramDialog: React.FC<Props> = ({
                         }
                         }>
                             <MDXEditor
-                                key={idx}
+                                ref={ref}
                                 markdown={value ?? ""}
-                                plugins={[headingsPlugin(), listsPlugin()]}
+                                plugins={[
+                                    headingsPlugin(),
+                                    listsPlugin(),
+                                    toolbarPlugin({
+                                        toolbarClassName: 'my-classname',
+                                        toolbarContents: () => (
+                                            <>
+                                                <UndoRedo />
+                                                <BoldItalicUnderlineToggles />
+                                                <ListsToggle />
+                                            </>
+                                        )
+                                    })
+                                ]}
                                 onChange={onChange} />
                         </Box>
                     </FormControl>
@@ -96,7 +111,7 @@ export const ProgramDialog: React.FC<Props> = ({
             }
         },
         {
-            name: "statuses",
+            name: "node_statuses",
             label: 'Statuses (soonest-to-lastest)',
             type: 'custom',
             disabled: false,
@@ -104,7 +119,7 @@ export const ProgramDialog: React.FC<Props> = ({
                 return <DelimitedListInput
                     label={option.label}
                     value={value}
-                    placeholder={'Backlog, ToDo, In Progress'}
+                    placeholder={'ToDo, In Progress, Done'}
                     onChange={onChange}
                 />
             }

@@ -7,42 +7,37 @@
  *
  */
 
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { IconButton, MenuItem, Select, Stack, SxProps, TextField, Tooltip, Typography } from "@mui/material";
-import { ProgramContext } from "./ProgramContext";
+import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { DatePicker, } from "@mui/x-date-pickers";
+import dayjs from 'dayjs';
+import { InputEditProps } from "./types";
 
-export type StatusEditProps = {
-    label?: string,
-    value: string,
-    rows?: number,
-    sx?: SxProps,
-    onChange: (text: string) => void
-};
-
-export const StatusEdit: React.FC<StatusEditProps> = ({ label, value, rows, sx, onChange }) => {
+export const DateEdit: React.FC<InputEditProps<Date>> = ({ value, onChange }) => {
     const [edit, setEdit] = useState<boolean>(false);
-    const [text, setText] = useState<string>(value);
+    const [date, setDate] = useState<Date>(value);
     const [active, setActive] = useState<boolean>(false);
 
-    const { program } = useContext(ProgramContext);
+    useEffect(() => {
+        setDate(value);
+    }, [value]);
 
     const cancel = () => {
-        setText(value);
+        setDate(value);
         setEdit(false);
         setActive(false);
     }
 
     const doSave = () => {
-        onChange(text)
+        onChange(date)
         setEdit(false);
         setActive(false);
     }
 
     return (
-        <Stack direction={'row'}>
-            {label && <Typography fontWeight={600} sx={{ marginRight: 2 }} >{label}:</Typography>}
+        <Stack direction={'row'} sx={{ flexGrow: 1 }}>
             {!edit &&
                 <Tooltip title='Click to edit'>
                     <Stack sx={{
@@ -50,20 +45,17 @@ export const StatusEdit: React.FC<StatusEditProps> = ({ label, value, rows, sx, 
                         bgcolor: active ? 'lightgray' : '',
                         cursor: active ? 'pointer' : ''
                     }} onClick={() => setEdit(!edit)} onMouseEnter={() => { setActive(true) }} onMouseLeave={() => { setActive(false) }}>
-                        <Typography >{text}</Typography>
+                        <Typography >{date?.toDateString()}</Typography>
                     </Stack>
                 </Tooltip>
             }
             {edit &&
                 <>
-                    <Select
-                        value={text}
-                        fullWidth={true}
-                        onChange={(ev) => setText(ev.target.value as string)}>
-                        {program.node_statuses.map(status =>
-                            <MenuItem key={status} value={status} >{status}</MenuItem>
-                        )}
-                    </Select>
+                    <DatePicker
+                        sx={{ width: "100%" }}
+                        value={dayjs(date)}
+                        onChange={(value) => setDate(value?.toDate())}
+                    />
                     <IconButton size="small" color="error" onClick={cancel}>
                         <CloseCircleOutlined />
                     </IconButton>
