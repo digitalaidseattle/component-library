@@ -4,7 +4,7 @@
  */
 
 // material-ui
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { PlusCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNotifications } from "@digitalaidseattle/core";
@@ -18,32 +18,52 @@ import {
     Typography
 } from '@mui/material';
 import { ProgramDialog } from "../components";
-import NodeDialog from "../components/NodeDialog";
 import Outline from "../components/Outline";
 import { ProgramContext } from "../components/ProgramContext";
 import { ProgramService } from "../services";
 import { Node, Program } from "../types";
 import { Kanban } from "./Kanban";
 import { Summary } from "./Summary";
+import NodeDialog from "./NodeDialog";
 
 //
 export const ProgramDetailCard: React.FC = () => {
     const service = ProgramService.getInstance();
+    const notifications = useNotifications();
 
+    const { program, setProgram } = React.useContext(ProgramContext);
     const [openProgramDialog, setOpenProgramDialog] = useState<boolean>(false);
     const [programModalTitle, setProgramModalTitle] = useState<string>("");
 
+    const [selectedNode, setSelectedNode] = useState<Node>();
     const [openNodeDialog, setOpenNodeDialog] = useState<boolean>(false);
     const [nodeDialogTitle, setNodeDialogTitle] = useState<string>("");
-    const [childNode, setChildNode] = useState<Node>();
 
-    const notifications = useNotifications();
-    const { program, setProgram } = React.useContext(ProgramContext);
-    
+    React.useEffect(() => {
+    }, [program]);
+
+    function handleProgramChange(changed: Program | null): void {
+        if (changed !== null) {
+            service.update(changed)
+                .then(updated => {
+                    setProgram(updated);
+                    setOpenProgramDialog(false);
+                    notifications.success(`Program changes saved.`)
+                })
+        } else {
+            setOpenProgramDialog(false);
+        }
+    }
+
+    function editSettings() {
+        setProgramModalTitle(`Edit Program: ${program.name}`);
+        setOpenProgramDialog(true);
+    }
+
     async function addNode() {
         service.createChild(program!)
             .then(node => {
-                setChildNode(node);
+                setSelectedNode(node);
                 setNodeDialogTitle(`Add ${node.type}`)
                 setOpenNodeDialog(true);
             })
@@ -54,30 +74,13 @@ export const ProgramDetailCard: React.FC = () => {
             service.insertNode(program!, updated)
                 .then(updatedProgram => {
                     setProgram(updatedProgram);
+                    setOpenNodeDialog(false);
                     notifications.success(`Added ${updated.node_no}.`)
                 })
+        } else {
+            setOpenNodeDialog(false);
+
         }
-        setOpenNodeDialog(false);
-    }
-
-    function editSettings() {
-        if (program) {
-            setProgramModalTitle(`Edit Program: ${program.name}`);
-            setOpenProgramDialog(true);
-        }
-    }
-
-    function handleCloseProgramDialog(): void {
-        setOpenProgramDialog(false);
-    }
-
-    function handleSubmitProgramDialog(changed: Program): void {
-        service.update(changed)
-            .then(updated => {
-                setProgram(updated);
-                setOpenProgramDialog(false);
-                notifications.success(`Changes saved.`)
-            })
     }
 
     return (program &&
@@ -123,16 +126,14 @@ export const ProgramDetailCard: React.FC = () => {
             </Card >
             <ProgramDialog
                 program={program!}
-                opened={openProgramDialog}
+                open={openProgramDialog}
                 title={programModalTitle}
-                onClose={handleCloseProgramDialog}
-                onSubmit={handleSubmitProgramDialog} />
+                onChange={handleProgramChange} />
             <NodeDialog
-                node={childNode!}
+                node={selectedNode!}
                 open={openNodeDialog}
                 title={nodeDialogTitle}
-                onChange={handleNodeChange}
-            />
+                onChange={handleNodeChange} />
         </>
     );
 }

@@ -1,5 +1,5 @@
 /**
- * Outline
+ * Kanban
  *
  *
  */
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Card, CardHeader, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import { ProjectOutlined } from "@ant-design/icons";
+import { useNotifications } from "@digitalaidseattle/core";
 import { ProgramService } from "../services";
 import { Node } from "../types";
 import { NodeKanban } from "./NodeKanban";
@@ -38,6 +39,7 @@ export function Kanban() {
     function editViewSettings() {
         // show edit view settings
         // put it in local storage
+        alert('Fixme')
     }
 
     return (
@@ -51,7 +53,7 @@ export function Kanban() {
                             <Typography sx={{ cursor: "pointer" }}
                                 onClick={() => setFocusNode(ancestor)} >{ancestor.node_no} {ancestor.name}</Typography>
                         ))}
-                        {focusNode && <Typography>{focusNode.node_no} {focusNode.name}</Typography>}
+                        {focusNode && <Typography fontWeight={600}>{focusNode.node_no} {focusNode.name}</Typography>}
                     </Breadcrumbs>
                 }
                 action={
@@ -73,14 +75,26 @@ export function Kanban() {
                     </Stack>
                 } />
             <Stack gap={2}>
-                {!focusNode &&
-                    <NodeKanban node={undefined}
-                        onFocusChange={node => setFocusNode(node)} />}
-                {focusNode && nodes.map(node => <Box key={node.id} >
+                {
+                    nodes.map(node => (
+                        <Box key={node.id} >
+                            <NodeKanban
+                                node={node}
+                                onFocusChange={focus => setFocusNode(focus)} />
+                        </Box>
+                    ))
+                }
+                {/* {!focusNode &&
                     <NodeKanban
-                        node={node}
-                        onFocusChange={node => setFocusNode(node)} />
-                </Box>)}
+                        node={undefined}
+                        onFocusChange={focus => setFocusNode(focus)} />}
+                {focusNode && nodes.map(node => (
+                    <Box key={node.id} >
+                        <NodeKanban
+                            node={node}
+                            onFocusChange={focus => setFocusNode(focus)} />
+                    </Box>
+                ))} */}
             </Stack>
         </Card>
     );

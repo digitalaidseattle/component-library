@@ -16,7 +16,7 @@ export type Profile = Entity & {
 }
 
 export type Program = Entity & {
-    status: string;  // 'active' | 'inactive'
+    status: string;  // Configured 'active' | 'inactive'
     name: string;
     description: string;
     prefix: string;  // FOR JIRA-like naming
@@ -40,9 +40,9 @@ export type History = {
 }
 
 export type Node = Entity & {
-    node_no: string;
-    program_id: Identifier;
-    parent_id: Identifier | undefined;
+    node_no: string;  // Human readable name
+    program_id: Identifier;  // Program
+    parent_id: Identifier | undefined;  // Parent Node
 
     name: string;
     type: string;

@@ -6,8 +6,8 @@
 
 import React, { useEffect } from 'react';
 
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Box, Chip, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { EditOutlined, PlusCircleOutlined, ProjectOutlined } from '@ant-design/icons';
+import { Box, Breadcrumbs, Card, CardHeader, Chip, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import {
     RichTreeView,
     TreeItemContent,
@@ -43,7 +43,9 @@ export default function Outline() {
     const { program } = React.useContext(ProgramContext);
 
     const [treeNodes, setTreeNodes] = React.useState<TreeNode[]>([]);
+
     const [openNodeDialog, setOpenNodeDialog] = React.useState<boolean>(false);
+    const [nodeDialogTitle, setNodeDialogTitle] = React.useState<string>("");
     const [selectedNode, setSelectedNode] = React.useState<Node>();
 
     useEffect(() => {
@@ -58,10 +60,15 @@ export default function Outline() {
         });
     }
 
-    function addNode(parentId: string) {
+    function editViewSettings() {
+        alert('Fixme');
+    }
+
+    function addNode(parentId?: string) {
         service.createChild(program, parentId)
-            .then(child => {
-                setSelectedNode(child);
+            .then(node => {
+                setSelectedNode(node);
+                setNodeDialogTitle(`Add ${node.type}`)
                 setOpenNodeDialog(true);
             })
     }
@@ -91,6 +98,7 @@ export default function Outline() {
             openNode(found!);
         }
     };
+
 
     // 1. Define your custom tree item component
     const CustomTreeItem = React.forwardRef(function CustomTreeItem(
@@ -184,20 +192,57 @@ export default function Outline() {
     });
 
     return (
-        <Box sx={{ minHeight: 352, minWidth: 250 }}>
-            <RichTreeView
-                items={treeNodes}
-                slots={{
-                    item: CustomTreeItem,
-                }}
-                onItemClick={handleItemClick}
+        <Card >
+            <CardHeader
+                title={
+                    <Breadcrumbs aria-label="breadcrumb" separator=">>">
+                        <Typography>{program.name}</Typography>
+                    </Breadcrumbs>
+                }
+                action={
+                    <Stack
+                        className="actions"
+                        direction="row"
+                        spacing={0.5}
+                    >
+                        <Tooltip title={`Add ${program?.node_types[0]}`}>
+                            <IconButton
+                                onClick={(e) => {
+                                    addNode();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <PlusCircleOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit view setting">
+                            <IconButton
+                                onClick={(e) => {
+                                    editViewSettings();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <ProjectOutlined />
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
+                }
             />
-            <NodeDialog
-                title={"Add"}
-                node={selectedNode!}
-                open={openNodeDialog}
-                onChange={handleNodeChange} />
-        </Box>
+            <Box sx={{ minHeight: 352, minWidth: 250 }}>
+                <RichTreeView
+                    items={treeNodes}
+                    slots={{
+                        item: CustomTreeItem,
+                    }}
+                    onItemClick={handleItemClick}
+                />
+                <NodeDialog
+                    title={nodeDialogTitle}
+                    node={selectedNode!}
+                    open={openNodeDialog}
+                    onChange={handleNodeChange} />
+            </Box>
+        </Card>
     );
 }
 

@@ -159,23 +159,22 @@ export const ProgamsListCard: React.FC = () => {
         setOpenProgramModal(false);
     }
 
-    function handleSubmit(submitted: Program): void {
-        if (isNewProgram) {
-            service.insert(submitted)
-                .then(inserted => {
-                    setOpenProgramModal(false);
-                    navigate(`/${DETAIL_PAGE}/${inserted.id}`);
-                    notifcations.success(`Program created.`);
-                })
-
-        } else {
-            service.update(submitted)
-                .then(updated => {
-                    setOpenProgramModal(false);
-                    fetchData();
-                })
-
+    function handleChange(submitted: Program | null): void {
+        if (submitted) {
+            if (isNewProgram) {
+                service.insert(submitted)
+                    .then(inserted => {
+                        navigate(`/${DETAIL_PAGE}/${inserted.id}`);
+                        notifcations.success(`Program created.`);
+                    })
+            } else {
+                service.update(submitted)
+                    .then(updated => {
+                        fetchData();
+                    })
+            }
         }
+        setOpenProgramModal(false);
     }
 
     return (
@@ -206,10 +205,10 @@ export const ProgamsListCard: React.FC = () => {
             </Card>
             <ProgramDialog
                 program={program!}
-                opened={openProgramModal}
+                open={openProgramModal}
                 title={programModalTitle}
-                onClose={handleClose}
-                onSubmit={handleSubmit} />
+                onChange={handleChange}
+            />
         </>
     );
 }

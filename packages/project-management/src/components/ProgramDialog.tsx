@@ -22,18 +22,15 @@ import EntityListInput from "./EntityListInput";
 interface Props {
     program: Program;
     title: string;
-    opened: boolean;
-
-    onClose: () => void;
-    onSubmit: (updated: Program) => void;
+    open: boolean;
+    onChange: (updated: Program | null) => void;
 }
 
 export const ProgramDialog: React.FC<Props> = ({
     program,
     title,
-    opened,
-    onClose,
-    onSubmit
+    open,
+    onChange
 }) => {
     const [activeProfiles, setActiveProfiles] = useState<Profile[]>([]);
     const { data: profiles } = useProfiles();
@@ -142,19 +139,14 @@ export const ProgramDialog: React.FC<Props> = ({
 
     ];
 
-
     function handleChange(updated: Program | null) {
-        if (updated === null) {
-            onClose();
-        } else {
-            onSubmit(updated);
-        }
+        onChange(updated);
     }
 
     return (
         <InputFormDialog
             entity={program}
-            open={opened}
+            open={open}
             title={title}
             inputFields={programInputFields}
             onChange={handleChange} />
