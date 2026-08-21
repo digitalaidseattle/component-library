@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
-    "@mui/x-date-pickers": "^8.17.0",
+    "@mui/x-date-pickers": "^9.11.0",
     "dayjs": "^1.11.13",
     "react-markdown": "^10.1.0"
   },

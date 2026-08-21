@@ -32,7 +32,7 @@ export class NodeService {
         return ({
             id: undefined,
             program_id: '',
-            parent_id: undefined,
+            parent_id: null,
             node_no: '',
 
             name: '',
@@ -40,7 +40,7 @@ export class NodeService {
             status: '',
             description: '',
             priority: '',
-            assignee_id: undefined,
+            assignee_id: null,
             due_date: new Date(),
 
             children: [],

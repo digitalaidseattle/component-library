@@ -17,7 +17,7 @@ export class ProgramDao extends FirestoreDao<Program> {
                 Configuration.getInstance().client,
                 {
                     unmapper: (entity) => {
-                        const { nodes, ...trimmed } = entity;
+                        const { id, nodes, ...trimmed } = entity;
                         return trimmed;
                     }
                 }

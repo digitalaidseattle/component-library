@@ -42,15 +42,15 @@ export type History = {
 export type Node = Entity & {
     node_no: string;  // Human readable name
     program_id: Identifier;  // Program
-    parent_id: Identifier | undefined;  // Parent Node
+    parent_id: Identifier | null;  // Parent Node
 
     name: string;
     type: string;
     status: string;
     priority: string;
     due_date: Date;
-    description: string | undefined;
-    assignee_id: Identifier | undefined;
+    description: string | null;
+    assignee_id: Identifier | null;
 
     children: Node[];
     comments: Comment[];

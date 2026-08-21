@@ -84,17 +84,6 @@ export function Kanban() {
                         </Box>
                     ))
                 }
-                {/* {!focusNode &&
-                    <NodeKanban
-                        node={undefined}
-                        onFocusChange={focus => setFocusNode(focus)} />}
-                {focusNode && nodes.map(node => (
-                    <Box key={node.id} >
-                        <NodeKanban
-                            node={node}
-                            onFocusChange={focus => setFocusNode(focus)} />
-                    </Box>
-                ))} */}
             </Stack>
         </Card>
     );

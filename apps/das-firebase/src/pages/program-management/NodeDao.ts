@@ -25,7 +25,7 @@ export class NodeDao extends FirestoreDao<Node> {
                         return entity;
                     },
                     unmapper: (entity) => {
-                        const { children, ...trimmed } = entity;
+                        const { id, children, ...trimmed } = entity;
                         return trimmed;
                     }
                 }

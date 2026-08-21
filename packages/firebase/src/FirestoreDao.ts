@@ -113,7 +113,8 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
     // Add a document to a collection
     async batchInsert(entities: T[], opts?: DataAccessOptions<T>): Promise<T[]> {
         try {
-            const docRef = await addDoc(collection(this.db, this.collectionName), entities);
+            const unMapped = entities.map(entity => this.unmapEntity(entity));
+            const docRef = await addDoc(collection(this.db, this.collectionName), unMapped);
             // FIXME add ID to docRef instead
             return entities
         } catch (e) {
@@ -125,7 +126,8 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
     // Add a document to a collection
     async insert(entity: T, opts?: DataAccessOptions<T>): Promise<T> {
         try {
-            const docRef = await addDoc(collection(this.db, this.collectionName), entity);
+            const unMapped = this.unmapEntity(entity);
+            const docRef = await addDoc(collection(this.db, this.collectionName), unMapped);
             return {
                 ...docRef.toJSON(),
                 id: docRef.id
@@ -140,7 +142,8 @@ export class FirestoreDao<T extends Entity> implements DataAccessObject<T> {
     async update(entityId: Identifier, updatedFields: Partial<T>, opts?: DataAccessOptions<T>): Promise<T> {
         try {
             const docRef = doc(this.db, this.collectionName, entityId as string);
-            updateDoc(docRef, updatedFields as any);
+            const unMapped = this.unmapEntity(updatedFields as T);
+            updateDoc(docRef, unMapped as any);
             return this.getById(entityId);
         } catch (e) {
             console.error("Error updating document: ", e);
