@@ -1,10 +1,8 @@
 /**
- * Outline
+ * NodeKanban
  *
  *
  */
-
-
 import { DDCategory, DDType, DragAndDrop } from '@digitalaidseattle/draganddrop';
 import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, CardHeader, Chip, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useState } from "react";

@@ -3,9 +3,9 @@
  *
  */
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { NodeService } from '../services/NodeService';
 import { Node } from '../types';
@@ -36,13 +36,13 @@ export default function NodeDialog({
         reset,
         formState: { errors, validatingFields, isDirty },
     } = useForm<Node>({
-        mode: 'onTouched',
+        mode: 'onBlur',
+        reValidateMode: 'onChange',
         defaultValues: node ?? nodeService.empty()
     });
 
     useEffect(() => {
         if (open && node) {
-            console.log('reset', node)
             reset(node);
         }
     }, [open, node, reset]);
@@ -68,6 +68,7 @@ export default function NodeDialog({
                         {...register('name', {
                             required: 'Name is required'
                         })}
+                        required
                         error={!!errors.name}
                         helperText={errors.name?.message || (validatingFields.name ? 'Checking availability...' : undefined)}
                         sx={{ minHeight: '75px' }}  //TODO  minHeight avoids layout resizing,  may have to make this more repsonsive
@@ -76,41 +77,70 @@ export default function NodeDialog({
                         label="Description"
                         name="description"
                         control={control}
+                        required={true}
                     />
-                    <FormControl fullWidth>
-                        <InputLabel id={'status-label'}>{'Status'}</InputLabel>
-                        <Select
-                            id={'status'}
-                            labelId={'status-label'}
-                            label={'Status'}
-                            {...register('status')}
-                            error={!!errors.status}>
-                            {[
-                                <MenuItem key={`s-0`} value={''}>{`<Make Selection>`}</MenuItem>,
-                                ...program.node_statuses
-                                    .map(value => ({ label: value, value: value }))
-                                    .map((item: { label: string, value: string }, idx) =>
-                                        <MenuItem key={`s-${idx + 1}`} value={item.value} >{item.label}</MenuItem>
-                                    )
-                            ]}
-                        </Select>
-                    </FormControl>
+                    <Controller
+                        name="status"
+                        control={control}
+                        rules={{
+                            required: 'Please select a status',
+                        }}
+                        render={({ field, fieldState }) => (
+                            <FormControl
+                                fullWidth
+                                required
+                                error={!!fieldState.error}>
+                                <InputLabel id={'status-label'}>{'Status'}</InputLabel>
+                                <Select
+                                    {...field}
+                                    id="status"
+                                    labelId="status-label"
+                                    label="Status"
+                                    value={field.value ?? ''}
+                                >
+                                    <MenuItem value="">
+                                        <em>&lt;Make Selection&gt;</em>
+                                    </MenuItem>
+
+                                    {program.node_statuses.map((status) => (
+                                        <MenuItem key={status} value={status}>{status}</MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>
+                                    {fieldState.error?.message}
+                                </FormHelperText>
+                            </FormControl>
+                        )}
+                    />
+
                     <FormControl fullWidth>
                         <InputLabel id={'assignee-label'}>{'Assigned To'}</InputLabel>
-                        <Select
-                            id={'assignee_id'}
-                            labelId={'assignee-label'}
-                            label={'Assigned To'}
-                            {...register('assignee_id')}>
-                            {[
-                                <MenuItem key={`m-0`} value={''}>{`<Make Selection>`}</MenuItem>,
-                                ...program.members
-                                    .map(member => ({ label: member.name, value: member.id as string }))
-                                    .map((item: { label: string, value: string }, idx) =>
-                                        <MenuItem key={`m-${idx + 1}`} value={item.value} >{item.label}</MenuItem>
-                                    )
-                            ]}
-                        </Select>
+                        <Controller
+                            name="assignee_id"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    {...field}
+                                    id="assignee_id"
+                                    labelId="assignee-label"
+                                    label="Assigned To"
+                                    value={field.value ?? ''}
+                                >
+                                    <MenuItem value="">
+                                        <em>&lt;Make Selection&gt;</em>
+                                    </MenuItem>
+
+                                    {program.members.map((member) => (
+                                        <MenuItem
+                                            key={member.id}
+                                            value={member.id as string}
+                                        >
+                                            {member.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
                     </FormControl>
                 </Stack>
             </DialogContent>
