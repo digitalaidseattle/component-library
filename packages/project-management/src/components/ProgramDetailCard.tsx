@@ -75,7 +75,7 @@ export const ProgramDetailCard: React.FC = () => {
                 .then(updatedProgram => {
                     setProgram(updatedProgram);
                     setOpenNodeDialog(false);
-                    notifications.success(`Added ${updated.node_no}.`)
+                    notifications.success(`Added ${updated.name}.`)
                 })
         } else {
             setOpenNodeDialog(false);

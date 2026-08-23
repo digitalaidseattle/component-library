@@ -77,7 +77,6 @@ export default function NodeDialog({
                         label="Description"
                         name="description"
                         control={control}
-                        required={true}
                     />
                     <Controller
                         name="status"
