@@ -33,8 +33,7 @@ const HeaderContent: React.FC = () => {
         </Box>}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
       {configuration.toolbarItems}
-      {!matchesXs && <Profile />}
-      {matchesXs && <MobileSection />}
+      <Profile />
     </>
   );
 };
