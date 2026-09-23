@@ -54,9 +54,19 @@ function MainLayout({ sx }: { sx?: SxProps }) {
     setDrawerOpen(!drawerOpen);
   };
 
+  const handleResize = () => {
+    setDrawerOpen(false);
+  }
+
   // set media wise responsive drawer
   useEffect(() => {
     setDrawerOpen(!matchDownLG);
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [matchDownLG]);
 
   return (user &&
