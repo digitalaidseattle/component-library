@@ -13,7 +13,6 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 // project import
 import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
-import MobileSection from './MobileSection';
 import Profile from './Profile/Profile';
 
 // ==============================|| HEADER - CONTENT ||============================== //
