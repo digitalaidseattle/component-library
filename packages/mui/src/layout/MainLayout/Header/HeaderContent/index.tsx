@@ -13,7 +13,6 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 // project import
 import { useLayoutConfiguration } from '../../../LayoutConfigurationContext';
-import MobileSection from './MobileSection';
 import Profile from './Profile/Profile';
 
 // ==============================|| HEADER - CONTENT ||============================== //
@@ -33,8 +32,7 @@ const HeaderContent: React.FC = () => {
         </Box>}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
       {configuration.toolbarItems}
-      {!matchesXs && <Profile />}
-      {matchesXs && <MobileSection />}
+      <Profile />
     </>
   );
 };
