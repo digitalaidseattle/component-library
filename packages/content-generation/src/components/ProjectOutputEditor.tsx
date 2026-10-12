@@ -3,7 +3,7 @@
  * 
  * @copyright 2025 Digital Aid Seattle
 */
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { HelpTopicContext, useHelp } from '@digitalaidseattle/core';
 import {
   Button, ButtonGroup,
@@ -58,7 +58,7 @@ export const ProjectOutputEditor = ({ title, onChange }: { title: string, onChan
         slotProps={{ title: { fontWeight: 600, fontSize: 16 } }}
         avatar={<IconButton
           onClick={() => { setHelpTopic('Outputs'); setShowHelp(true) }}
-          color="primary"><InfoCircleOutlined /></IconButton>}
+          color="primary"><QuestionCircleOutlined /></IconButton>}
         action={
           <Button
             variant="outlined"

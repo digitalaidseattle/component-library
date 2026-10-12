@@ -22,7 +22,7 @@ const Error: React.FC = () => {
   const navigate = useNavigate();
 
   const returnHandler = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   return (

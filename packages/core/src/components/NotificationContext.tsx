@@ -10,6 +10,7 @@ import React, { createContext, useState } from "react";
 export type NotificationOptions = {
     open: boolean;
     message: string;
+    details?: string;
     severity: string;
     handleClose: () => void
 }
@@ -53,34 +54,38 @@ export const useNotifications = () => {
 
     const notifications = {
         displayOptions,
-        info: (message: string) => {
+        info: (message: string, details?: string) => {
             setDisplayOptions({
                 open: true,
                 message: message,
+                details: details,
                 severity: 'info',
                 handleClose: () => setDisplayOptions(DEFAULT_OPTIONS)
             })
         },
-        success: (message: string) => {
+        success: (message: string, details?: string) => {
             setDisplayOptions({
                 open: true,
                 message: message,
+                details: details,
                 severity: 'success',
                 handleClose: () => setDisplayOptions(DEFAULT_OPTIONS)
             })
         },
-        warn: (message: string) => {
+        warn: (message: string, details?: string) => {
             setDisplayOptions({
                 open: true,
                 message: message,
+                details: details,
                 severity: 'warning',
                 handleClose: () => setDisplayOptions(DEFAULT_OPTIONS)
             })
         },
-        error: (message: string) => {
+        error: (message: string, details?: string) => {
             setDisplayOptions({
                 open: true,
                 message: message,
+                details: details,
                 severity: 'error',
                 handleClose: () => setDisplayOptions(DEFAULT_OPTIONS)
             })

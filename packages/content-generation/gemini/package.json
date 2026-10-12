@@ -1,0 +1,4 @@
+{
+  "main": "dist/digitalaidseattle-content-generation-gemini.cjs.js",
+  "module": "dist/digitalaidseattle-content-generation-gemini.esm.js"
+}

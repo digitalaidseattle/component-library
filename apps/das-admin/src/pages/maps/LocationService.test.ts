@@ -5,26 +5,17 @@
  *
  */
 import { describe, expect, it } from 'vitest';
-import { mappingService } from './mappingService';
+import { Location, LocationService } from './LocationService';
 
-describe('mappingService tests', () => {
-
-    it('getLocations', async () => {
-        const locs = await mappingService.getLocations();
-        expect(locs.length).toBeGreaterThan(0);
-    });
-
-    it('getPeople', async () => {
-        expect(true).toEqual(true);
-    });
+describe('LocationService tests', () => {
 
     it('unique', async () => {
-        const orig = [
+        const orig: Location[] = [
             { name: "Bellevue, WA United States", "latitude": 47.6101, "longitude": -122.2015 },
             { name: "Bellevue, WA", "latitude": 47.6101, "longitude": -122.2015 },
             { name: "Bellingham, WA, USA", "latitude": 48.7519, "longitude": -122.4787 },
-        ];
-        const actual = mappingService.unique(orig);
+        ] as Location[];
+        const actual = LocationService.getInstance().unique(orig);
         expect(actual.length).toEqual(2);
     });
 

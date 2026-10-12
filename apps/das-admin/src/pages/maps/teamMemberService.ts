@@ -7,71 +7,51 @@
  *
  */
 
-import { AirtableEntityService } from '@digitalaidseattle/airtable';
-import Airtable, { Record, FieldSet } from 'airtable';
-import { Location } from './mappingService';
-
-const airtableClient = new Airtable({ apiKey: import.meta.env.VITE_AIRTABLE_ANON_KEY })
-
-type TeamMember = {
-    id: string,
-    name: string,
-    role: string,
-    url: string,
-    location: string
-}
+import { Location, LocationService } from './LocationService';
+import { Volunteer, VolunteerDao } from './VolunteerDao';
 
 
-class TeamMemberService extends AirtableEntityService<TeamMember> {
+class TeamMemberService {
+    private static instance: TeamMemberService;
+
+    public static getInstance(): TeamMemberService {
+        if (!TeamMemberService.instance) {
+            this.instance = new TeamMemberService();
+        }
+        return TeamMemberService.instance;
+    }
+
+    dao: VolunteerDao;
+    locationService: LocationService;
 
     public constructor() {
-        super(airtableClient, import.meta.env.VITE_AIRTABLE_TABLE_PEOPLE_REFERENCE);
+        this.dao = VolunteerDao.getInstance();
+        this.locationService = LocationService.getInstance();
     }
 
-    transform(record: Record<FieldSet>): TeamMember {
-        const pics = record.fields.pic as any[];
-        return {
-            id: record.id,
-            name: `${record.fields['First name']} ${record.fields['Last name']}`,
-            role: record.fields['Position'] as string,
-            url: pics && pics[0] && pics[0].thumbnails.large.url || undefined,
-            location: record.fields['Location'] as string
-        };
-    }
-
-    transformEntity(entity: Partial<TeamMember>): Partial<FieldSet> {
-        const fields: Partial<FieldSet> = {};
-        if (entity.name) {
-            const [firstName, lastName] = entity.name.split(' ');
-            fields['First name'] = firstName;
-            fields['Last name'] = lastName;
-        }
-        if (entity.role) {
-            fields['Position'] = entity.role;
-        }
-        // if (entity.url) {
-        //     fields['pic'] = [{ thumbnails: { large: { url: entity.url } } }];
-        // }
-        if (entity.location) {
-            fields['Location'] = entity.location;
-        }
-        return fields;
-    }
-
-    async getAll(count?: number, _select?: string): Promise<TeamMember[]> {
-        const filter = `{Manual Status} = "${'Cadre'}"`
-        return super.getAll(count, filter);
+    async getAll(): Promise<Volunteer[]> {
+        return this.dao.getAll();
     }
 
     // Given a location, find all people with the same lat-long  (that's why we need all locations)
-    getPeopleAt(people: TeamMember[], locations: Location[], location: Location): TeamMember[] {
-        return people.filter(p => {
-            const match = locations.find(l => l.name === p.location);
-            return match && match.latitude === location.latitude && match.longitude === location.longitude;
-        })
+    async getPeopleAt(people: Volunteer[], location: Location): Promise<Volunteer[]> {
+        const filtered: Volunteer[] = [];
+        for (const person of people) {
+            const match = await this.locationService.findByName(person.location.trim());
+            if (
+                match &&
+                match.latitude === location.latitude &&
+                match.longitude === location.longitude
+            ) {
+                filtered.push(person);
+            }
+        }
+        return filtered;
+    }
+
+    getLocation(volunteer: Volunteer): Promise<Location | null> {
+        return this.locationService.findByName(volunteer.location);
     }
 }
 
-const teamMemberService = new TeamMemberService();
-export { teamMemberService };
-export type { TeamMember };
+export { TeamMemberService };

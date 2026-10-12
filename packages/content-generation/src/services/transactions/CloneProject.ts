@@ -6,9 +6,9 @@
  */
 
 import { getCoreServices } from "@digitalaidseattle/core";
-import { getContentGenerationServices } from "..";
-import { Project, ProjectContext } from "../types";
 import { v4 as uuid } from 'uuid';
+import { Configuration } from "..";
+import { Project, ProjectContext } from "../types";
 
 const DEFAULT_FOLDER = import.meta.env.VITE_FIREBASE_STORAGE_FOLDER;
 
@@ -19,7 +19,7 @@ async function validate(project: Project) {
 }
 
 async function getCloneName(project: Project): Promise<string> {
-    const projectService = getContentGenerationServices().projectService;
+    const projectService = Configuration.getInstance().projectService;
 
     let count = 0;
     const baseName = `Clone of ${project.name}`;
@@ -64,7 +64,7 @@ async function cloneProjectContexts(project: Project, cloneId: string): Promise<
 
 export async function cloneProject(project: Project): Promise<Project> {
     const authService = getCoreServices().authService!;
-    const projectService = getContentGenerationServices().projectService;
+    const projectService = Configuration.getInstance().projectService;
 
     await validate(project);
 

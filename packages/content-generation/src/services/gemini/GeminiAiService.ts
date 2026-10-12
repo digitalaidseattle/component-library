@@ -18,9 +18,15 @@
 import { getCoreServices, StorageFile } from "@digitalaidseattle/core";
 import { createPartFromText, createPartFromUri, createUserContent, GoogleGenAI, Part } from "@google/genai";
 import Handlebars from "handlebars";
-import { AiService } from "../contentGenerationServices";
 import { Project } from "../types";
-import { getGeminiConfiguration } from "./GeminiConfiguration";
+import { Configuration } from "./Configuration";
+import { AiService } from "../Configuration";
+
+const MODELS = [
+    { label: "Gemini Flash Latest", value: "models/gemini-flash-latest" },
+    { label: "Gemini 3.6 Flash", value: "models/gemini-3.6-flash" },
+    { label: "Gemini 3.6 Flash Lite", value: "models/gemini-3.6-flash-lite" }
+];
 
 class GeminiAiService implements AiService {
 
@@ -35,23 +41,25 @@ class GeminiAiService implements AiService {
 
     ai: GoogleGenAI;
     storageFolder: string;
-    models: { label: string, value: string }[] | undefined = undefined;
+    models: { label: string, value: string }[] | undefined = MODELS;
 
     constructor() {
-        const config = getGeminiConfiguration();
-        this.ai = new GoogleGenAI({ apiKey: config.firebase_options.apiKey });
+        const config = Configuration.getInstance();
+        this.ai = new GoogleGenAI({ apiKey: config.apiKey });
         this.storageFolder = config.storage_folder;
     }
 
     async getModels(): Promise<{ label: string, value: string }[]> {
         if (!this.models) {
             let gemModels = await this.ai.models.list();
+            console.log("Gemini models:", gemModels, gemModels.pageSize);
             const items: { label: string, value: string }[] = [];
             let done = false;
             do {
                 for (let i = 0; i < gemModels.pageSize; i++) {
                     const mm = gemModels.getItem(i);
                     if (mm.name && mm.name.startsWith('models/gemini')) {
+                        console.log("Gemini mode ls:", mm);
                         items.push({
                             label: mm.displayName!,
                             value: mm.name!

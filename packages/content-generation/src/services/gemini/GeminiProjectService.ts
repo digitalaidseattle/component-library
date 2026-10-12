@@ -1,9 +1,13 @@
-import { FirestoreService } from "@digitalaidseattle/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { ProjectService } from "../contentGenerationServices";
-import { Project } from "../types";
-import { getFirebaseApp } from "./GeminiConfiguration";
+/**
+ * GeminiProjectService.ts
+ * 
+ * @copyright Digital Aid Seattle 2026
+ */
 
+import { Configuration, FirestoreService } from "@digitalaidseattle/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { Project } from "../types";
+import { ProjectService } from "../Configuration";
 
 export class GeminiProjectService extends FirestoreService<Project> implements ProjectService {
 
@@ -11,15 +15,19 @@ export class GeminiProjectService extends FirestoreService<Project> implements P
 
   static getInstance() {
     if (!GeminiProjectService.instance) {
+
       GeminiProjectService.instance = new GeminiProjectService();
     }
     return GeminiProjectService.instance;
   }
 
   constructor() {
-    super("projects", getFirebaseApp());
+    super("projects", Configuration.getInstance().getClient());
   }
 
+  mapJson(json: any): Project {
+    return json;
+  }
 
   /**
    * Creates a blank project with default values.

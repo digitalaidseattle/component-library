@@ -5,7 +5,7 @@
 */
 import React from "react";
 
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";
 import { Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 
@@ -18,7 +18,7 @@ export const PlainTextCard = ({ title, value }: { title: string, value: string }
                 slotProps={{ title: { fontWeight: 600, fontSize: 16 } }}
                 avatar={<IconButton
                     onClick={() => { setHelpTopic(title); setShowHelp(true) }}
-                    color="primary"><InfoCircleOutlined /></IconButton>} />
+                    color="primary"><QuestionCircleOutlined /></IconButton>} />
             <CardContent>
                 <Typography>{value}</Typography>
             </CardContent>

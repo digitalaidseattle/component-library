@@ -8,3 +8,4 @@ export * from "./NotificationContext";
 export * from "./RefreshContext";
 export * from "./StorageServiceContext";
 export * from "./UserContext";
+export * from "./CacheFactory";
