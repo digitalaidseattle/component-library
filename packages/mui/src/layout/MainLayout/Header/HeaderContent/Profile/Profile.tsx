@@ -14,7 +14,8 @@ import {
   Paper,
   Popper,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { useAuthService, UserContext, UserContextType } from '@digitalaidseattle
 
 import Transitions from '../../../../../components/Transitions';
 import { useLayoutConfiguration } from '../../../../LayoutConfigurationContext';
+import { MoreOutlined } from '@ant-design/icons';
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 const iconBackColorOpen = 'grey.300';
@@ -41,6 +43,8 @@ const Profile = () => {
   const [avatar, setAvatar] = useState<string>('')
   const [version, setVersion] = useState<string>('')
   const [profileItems, setProfileItems] = useState<ReactNode[]>([]);
+
+  const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigate = useNavigate();
 
@@ -81,11 +85,11 @@ const Profile = () => {
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
         sx={{
-          p: 0.25,
+          p: matchesXs ? 0 : 0.25,
           bgcolor: open ? iconBackColorOpen : theme.palette.background.default,
-          borderRadius: 1,
+          borderRadius: matchesXs ? '50%' : 1,
           '&:hover': { bgcolor: theme.palette.secondary.light },
-          paddingRight: '15px'
+          paddingRight: matchesXs ? '0' : '15px'
         }}
         aria-label="open profile"
         ref={anchorRef}
@@ -93,10 +97,23 @@ const Profile = () => {
         aria-haspopup="true"
         onClick={handleToggleMenu}
       >
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={avatar} sx={{ width: 32, height: 32 }} />
-          <Typography variant="subtitle1">{username}</Typography>
-        </Stack>
+        {!matchesXs ?
+          <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+            <Avatar alt="profile user" src={avatar} sx={{ width: 32, height: 32 }} />
+            <Typography variant="subtitle1">{username}</Typography>
+          </Stack>
+          :
+          <IconButton
+            component="span"
+            disableRipple
+            sx={{
+              bgcolor: open ? 'grey.300' : 'grey.100'
+            }}
+            color="inherit"
+          >
+            <MoreOutlined />
+          </IconButton>
+        }
       </ButtonBase>
       <Popper
         placement="bottom-end"
