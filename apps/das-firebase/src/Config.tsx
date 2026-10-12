@@ -1,5 +1,6 @@
 import {
     BankOutlined,
+    ClusterOutlined,
     FormOutlined
 } from '@ant-design/icons';
 import { HelpButton, LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
@@ -30,6 +31,13 @@ export const Config: LayoutConfiguration = ({
                 type: 'item',
                 url: '/ai-projects',
                 icon: <FormOutlined />,
+            } as MenuItem,
+            {
+                id: 'programs',
+                title: 'Program Tracking',
+                type: 'item',
+                url: '/programs',
+                icon: <ClusterOutlined />
             } as MenuItem
         ]
     } as MenuItem],

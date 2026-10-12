@@ -17,6 +17,7 @@
     "@digitalaidseattle/draganddrop": "2.0.3",
     "@digitalaidseattle/firebase": "1.0.17",
     "@digitalaidseattle/mui": "1.0.45",
+    "@digitalaidseattle/program-management": "1.0.0",
     "@digitalaidseattle/supabase": "1.0.24",
     "@digitalaidseattle/superhuman": "1.0.0",
     "file-saver": "^2.0.5",
