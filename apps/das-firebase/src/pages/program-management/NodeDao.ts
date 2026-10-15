@@ -26,6 +26,8 @@ export class NodeDao extends FirestoreDao<Node> {
                     },
                     unmapper: (entity) => {
                         const { id, children, ...trimmed } = entity;
+                        // Firebase don't like undefined.
+                        if (trimmed.assignee_id === undefined) trimmed.assignee_id = null;
                         return trimmed;
                     }
                 }

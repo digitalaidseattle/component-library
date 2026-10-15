@@ -165,6 +165,38 @@ export class NodeService {
         return this.dao.update(node.id as Identifier, partial);
     }
 
+    async findByParentId(id: Identifier): Promise<Node[]> {
+        const queryModel = {
+            filterModel: {
+                items: [
+                    {
+                        field: 'parent_id',
+                        operator: '==',
+                        value: id
+                    }
+                ]
+            },
+            page: 1,
+            pageSize: 1000,
+            sortField: 'node_no',
+            sortDirection: 'asc'
+        }
+        const pageInfo = await this.dao.find(queryModel);
+        return pageInfo.rows;
+    }
+
+    /**
+     * Deletes a node and all of its descendants.
+     * Children are deleted before their parent so parent_id references remain valid.
+     */
+    async deleteRecursive(id: Identifier): Promise<void> {
+        const children = await this.findByParentId(id);
+        for (const child of children) {
+            await this.deleteRecursive(child.id as Identifier);
+        }
+        await this.dao.delete(id);
+    }
+
     getUrl(node: Node): string {
         return `/programs/${node.program_id}/nodes/${node.node_no}`
     }

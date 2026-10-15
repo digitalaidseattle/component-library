@@ -7,8 +7,9 @@ import { DDCategory, DDType, DragAndDrop } from '@digitalaidseattle/draganddrop'
 import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, CardHeader, Chip, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useState } from "react";
 
-import { ArrowsAltOutlined, EditOutlined, MoreOutlined } from '@ant-design/icons';
-import { RefreshContext } from '@digitalaidseattle/core';
+import { ArrowsAltOutlined, DeleteOutlined, EditOutlined, MoreOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
+import { ConfirmationDialog } from '@digitalaidseattle/mui';
 import { useNavigate } from 'react-router-dom';
 import { ProgramService, useProfiles } from "../services";
 import { NodeService } from '../services/NodeService';
@@ -102,15 +103,17 @@ function NodeCard({ node, onFocusChange }: { node: Node | undefined, onFocusChan
 }
 
 export function NodeKanban({ node, onFocusChange }: { node: Node | undefined, onFocusChange: (node: Node) => void }) {
-    const service = ProgramService.getInstance();
-
     const { program } = React.useContext(ProgramContext);
     const { setRefresh } = React.useContext(RefreshContext);
 
     const [categories, setCategories] = useState<DDCategory<string>[]>();
     const [items, setItems] = useState<Map<DDCategory<string>, NodeWrapper[]>>();
 
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState<boolean>(false);
     const [openNodeDialog, setOpenNodeDialog] = React.useState<boolean>(false);
+    const [newNode, setNewNode] = React.useState<Node>();
+    const notifications = useNotifications();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCategories(program.node_statuses.map(st => ({ label: st, value: st })));
@@ -144,28 +147,69 @@ export function NodeKanban({ node, onFocusChange }: { node: Node | undefined, on
         )
     };
 
-    function handleNodeChange(node: Node | null) {
-        if (node !== null) {
-            service.insertNode(program, node)
-                .then(updateNode => {
-                    setRefresh(0);
+    const handleStatusChange = (changes: Map<string, unknown>, element: NodeWrapper) => {
+        NodeService.getInstance()
+            .changeAttribute(element, "status", changes.get("containerId") as string)
+            .then(updated => { console.log('handleStatusChange', updated), setRefresh(Date.now()) })
+    }
+
+    function handleAdd() {
+        ProgramService.getInstance()
+            .createChild(program, node?.id as string | undefined)
+            .then(child => {
+                setNewNode(child);
+                setOpenNodeDialog(true);
+            })
+            .catch(err => notifications.error(`Add failed: ${err.message}`));
+    }
+
+    function handleNodeChange(updated: Node | null) {
+        if (updated !== null) {
+            ProgramService.getInstance()
+                .insertNode(program, updated)
+                .then(() => {
+                    notifications.success(`${updated.type} added.`);
+                    setRefresh(Date.now());
                 })
+                .catch(err => notifications.error(`Add failed: ${err.message}`));
         }
         setOpenNodeDialog(false);
     }
 
-    const handleStatusChange = (changes: Map<string, unknown>, element: NodeWrapper) => {
-        NodeService.getInstance()
-            .changeAttribute(element, "status", changes.get("containerId") as string)
-            .then(updated => { console.log('handleStatusChange', updated), setRefresh(0) })
+    function handleDeleteConfirm() {
+        if (node) {
+            NodeService.getInstance()
+                .deleteRecursive(node.id!)
+                .then(() => {
+                    notifications.success(`${node.node_no} deleted.`);
+                    setRefresh(Date.now());
+                })
+                .catch(err => notifications.error(`Delete failed: ${err.message}`))
+                .finally(() => setOpenDeleteDialog(false));
+        } else {
+            setOpenDeleteDialog(false);
+        }
     }
 
     return (items &&
         <Card>
-            {node && <CardHeader
-                title={<Typography fontWeight={600}>{node.type}: {node.name}</Typography>}
+            <CardHeader
+                title={node && <Typography fontWeight={600}>{node.type}: {node.name}</Typography>}
                 action={
                     <Stack direction={'row'} >
+                        <Tooltip title={`Add ${ProgramService.getInstance().getChildType(program, node) ?? ''}`}>
+                            <IconButton
+                                size='small'
+                                color='primary'
+                                onClick={(e) => {
+                                    handleAdd();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <PlusCircleOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        {node && <>
                         <Tooltip title={`Set in focus`}>
                             <IconButton
                                 size='small'
@@ -181,28 +225,47 @@ export function NodeKanban({ node, onFocusChange }: { node: Node | undefined, on
                             <IconButton
                                 size='small'
                                 onClick={(e) => {
-                                    setOpenNodeDialog(true);
+                                    navigate(`/programs/${node.program_id}/nodes/${node.node_no}`);
                                     e.stopPropagation();
                                 }}
                             >
                                 <EditOutlined />
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title={`Delete`}>
+                            <IconButton
+                                size='small'
+                                onClick={(e) => {
+                                    setOpenDeleteDialog(true);
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <DeleteOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        </>}
                     </Stack>
                 } />
-            }
             <DragAndDrop
                 onChange={(c: Map<string, unknown>, t: NodeWrapper) => handleStatusChange(c, t)}
                 items={items}
                 categories={categories!}
                 cardRenderer={cardRenderer}
                 headerRenderer={headerRenderer} />
-            {node &&
+            {newNode &&
                 <NodeDialog
-                    title={"Add"}
-                    node={node}
+                    title={`Add ${newNode.type}`}
+                    node={newNode}
                     open={openNodeDialog}
                     onChange={handleNodeChange} />
+            }
+            {node &&
+                <ConfirmationDialog
+                    title='Delete'
+                    message={`Delete ${node.node_no} "${node.name}"${node.children?.length ? ' and all of its children' : ''}? This cannot be undone.`}
+                    open={openDeleteDialog}
+                    handleConfirm={handleDeleteConfirm}
+                    handleCancel={() => setOpenDeleteDialog(false)} />
             }
         </Card >
     );
