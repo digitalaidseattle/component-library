@@ -12,15 +12,18 @@ import React, { useState } from 'react';
 interface ConfirmationDialogProps {
     title?: string;
     message: string;
+    confirmText?: string;
+    cancelText?: string;
+    iconBackColor?: string;
+    iconBackColorOpen?: string;
+    confirmColor?: string;
+    cancelColor?: string;
     open: boolean;
     handleConfirm: () => void;
     handleCancel: () => void;
 }
 
-const iconBackColorOpen = 'grey.300';
-const iconBackColor = 'grey.100';
-
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message, open, handleConfirm, handleCancel }) => {
+const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message, confirmText = 'OK', confirmColor = 'text.success', cancelText = 'Cancel', cancelColor = 'text.secondary', iconBackColor = 'grey.100', iconBackColorOpen = 'grey.300', open, handleConfirm, handleCancel }) => {
 
     const [dialogTitle] = useState<string>(title ?? 'Confirm');
 
@@ -38,12 +41,12 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message,
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.secondary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-                    onClick={() => handleCancel()}>Cancel</Button>
+                    sx={{ color: cancelColor, bgcolor: open ? iconBackColorOpen : iconBackColor, borderColor: cancelColor }}
+                    onClick={() => handleCancel()}>{cancelText}</Button>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.success', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-                    onClick={handleConfirm}>OK</Button>
+                    sx={{ color: confirmColor, bgcolor: open ? iconBackColorOpen : iconBackColor, borderColor: confirmColor }}
+                    onClick={handleConfirm}>{confirmText}</Button>
             </DialogActions>
         </Dialog>
     )
