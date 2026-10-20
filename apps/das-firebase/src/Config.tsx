@@ -1,6 +1,7 @@
 import {
     BankOutlined,
     ClusterOutlined,
+    DollarOutlined,
     FormOutlined
 } from '@ant-design/icons';
 import { HelpButton, LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
@@ -19,15 +20,8 @@ export const Config: LayoutConfiguration = ({
         type: 'group',
         children: [
             {
-                id: 'Inst',
-                title: 'Institutions',
-                type: 'item',
-                url: '/institutions',
-                icon: <BankOutlined />,
-            } as MenuItem,
-            {
-                id: 'GRNT',
-                title: 'AI Projects',
+                id: 'CNT',
+                title: 'AI Content Projects',
                 type: 'item',
                 url: '/ai-projects',
                 icon: <FormOutlined />,
@@ -38,6 +32,34 @@ export const Config: LayoutConfiguration = ({
                 type: 'item',
                 url: '/programs',
                 icon: <ClusterOutlined />
+            } as MenuItem
+        ]
+    } as MenuItem,
+    {
+        id: 'group-grants',
+        title: 'Grant Tracking',
+        type: 'group',
+        children: [
+            {
+                id: 'GRNT-FND',
+                title: 'Funders',
+                type: 'item',
+                url: '/funders',
+                icon: <BankOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-PRG',
+                title: 'Grant Programs',
+                type: 'item',
+                url: '/grant-programs',
+                icon: <DollarOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-APPL',
+                title: 'Grant Applications',
+                type: 'item',
+                url: '/grant-applications',
+                icon: <FormOutlined />
             } as MenuItem
         ]
     } as MenuItem],

@@ -14,9 +14,10 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
-import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
-import InstitutionsPage from "./pages/institutions";
 import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
+import { FundersPage } from './grant-tracking/pages/Funders';
+import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
+import { GrantProgramsPage } from './grant-tracking/pages/Programs';
 
 const routes: RouteObject[] = [
   {
@@ -26,10 +27,6 @@ const routes: RouteObject[] = [
       {
         path: "",
         element: <AiProjectsPage />,
-      },
-      {
-        path: "institutions",
-        element: <InstitutionsPage />,
       },
       {
         path: "ai-projects/:id",
@@ -53,7 +50,15 @@ const routes: RouteObject[] = [
       {
         path: "programs/:program_id/nodes/:node_no",
         element: <NodePage />,
-      }
+      },
+      {
+        path: "funders",
+        element: <FundersPage />,
+      },
+      {
+        path: "grant-programs",
+        element: <GrantProgramsPage />,
+      },
     ]
   },
   {
