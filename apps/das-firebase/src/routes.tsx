@@ -18,6 +18,9 @@ import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-
 import { FundersPage } from './grant-tracking/pages/Funders';
 import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
 import { GrantProgramsPage } from './grant-tracking/pages/Programs';
+import { VentureTrackingPage } from './venture-evaluation/pages/VentureTracking';
+import { VentureDebriefsPage } from './venture-evaluation/pages/VentureDebriefs';
+import { VentureTrackingDetails } from './venture-evaluation/pages/VentureTrackingDetails';
 
 const routes: RouteObject[] = [
   {
@@ -59,6 +62,28 @@ const routes: RouteObject[] = [
         path: "grant-programs",
         element: <GrantProgramsPage />,
       },
+    ]
+  },
+  {
+    path: "/venture-evaluation",
+    element: <MainLayout sx={{ p: 1 }} />,
+    children: [
+      {
+        path: 'programs',
+        element: <VentureTrackingPage />
+      },
+      {
+        path: "programs/:id",
+        element: <VentureTrackingDetails />,
+      },
+      {
+        path: "programs/:program_id/nodes/:node_no",
+        element: <NodePage />,
+      },
+      {
+        path: "debriefs",
+        element: <VentureDebriefsPage />,
+      }
     ]
   },
   {

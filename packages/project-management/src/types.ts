@@ -5,6 +5,8 @@
  */
 
 import { Entity, Identifier } from "@digitalaidseattle/core";
+import { DDType } from "@digitalaidseattle/draganddrop";
+import React from "react";
 
 
 // consider using ProfileManagement
@@ -16,6 +18,7 @@ export type Profile = Entity & {
 }
 
 export type Program = Entity & {
+    organization: string; // TODO change to id of organization  entity
     status: string;  // Configured 'active' | 'inactive'
     name: string;
     description: string;
@@ -55,4 +58,15 @@ export type Node = Entity & {
     children: Node[];
     comments: Comment[];
     history: History[];
+    tags: string[];
+    order: number;  // order within parent
+}
+export type NodeWrapper = Node & DDType
+
+export interface NodeKanbanProps {
+    node: Node | undefined;
+    onFocusChange: (node: Node) => void;
+    opts?: {
+        cardRenderer: (node: NodeWrapper, onFocusChange: (node: Node) => void) => React.ReactNode
+    }
 }

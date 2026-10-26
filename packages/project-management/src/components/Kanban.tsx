@@ -9,13 +9,17 @@ import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Card, CardHeader, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import { ProjectOutlined } from "@ant-design/icons";
-import { useNotifications } from "@digitalaidseattle/core";
 import { ProgramService } from "../services";
-import { Node } from "../types";
+import { Node, NodeWrapper } from "../types";
 import { NodeKanban } from "./NodeKanban";
 import { ProgramContext } from "./ProgramContext";
 
-export function Kanban() {
+export const Kanban = ({ cardRenderer }: {
+    cardRenderer?: (
+        node: NodeWrapper,
+        onFocusChange: (node: Node) => void
+    ) => React.ReactNode
+}) => {
 
     const service = ProgramService.getInstance();
 
@@ -80,12 +84,13 @@ export function Kanban() {
                         <Box key={node.id} >
                             <NodeKanban
                                 node={node}
-                                onFocusChange={focus => setFocusNode(focus)} />
+                                onFocusChange={focus => setFocusNode(focus)}
+                                opts={cardRenderer ? { cardRenderer } : undefined} />
                         </Box>
                     ))
                 }
             </Stack>
         </Card>
     );
-}
+};
 

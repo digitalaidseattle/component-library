@@ -6,9 +6,8 @@
  */
 
 import { DataAccessObject, getCoreServices, Identifier, QueryModel } from "@digitalaidseattle/core";
-import { v4 as uuid } from "uuid";
 import { Configuration } from "../Configuration";
-import { Node, Profile, Program } from "../types";
+import { Node, Program } from "../types";
 import { NodeService } from "./NodeService";
 
 export class ProgramService {
@@ -31,6 +30,7 @@ export class ProgramService {
     empty(): Program {
         return ({
             id: undefined,
+            organization: '',
             status: 'active',
             name: '',
             description: '',

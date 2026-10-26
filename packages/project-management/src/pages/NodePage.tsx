@@ -74,16 +74,16 @@ export const NodePage = () => {
       <NodeContext.Provider value={{ node, setNode }} >
         <Breadcrumbs aria-label="breadcrumb">
           <NavLink to="/" ><IconButton size="medium"><HomeOutlined /></IconButton></NavLink>
-          <NavLink to="/programs" >Program Tracking</NavLink>
-          <NavLink to={`/programs/${program_id}`} >{program.name}</NavLink>
+          <NavLink to="../../.." relative="path">Program Tracking</NavLink>
+          <NavLink to="../.." relative="path" >{program.name}</NavLink>
           {(ancestralNodes ?? []).map(ancestor => (
-            <NavLink key={ancestor.id} to={`/programs/${program_id}/nodes/${ancestor.node_no}`} >{ancestor.node_no} {ancestor.name}</NavLink>
+            <NavLink key={ancestor.id} to={`../${ancestor.node_no}`} relative='path' >{ancestor.node_no} {ancestor.name}</NavLink>
           ))}
           <Typography color="text.primary">{node?.node_no} {node?.name}</Typography>
         </Breadcrumbs>
         <NodeDetailCard />
       </NodeContext.Provider>
-    </ProgramContext.Provider>
+    </ProgramContext.Provider >
   );
 }
 

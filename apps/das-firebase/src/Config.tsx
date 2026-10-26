@@ -1,6 +1,8 @@
 import {
     BankOutlined,
     ClusterOutlined,
+    CommentOutlined,
+    DatabaseOutlined,
     DollarOutlined,
     FormOutlined
 } from '@ant-design/icons';
@@ -37,7 +39,7 @@ export const Config: LayoutConfiguration = ({
     } as MenuItem,
     {
         id: 'group-grants',
-        title: 'Grant Tracking',
+        title: 'Grant Tracking (TEST)',
         type: 'group',
         children: [
             {
@@ -61,6 +63,27 @@ export const Config: LayoutConfiguration = ({
                 url: '/grant-applications',
                 icon: <FormOutlined />
             } as MenuItem
+        ]
+    } as MenuItem,
+    {
+        id: 'venture-evaluation',
+        title: 'Venture Evaluation (TEST)',
+        type: 'group',
+        children: [
+            {
+                id: 'VES-TRACK',
+                title: 'Tracking',
+                type: 'item',
+                url: '/venture-evaluation/programs',
+                icon: <DatabaseOutlined />,
+            } as MenuItem,
+            {
+                id: 'VES-DEBRIEF',
+                title: 'Debriefs',
+                type: 'item',
+                url: '/venture-evaluation/debriefs',
+                icon: <CommentOutlined />,
+            } as MenuItem,
         ]
     } as MenuItem],
     toolbarItems: [

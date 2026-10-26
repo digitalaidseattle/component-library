@@ -45,7 +45,7 @@ export const ProgramPage = () => {
     <ProgramContext.Provider value={{ program, setProgram }} >
       <Breadcrumbs aria-label="breadcrumb">
         <NavLink to="/" ><IconButton size="medium"><HomeOutlined /></IconButton></NavLink>
-        <NavLink to="/programs" >Program Tracking</NavLink>
+        <NavLink to=".." relative="path" >Program</NavLink>
         <Typography color="text.primary">Program Details</Typography>
       </Breadcrumbs>
       <ProgramDetailCard />

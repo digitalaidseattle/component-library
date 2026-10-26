@@ -12,13 +12,11 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-
 import dayjs from "dayjs";
-import { useProfiles } from "../../services";
-import { History, Profile } from "../../types";
-import { NodeContext } from "../NodeContext";
 
-//
+import { useProfiles } from "../services";
+import { History, Profile } from "../types";
+import { NodeContext } from "./NodeContext";
 
 type Row = History & {
     profile: Profile | undefined
@@ -49,13 +47,6 @@ export const HistoryListCard: React.FC = () => {
         }
 
     }, [node, profiles, profilesLoading])
-
-    function getProfile(user: string): Profile | undefined {
-        if (profilesLoading) {
-            return undefined;
-        }
-        return (profiles ?? []).find(p => p.email === user);
-    }
 
     return (
         <Grid container spacing={1} >

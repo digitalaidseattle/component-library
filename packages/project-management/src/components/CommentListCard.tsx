@@ -8,31 +8,97 @@ import React, { ReactNode, useContext, useEffect, useRef, useState } from "react
 
 import {
     Avatar,
-    Box,
-    Button,
     Card,
     CardActions,
     CardContent,
     IconButton,
     Stack,
+    Tooltip,
     Typography
 } from '@mui/material';
 
-import { RefreshContext, useAuthService } from "@digitalaidseattle/core";
+import { CheckCircleOutlined, CloseCircleOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { RefreshContext, useAuthService, useNotifications } from "@digitalaidseattle/core";
 import { BoldItalicUnderlineToggles, headingsPlugin, listsPlugin, ListsToggle, MDXEditor, MDXEditorMethods, toolbarPlugin, UndoRedo } from "@mdxeditor/editor";
 import dayjs from "dayjs";
 import Markdown from "react-markdown";
-import { useProfiles } from "../../services";
-import { NodeService } from "../../services/NodeService";
-import { Comment, Node, Profile } from "../../types";
-import { NodeContext } from "../NodeContext";
-import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
+import { useProfiles } from "../services";
+import { NodeService } from "../services/NodeService";
+import { Comment, Profile } from "../types";
+import { NodeContext } from "./NodeContext";
 
 //
 
 
 type CommentData = Comment & {
     profile: Profile | undefined
+}
+
+function NewCommentCard({ onChange }: { onChange: (updated: string | null) => void }): ReactNode {
+
+    const [newComment, setNewComment] = React.useState<string>("");
+
+    const ref = useRef<MDXEditorMethods>(null);
+    const { node, setNode } = useContext(NodeContext);
+    const { setRefresh } = useContext(RefreshContext);
+
+    // async function handleSave() {
+    //     nodeService.updateComment(node, -1, newComment)
+    //         .then((updated) => {
+    //             setNode(updated);
+    //             ref.current?.setMarkdown("");
+    //             setNewComment("");
+    //             setRefresh(Date.now());
+    //         })
+    // }
+
+    async function handleSave() {
+        ref.current?.setMarkdown("");
+        setNewComment("");
+        onChange(newComment);
+    }
+
+
+    async function handleCancel() {
+        ref.current?.setMarkdown("");
+        setNewComment("");
+        onChange(null);
+    }
+
+    return (
+        <Card>
+            <CardContent sx={{ padding: 2 }}>
+                <MDXEditor
+                    ref={ref}
+                    markdown={newComment}
+                    plugins={[
+                        headingsPlugin(),
+                        listsPlugin(),
+                        toolbarPlugin({
+                            toolbarClassName: 'my-classname',
+                            toolbarContents: () => (
+                                <>
+                                    <UndoRedo />
+                                    <BoldItalicUnderlineToggles />
+                                    <ListsToggle />
+                                </>
+                            )
+                        })
+                    ]}
+                    onChange={md => setNewComment(md)} />
+            </CardContent>
+            <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Stack direction={'row'}>
+                    <IconButton size="small" color="error" onClick={handleCancel}>
+                        <CloseCircleOutlined />
+                    </IconButton>
+                    <IconButton size="small" color="success" onClick={handleSave}>
+                        <CheckCircleOutlined />
+                    </IconButton>
+                </Stack>
+            </CardActions>
+        </Card >
+    )
 }
 
 function CommentCard({ index, comment }: { index: number, comment: CommentData }): ReactNode {
@@ -49,8 +115,10 @@ function CommentCard({ index, comment }: { index: number, comment: CommentData }
 
     useEffect(() => {
         if (index === -1) {
+            setDoEdit(true);
             setCanEdit(true);
         } else {
+            // Only author can re-edit
             auth.getUser().then(user => {
                 setCanEdit(user?.email.toLowerCase() === comment.user.toLowerCase());
             })
@@ -67,8 +135,8 @@ function CommentCard({ index, comment }: { index: number, comment: CommentData }
             .then((updated) => {
                 setNode(updated);
                 ref.current?.setMarkdown("");
-                setNewComment("");
-                setRefresh(0);
+                setRefresh(Date.now());
+                setDoEdit(false);
             })
     }
 
@@ -143,11 +211,14 @@ function CommentCard({ index, comment }: { index: number, comment: CommentData }
 
 
 export const CommentListCard: React.FC = () => {
+    const nodeService = NodeService.getInstance();
+    const notifications = useNotifications();
 
-    const { node } = useContext(NodeContext);
+    const { node, setNode } = useContext(NodeContext);
     const { data: profiles, loading: profilesLoading } = useProfiles();
 
     const [rows, setRows] = React.useState<CommentData[]>([]);
+    const [showNewCard, setShowNewCard] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (node) {
@@ -162,20 +233,47 @@ export const CommentListCard: React.FC = () => {
                         } as unknown as CommentData;
                         return row;
                     })
-                    .sort((a,b) => a.date.localeCompare(b.date))
+                    .sort((a, b) => a.date.localeCompare(b.date))
                 setRows(newRows);
             }
         }
     }, [node, profiles]);
 
+    function handleAdd(): void {
+        setShowNewCard(true);
+    }
+
+    async function handNewComment(comment: string | null) {
+        if (comment) {
+            const trimmed = comment.trim()
+            if (trimmed.length > 0) {
+                nodeService.updateComment(node, -1, trimmed)
+                    .then((updated) =>
+                        setNode(updated)
+                    )
+                    .catch(err => {
+                        console.error(err);
+                    })
+                    .finally(() => setShowNewCard(false));
+
+            } else {
+                notifications.info('No comment added.')
+            }
+        } else {
+            setShowNewCard(false);
+        }
+    }
+
     return (
         <Stack sx={{ marginTop: 1, gap: 1 }}>
-            <CommentCard index={-1} comment={{
-                user: '',
-                content: '*Click to start editing.*',
-                date: new Date().toISOString(),
-                profile: undefined
-            }} />
+            {showNewCard
+                ? <NewCommentCard onChange={handNewComment} />
+                : <Tooltip title={'Click to add comment'} >
+                    <IconButton size="small" color="primary" onClick={handleAdd} sx={{ alignSelf: 'flex-start' }}>
+                        <PlusCircleOutlined />
+                    </IconButton>
+                </Tooltip>
+            }
             {rows.map((row, idx) => <CommentCard key={idx} index={idx} comment={row} />)}
         </Stack>
     );

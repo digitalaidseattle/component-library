@@ -34,6 +34,7 @@ export class NodeService {
             program_id: '',
             parent_id: null,
             node_no: '',
+            order: 0,
 
             name: '',
             type: '',
@@ -45,7 +46,8 @@ export class NodeService {
 
             children: [],
             comments: [],
-            history: []
+            history: [],
+            tags: []
         })
     }
 
@@ -138,7 +140,7 @@ export class NodeService {
         return ancestors;
     }
 
-    async changeAttribute(node: Node, attribute: string, value: string): Promise<Node> {
+    async changeAttribute(node: Node, attribute: string, value: string | null): Promise<Node> {
         const user = await getCoreServices().authService?.getUser();
         const newHistory = {
             user: user?.email!,
@@ -151,12 +153,40 @@ export class NodeService {
         return this.dao.update(node.id as Identifier, partial);
     }
 
-    async changeAssignment(node: Node, attribute: string, value: string): Promise<Node> {
+    async changeTags(node: Node, attribute: string, value: string[]): Promise<Node> {
         const user = await getCoreServices().authService?.getUser();
-        const assignee = await ProfileService.getInstance().getById(value);
         const newHistory = {
             user: user?.email!,
-            description: `Changed "Assignee" to "${assignee?.name}".`,
+            description: `Changed "${attribute}" to "${value}".`,
+            date: new Date().toISOString(),
+        };
+
+        const partial: any = { history: [...node.history, newHistory] };
+        partial[attribute] = value;
+        return this.dao.update(node.id as Identifier, partial);
+    }
+
+    async changeOrder(node: Node, attribute: string, value: number): Promise<Node> {
+        // todo reorder
+        const user = await getCoreServices().authService?.getUser();
+        const newHistory = {
+            user: user?.email!,
+            description: `Changed "${attribute}" to "${value}".`,
+            date: new Date().toISOString(),
+        };
+
+        const partial: any = { history: [...node.history, newHistory] };
+        partial[attribute] = value;
+        return this.dao.update(node.id as Identifier, partial);
+    }
+
+
+    async changeAssignment(node: Node, attribute: string, value: string | null): Promise<Node> {
+        const user = await getCoreServices().authService?.getUser();
+        const assignee = value ? await ProfileService.getInstance().getById(value) : null;
+        const newHistory = {
+            user: user?.email!,
+            description: assignee ? `Changed "Assignee" to "${assignee.name}".` : `Unassigned.`,
             date: new Date().toISOString(),
         };
 
@@ -198,7 +228,7 @@ export class NodeService {
     }
 
     getUrl(node: Node): string {
-        return `/programs/${node.program_id}/nodes/${node.node_no}`
+        return `./programs/${node.program_id}/nodes/${node.node_no}`
     }
 
     async update(id: Identifier, changes: Partial<Node>): Promise<Node> {
