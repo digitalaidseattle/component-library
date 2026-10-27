@@ -4,7 +4,7 @@
  * @copyright 2025 Digital Aid Seattle
 */
 
-import { HomeOutlined, MoreOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, HomeOutlined } from "@ant-design/icons";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Breadcrumbs, Grid, IconButton, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Markdown from "react-markdown";
@@ -38,11 +38,13 @@ const AiProjectsPage: React.FC = () => {
               <Grid size={12}>
                 <Accordion>
                   <AccordionSummary
-                    expandIcon={<MoreOutlined />}
+                    expandIcon={<ArrowDownOutlined />}
                     aria-controls="panel1-content"
                     id="panel1-header"
                   >
-                    <Typography component="span" fontWeight={600} fontSize={16}>AI Projects</Typography>
+                    <Typography component="span" marginLeft={1} fontWeight={600} fontSize={16}>
+                      AI Generated Contents Projects
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Markdown>{ProjectHelp}</Markdown>

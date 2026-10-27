@@ -6,15 +6,8 @@
  *
  */
 
+import { Box, Card, CardContent, Tab, Tabs, useTheme } from "@mui/material";
 import React, { ReactNode, useState } from "react";
-import { Box, Card, CardContent, Direction, Tab, Tabs, useTheme } from "@mui/material";
-
-interface TabPanelProps {
-    children: ReactNode,
-    index: number,
-    value: number,
-    dir: Direction
-}
 
 interface TabbedCardProps {
     panels: {
@@ -41,21 +34,17 @@ const TabbedPanels: React.FC<TabbedCardProps> = ({ panels }) => {
     return (
         <Card>
             <CardContent>
-                <Tabs variant="fullWidth" value={activeTab} onChange={handleTabChange} aria-label="profile tabs">
-                    {panels.map((p, idx) => (
-                        <Tab
-                            key={idx}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                            label={p.header}
-                            {...a11yProps(idx)}
-                        />
-                    ))}
-                </Tabs>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={activeTab} onChange={handleTabChange} aria-label="tabs">
+                        {panels.map((p, idx) => (
+                            <Tab
+                                key={idx}
+                                label={p.header}
+                                {...a11yProps(idx)}
+                            />
+                        ))}
+                    </Tabs>
+                </Box>
                 {panels.map((p, index) => (
                     <Box
                         key={index}
@@ -83,4 +72,4 @@ const TabbedPanelsCard: React.FC<TabbedCardProps> = ({ panels }) => {
 }
 
 
-export { TabbedPanelsCard, TabbedPanels }
+export { TabbedPanels, TabbedPanelsCard };

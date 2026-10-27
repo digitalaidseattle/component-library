@@ -4,10 +4,11 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { Typography } from '@mui/material';
 
@@ -15,6 +16,7 @@ import { Typography } from '@mui/material';
 import {
   AuthServiceProvider,
   HelpContextProvider,
+  RefreshContextProvider,
   setCoreServices,
   UserContextProvider
 } from "@digitalaidseattle/core";
@@ -29,13 +31,16 @@ import {
   Configuration as ContentGenerationConfiguration,
   TransactionService
 } from '@digitalaidseattle/content-generation';
-
 import {
   Configuration as GeminiConfiguration,
   GeminiAiService,
   GeminiContentService,
   GeminiProjectService
 } from '@digitalaidseattle/content-generation/gemini';
+
+import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
+import { Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/program-management";
+import { NodeDao, ProfileDao, ProgramDao } from './pages/program-management';
 
 import "./App.css";
 import { Config } from './Config';
@@ -50,6 +55,11 @@ const App: React.FC = () => {
   }, [])
 
   function configure() {
+
+    SuperhumanConfiguration.props({
+      apiToken: import.meta.env.VITE_CODA_API_TOKEN,
+      apiBase: import.meta.env.VITE_CODA_API_BASE
+    });
 
     FirebaseConfiguration.props({
       apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -73,6 +83,14 @@ const App: React.FC = () => {
       projectTransactionService: TransactionService.getInstance()
     });
 
+    ProgramManagmentConfigucation.props(
+      {
+        profileDao: ProfileDao.getInstance(),
+        programDao: ProgramDao.getInstance(),
+        nodeDao: NodeDao.getInstance(),
+      }
+    )
+
     setCoreServices({
       authService: FirebaseAuthService.getInstance(),
       storageService: FirebaseStorageService.getInstance()
@@ -84,14 +102,16 @@ const App: React.FC = () => {
   return (initialized &&
     <AuthServiceProvider authService={FirebaseAuthService.getInstance()} >
       <UserContextProvider>
-        <HelpContextProvider>
-          <LayoutConfigurationProvider configuration={Config}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              {initialized && <RouterProvider router={createBrowserRouter(routes)} />}
-              {!initialized && <Typography>Application not configured.</Typography>}
-            </LocalizationProvider>
-          </LayoutConfigurationProvider>
-        </HelpContextProvider>
+        <RefreshContextProvider >
+          <HelpContextProvider>
+            <LayoutConfigurationProvider configuration={Config}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {initialized && <RouterProvider router={createBrowserRouter(routes)} />}
+                {!initialized && <Typography>Application not configured.</Typography>}
+              </LocalizationProvider>
+            </LayoutConfigurationProvider>
+          </HelpContextProvider>
+        </RefreshContextProvider>
       </UserContextProvider>
     </AuthServiceProvider>
   );

@@ -7,7 +7,8 @@
 import { InputForm, InputOption } from '@digitalaidseattle/mui';
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Institution, institutionService } from './institutionService';
+import { FundersService } from '../services/fundersService';
+import { Funder } from '../types';
 
 // material-ui
 
@@ -15,14 +16,14 @@ interface EntityDialogProps<T> {
     entity: T;
     open: boolean;
     handleSuccess: (resp: T | null) => void;
-    handleError: (err: Error) => void;
 }
 
-const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, entity, handleSuccess, handleError }) => {
+export const FunderDialog: React.FC<EntityDialogProps<Funder>> = ({ open, entity, handleSuccess }) => {
+    const fundersService = FundersService.getInstance();
 
     const [dirty, setDirty] = useState<boolean>(false);
     const [dialogTitle, setDialogTitle] = useState<string>('edit');
-    const [institution, setInstitution] = useState<Institution>({} as Institution);
+    const [institution, setInstitution] = useState<Funder>(fundersService.empty());
 
     useEffect(() => {
         setDirty(false);
@@ -31,7 +32,7 @@ const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, ent
 
 
     useEffect(() => {
-        setDialogTitle(institution.id ? 'Update Institution' : 'Add Institution');
+        setDialogTitle(institution.id ? 'Update Funder' : 'Add Funder');
     }, [institution]);
 
 
@@ -46,17 +47,7 @@ const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, ent
     }
 
     const handleSubmit = () => {
-        if (institution.id) {
-            return institutionService
-                .update(institution.id, institution)
-                .then(() => handleSuccess(institution))
-                .catch(e => handleError(e))
-        } else {
-            return institutionService
-                .insert(institution)
-                .then(() => handleSuccess(institution))
-                .catch(e => handleError(e))
-        }
+        handleSuccess(institution);
     }
 
     const inputFields: InputOption[] = [
@@ -67,24 +58,46 @@ const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, ent
             disabled: false,
         },
         {
+            name: "type",
+            label: 'Type',
+            type: 'select',
+            disabled: false,
+            options: [
+                {
+                    label: 'Funder Collaborative',
+                    value: 'Funder Collaborative',
+                },
+                {
+                    label: 'Private Foundation',
+                    value: 'Private Foundation',
+                },
+                {
+                    label: 'State/ Local Government',
+                    value: 'State/ Local Government',
+                },
+                {
+                    label: 'Fiscally sponsored',
+                    value: 'Fiscally sponsored',
+                },
+                {
+                    label: 'Public Foundation',
+                    value: 'Public Foundation',
+                },
+                {
+                    label: 'Venture Philanthropy',
+                    value: 'Venture Philanthropy',
+                },
+                {
+                    label: 'Grant Facilitator',
+                    value: 'Grant Facilitator',
+                }]
+        },
+        {
             name: "description",
             label: 'Description',
             type: 'string',
             disabled: false,
-        },
-        {
-            name: "createdAt",
-            label: 'Created At',
-            type: 'datetime',
-            disabled: false,
-        },
-        {
-            name: "createdAt",
-            label: 'Created At',
-            type: 'time',
-            disabled: false,
         }
-
     ]
 
     return (
@@ -116,4 +129,3 @@ const InstitutionDialog: React.FC<EntityDialogProps<Institution>> = ({ open, ent
         </Dialog>
     )
 }
-export default InstitutionDialog;

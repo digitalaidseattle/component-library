@@ -37,8 +37,8 @@ const StorageExamplePage = () => {
     const file = event.target.files[0];
     storageService.uploadFile(file)
       .then(() => {
-        const fileObject: File = getFile(uuid(), file.name, file.size, file.type);
-        setFiles([...files, fileObject]);
+        const fileObject = getFile(uuid(), file.name, file.size, file.type);
+        setFiles([...files, fileObject as unknown as File]);
       })
       .catch(err => alert(err));
   }

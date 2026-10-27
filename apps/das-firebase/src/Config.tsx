@@ -1,5 +1,9 @@
 import {
     BankOutlined,
+    ClusterOutlined,
+    CommentOutlined,
+    DatabaseOutlined,
+    DollarOutlined,
     FormOutlined
 } from '@ant-design/icons';
 import { HelpButton, LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
@@ -18,19 +22,68 @@ export const Config: LayoutConfiguration = ({
         type: 'group',
         children: [
             {
-                id: 'Inst',
-                title: 'Institutions',
-                type: 'item',
-                url: '/institutions',
-                icon: <BankOutlined />,
-            } as MenuItem,
-            {
-                id: 'GRNT',
-                title: 'AI Projects',
+                id: 'CNT',
+                title: 'AI Content Projects',
                 type: 'item',
                 url: '/ai-projects',
                 icon: <FormOutlined />,
+            } as MenuItem,
+            {
+                id: 'programs',
+                title: 'Program Tracking',
+                type: 'item',
+                url: '/programs',
+                icon: <ClusterOutlined />
             } as MenuItem
+        ]
+    } as MenuItem,
+    {
+        id: 'group-grants',
+        title: 'Grant Tracking (TEST)',
+        type: 'group',
+        children: [
+            {
+                id: 'GRNT-FND',
+                title: 'Funders',
+                type: 'item',
+                url: '/funders',
+                icon: <BankOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-PRG',
+                title: 'Grant Programs',
+                type: 'item',
+                url: '/grant-programs',
+                icon: <DollarOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-APPL',
+                title: 'Grant Applications',
+                type: 'item',
+                url: '/grant-applications',
+                icon: <FormOutlined />
+            } as MenuItem
+        ]
+    } as MenuItem,
+    {
+        id: 'venture-evaluation',
+        title: 'Venture Evaluation (TEST)',
+        type: 'group',
+        children: [
+            {
+                id: 'VES-TRACK',
+                title: 'Tracking',
+                type: 'item',
+                url: '/venture-evaluation/programs',
+                icon: <DatabaseOutlined />,
+            } as MenuItem,
+            {
+                id: 'VES-DEBRIEF',
+                title: 'Debriefs',
+                type: 'item',
+                url: '/venture-evaluation/debriefs',
+                icon: <CommentOutlined />,
+            } as MenuItem,
         ]
     } as MenuItem],
     toolbarItems: [

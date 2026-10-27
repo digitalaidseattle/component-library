@@ -1,0 +1,48 @@
+{
+  "name": "@digitalaidseattle/program-management",
+  "version": "1.0.0",
+  "description": "Wrapper for Superhuman (formerly Coda) that works with DAS Component library",
+  "repository": "null//github.com/null/github.com/tree/master/packages/program-management",
+  "main": "dist/digitalaidseattle-program-management.cjs.js",
+  "module": "dist/digitalaidseattle-program-management.esm.js",
+  "types": "dist/declarations/src/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.25.0",
+    "@digitalaidseattle/core": "1.0.23",
+    "@digitalaidseattle/draganddrop": "2.0.3",
+    "@digitalaidseattle/mui": "1.0.45",
+    "@mdxeditor/editor": "^4.2.0",
+    "@mui/x-data-grid": "^8.17.0",
+    "@mui/x-tree-view": "^8.17.0",
+    "react-hook-form": "^7.85.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^5.3.0",
+    "@mui/material": "^7.3.5",
+    "@mui/x-date-pickers": "^9.11.0",
+    "@testing-library/react": "^16.3.2",
+    "dayjs": "^1.11.13",
+    "react": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.0",
+    "vite": "^5.4.10",
+    "vitest": "^1.2.2"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "^5.3.0",
+    "@mui/material": "^7.3.5",
+    "@mui/x-date-pickers": "^9.11.0",
+    "dayjs": "^1.11.13",
+    "react": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.0"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest"
+  },
+  "files": [
+    "dist"
+  ]
+}

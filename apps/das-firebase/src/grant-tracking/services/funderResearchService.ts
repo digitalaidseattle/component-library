@@ -17,12 +17,24 @@
 
 
 
-import { firebaseClient } from "@digitalaidseattle/firebase";
-import { getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
+import { Configuration as FirebaseConfiguration } from "@digitalaidseattle/firebase";
+import { AI, GenerativeModel, getAI, getGenerativeModel, GoogleAIBackend, Schema } from "firebase/ai";
 
-class InstitutionAiService {
+export class FunderResearchService {
 
-    ai = getAI(firebaseClient, { backend: new GoogleAIBackend() });
+    private static instance: FunderResearchService;
+
+    static getInstance() {
+        if (!FunderResearchService.instance) {
+            FunderResearchService.instance = new FunderResearchService();
+        }
+        return FunderResearchService.instance;
+    }
+
+    ai: AI;
+    constructor() {
+        this.ai = getAI(FirebaseConfiguration.getInstance().client, { backend: new GoogleAIBackend() });
+    }
 
     // Provide a JSON schema object using a standard format.
     // Later, pass this schema object into `responseSchema` in the generation config.
@@ -44,22 +56,24 @@ class InstitutionAiService {
         }
     });
 
+    createModel(modelType?: string): GenerativeModel {
+        return getGenerativeModel(this.ai, {
+            model: modelType ?? "gemini-2.5-flash",
+            // In the generation config, set the `responseMimeType` to `application/json`
+            // and pass the JSON schema object into `responseSchema`.
+            generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: this.jsonSchema
+            },
+        });
+    }
     // Create a `GenerativeModel` instance with a model that supports your use case
-    model = getGenerativeModel(this.ai, {
-        model: "gemini-2.5-flash",
-        // In the generation config, set the `responseMimeType` to `application/json`
-        // and pass the JSON schema object into `responseSchema`.
-        generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: this.jsonSchema
-        },
-    });
 
 
     // Wrap in an async function so you can use await
     query(prompt: string): Promise<any> {
         // To generate text output, call generateContent with the text input
-        return this.model.generateContent(prompt)
+        return this.createModel().generateContent(prompt)
             .then(result => JSON.parse(result.response.text()))
             .catch(error => {
                 console.error("Error querying AI: ", error);
@@ -68,7 +82,3 @@ class InstitutionAiService {
     }
 
 }
-
-const institutionAiService = new InstitutionAiService();
-export { institutionAiService };
-

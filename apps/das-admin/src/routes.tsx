@@ -15,6 +15,8 @@ import TicketsGrid from "./pages/crud/pages/TicketsPage";
 import ExcelPage from "./pages/excel/ExcelPage";
 import MapPage from "./pages/maps/MapPage";
 import StorageExamplePage from "./pages/storage/StorageExamplePage";
+import { NodePage, ProgramPage, ProgramsPage } from "@digitalaidseattle/program-management";
+
 
 const routes = [
   {
@@ -61,6 +63,18 @@ const routes = [
         path: "crud-example/ticket/:id",
         element: <TicketPage />,
       },
+      {
+        path: "programs",
+        element: <ProgramsPage />,
+      },
+      {
+        path: "programs/:id",
+        element: <ProgramPage />,
+      },
+      {
+        path: "programs/:program_id/nodes/:node_no",
+        element: <NodePage />,
+      }
     ]
   },
   {

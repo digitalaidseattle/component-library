@@ -2,7 +2,7 @@
   "name": "@digitalaidseattle/superhuman",
   "version": "1.0.0",
   "description": "Wrapper for Superhuman (formerly Coda) that works with DAS Component library",
-  "repository": "null//github.com/null/github.com/tree/master/packages/airtable",
+  "repository": "null//github.com/null/github.com/tree/master/packages/superhuman",
   "main": "dist/digitalaidseattle-superhuman.cjs.js",
   "module": "dist/digitalaidseattle-superhuman.esm.js",
   "types": "dist/declarations/src/index.d.ts",
