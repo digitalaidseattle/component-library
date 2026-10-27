@@ -13,17 +13,33 @@ interface ConfirmationDialogProps {
     title?: string;
     message: string;
     confirmText?: string;
-    cancelText?: string;
-    iconBackColor?: string;
-    iconBackColorOpen?: string;
     confirmColor?: string;
+    confirmBackColor?: string;
+    confirmBackColorOpen?: string;
+    cancelText?: string;
     cancelColor?: string;
+    cancelBackColor?: string;
+    cancelBackColorOpen?: string;
     open: boolean;
     handleConfirm: () => void;
     handleCancel: () => void;
 }
 
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message, confirmText = 'OK', confirmColor = 'text.success', cancelText = 'Cancel', cancelColor = 'text.secondary', iconBackColor = 'grey.100', iconBackColorOpen = 'grey.300', open, handleConfirm, handleCancel }) => {
+const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+     title,
+     message, 
+     confirmText = 'OK', 
+     confirmColor = 'text.success', 
+     confirmBackColor = 'grey.100', 
+     confirmBackColorOpen = 'grey.300',
+     cancelText = 'Cancel', 
+     cancelColor = 'text.secondary',   
+     cancelBackColor = 'grey.100', 
+     cancelBackColorOpen = 'grey.300', 
+     open, 
+     handleConfirm, 
+     handleCancel 
+    }) => {
 
     const [dialogTitle] = useState<string>(title ?? 'Confirm');
 
@@ -41,11 +57,11 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message,
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: cancelColor, bgcolor: open ? iconBackColorOpen : iconBackColor, borderColor: cancelColor }}
+                    sx={{ color: cancelColor, bgcolor: open ? cancelBackColorOpen : cancelBackColor, borderColor: cancelColor }}
                     onClick={() => handleCancel()}>{cancelText}</Button>
                 <Button
                     variant='outlined'
-                    sx={{ color: confirmColor, bgcolor: open ? iconBackColorOpen : iconBackColor, borderColor: confirmColor }}
+                    sx={{ color: confirmColor, bgcolor: open ? confirmBackColorOpen : confirmBackColor, borderColor: confirmColor }}
                     onClick={handleConfirm}>{confirmText}</Button>
             </DialogActions>
         </Dialog>
