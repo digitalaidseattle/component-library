@@ -19,7 +19,6 @@ export const TaskList: React.FC = () => {
     const [nodes, setNodes] = useState<Node[]>([]);
 
     React.useEffect(() => {
-        console.log('program', program);
         if (program) {
             NodeService.getInstance().findByProgramId(program.id)
                 .then(all => {

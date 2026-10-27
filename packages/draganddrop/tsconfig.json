@@ -1,9 +1,16 @@
 {
   "extends": "../../tsconfig.json",
-  // "compilerOptions": {
-  //   "outDir": "dist"
-  // },
   "include": [
-    "src"
-  ]
+    "src",
+    "vite-env.d.ts"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "ES2019",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "rootDir": "./src",
+    "ignoreDeprecations": "6.0"
+  }
 }
