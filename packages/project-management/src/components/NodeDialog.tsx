@@ -11,6 +11,7 @@ import { NodeService } from '../services/NodeService';
 import { Node } from '../types';
 import { MDXEditorField } from './MDXEditorField';
 import { ProgramContext } from './ProgramContext';
+import { Configuration } from '../Configuration';
 
 type NodeDialogProps = {
     title: string;
@@ -26,7 +27,7 @@ export default function NodeDialog({
     onChange
 }: NodeDialogProps) {
 
-    const nodeService = NodeService.getInstance();
+    const nodeService = Configuration.getInstance().getNodeService();
     const { program } = React.useContext(ProgramContext);
 
     const {

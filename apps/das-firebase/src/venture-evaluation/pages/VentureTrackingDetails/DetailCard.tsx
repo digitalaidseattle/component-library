@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { PlusCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNotifications } from "@digitalaidseattle/core";
 import { TabbedPanels } from "@digitalaidseattle/mui";
+import { Configuration, Kanban, Node, NodeWrapper, Program, ProgramContext, ProgramDialog } from "@digitalaidseattle/program-management";
 import {
     Card,
     CardHeader,
@@ -17,13 +18,12 @@ import {
     Tooltip,
     Typography
 } from '@mui/material';
-import { Node, Program, ProgramContext, ProgramDialog, ProgramService as PMProgramService, Kanban, NodeWrapper } from "@digitalaidseattle/program-management";
-import { TaskList } from "./TaskList";
 import { KanbanCard } from "./KanbanCard";
+import { TaskList } from "./TaskList";
 
 //
 export const DetailCard: React.FC = () => {
-    const service = PMProgramService.getInstance();
+    const programService = Configuration.getInstance().getProgramService();
     const notifications = useNotifications();
 
     const { program, setProgram } = React.useContext(ProgramContext);
@@ -35,7 +35,7 @@ export const DetailCard: React.FC = () => {
 
     function handleProgramChange(changed: Program | null): void {
         if (changed !== null) {
-            service.update(changed)
+            programService.update(changed)
                 .then(updated => {
                     setProgram(updated);
                     setOpenProgramDialog(false);

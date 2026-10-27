@@ -3,10 +3,10 @@ import {
     QueryModel
 } from "@digitalaidseattle/core";
 import {
+    Configuration,
     Node,
-    NodeService,
     Program,
-    ProgramService as PMProgramService
+    ProgramService
 } from "@digitalaidseattle/program-management";
 
 import template from "../resources/template.json";
@@ -14,16 +14,16 @@ import template from "../resources/template.json";
 
 export const ORG_NAME = "VentureEval";
 
-export class ProgramService {
+export class VEProgramService extends ProgramService {
 
-    private static instance: ProgramService;
+    // private static instance: VEProgramService;
 
-    public static getInstance(): ProgramService {
-        if (!ProgramService.instance) {
-            ProgramService.instance = new ProgramService();
-        }
-        return ProgramService.instance;
-    }
+    // public static getInstance(): VEProgramService {
+    //     if (!VEProgramService.instance) {
+    //         VEProgramService.instance = new VEProgramService();
+    //     }
+    //     return VEProgramService.instance;
+    // }
 
     async findByOrganization(organization: string = ORG_NAME): Promise<Program[]> {
         const queryModel: QueryModel = {
@@ -41,17 +41,17 @@ export class ProgramService {
             sortField: 'prefix',
             sortDirection: 'asc'
         }
-        return PMProgramService.getInstance().dao.find(queryModel).then(pageInfo => pageInfo.rows);
+        return this.dao.find(queryModel).then(pageInfo => pageInfo.rows);
     }
 
     // deletes the program and its node tree
     async deleteProgram(program: Program): Promise<void> {
-        const nodeService = NodeService.getInstance();
+        const nodeService = Configuration.getInstance().getNodeService();
         const nodes = await nodeService.findByProgramId(program.id);
         for (const root of nodes.filter(node => !node.parent_id)) {
             await nodeService.deleteRecursive(root.id as Identifier);
         }
-        await PMProgramService.getInstance().dao.delete(program.id as Identifier);
+        await this.dao.delete(program.id as Identifier);
     }
 
     // returns an error message for each field that is missing or already used by a program in the organization
@@ -80,7 +80,7 @@ export class ProgramService {
         const { id, nodes, ...fields } = structuredClone(template) as unknown as Program;
         const name = programName.trim();
         const prefix = programPrefix.trim();
-        const program = await PMProgramService.getInstance().insert({
+        const program = await this.insert({
             ...fields,
             id: undefined,
             organization: organization,
@@ -91,10 +91,12 @@ export class ProgramService {
         } as Program);
 
         let taskNumber = 1;
+        const nodeService = Configuration.getInstance().getNodeService();
+
         const insertNodes = async (templateNodes: Node[], parentId: Identifier | null) => {
             for (const templateNode of templateNodes) {
                 const { id, children, ...nodeFields } = templateNode;
-                const inserted = await NodeService.getInstance().insert({
+                const inserted = await nodeService.insert({
                     ...nodeFields,
                     id: undefined,
                     program_id: program.id!,
@@ -107,18 +109,20 @@ export class ProgramService {
         };
         await insertNodes(nodes, null);
 
-        return PMProgramService.getInstance().update({ ...program, next_task_number: taskNumber });
+        return this.update({ ...program, next_task_number: taskNumber });
     }
 
 
     // returns the program with its node tree: root nodes in nodes, descendants in children
     async getById(id: Identifier): Promise<Program> {
-        const program = await PMProgramService.getInstance().dao.getById(id);
+        const nodeService = Configuration.getInstance().getNodeService();
+
+        const program = await this.dao.getById(id);
         if (!program) {
             throw new Error(`Program not found for id = ${id}`);
         }
         // numeric collation so ABC-2 sorts before ABC-10
-        const allNodes = (await NodeService.getInstance().findByProgramId(program.id))
+        const allNodes = (await nodeService.findByProgramId(program.id))
             .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
         const childrenByParent = new Map<Identifier, Node[]>();
         for (const node of allNodes) {

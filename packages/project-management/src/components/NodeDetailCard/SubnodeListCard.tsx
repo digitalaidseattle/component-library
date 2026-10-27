@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import { RefreshContext, useNotifications } from "@digitalaidseattle/core";
-import { ProgramService } from "../../services";
+import { Configuration } from "../../Configuration";
 import { Node, Profile } from "../../types";
 import { NodeContext } from "../NodeContext";
 import NodeDialog from "../NodeDialog";
@@ -25,7 +25,7 @@ type TableRow = Node & {
 }
 //
 export const SubnodeListCard: React.FC = () => {
-    const programService = ProgramService.getInstance();
+    const programService = Configuration.getInstance().getProgramService();
 
     const { program } = useContext(ProgramContext);
     const { node } = useContext(NodeContext);

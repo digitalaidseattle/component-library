@@ -19,14 +19,14 @@ import {
 import { RefreshContext } from '@digitalaidseattle/core';
 
 import {
+  Configuration,
   Program,
   ProgramContext
 } from '@digitalaidseattle/program-management';
-import { ProgramService } from '../../services/ProgramService';
 import { DetailCard } from './DetailCard';
 
 export const VentureTrackingDetails = () => {
-  const service = ProgramService.getInstance();
+  const service = Configuration.getInstance().getProgramService();
 
   const [program, setProgram] = useState<Program>();
 

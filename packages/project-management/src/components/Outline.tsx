@@ -23,7 +23,7 @@ import {
 import { RefreshContext } from '@digitalaidseattle/core';
 
 import { useNavigate } from 'react-router-dom';
-import { ProgramService } from '../services';
+import { Configuration } from '../Configuration';
 import { Node } from "../types";
 import NodeDialog from './NodeDialog';
 import { ProgramContext } from './ProgramContext';
@@ -36,7 +36,7 @@ type TreeNode = {
 
 export default function Outline() {
 
-    const service = ProgramService.getInstance();
+    const service = Configuration.getInstance().getProgramService();
 
     const navigate = useNavigate();
     const { refresh, setRefresh } = React.useContext(RefreshContext);

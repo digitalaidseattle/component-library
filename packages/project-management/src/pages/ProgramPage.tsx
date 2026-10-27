@@ -20,11 +20,11 @@ import { RefreshContext } from '@digitalaidseattle/core';
 
 import { ProgramContext } from '../components/ProgramContext';
 import { ProgramDetailCard } from '../components/ProgramDetailCard';
-import { ProgramService } from '../services';
+import { Configuration } from '../Configuration';
 import { Program } from '../types';
 
 export const ProgramPage = () => {
-  const service = ProgramService.getInstance();
+  const service = Configuration.getInstance().getProgramService();
 
   const [program, setProgram] = useState<Program>();
 

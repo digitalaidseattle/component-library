@@ -26,6 +26,7 @@ import { useProfiles } from "../services";
 import { NodeService } from "../services/NodeService";
 import { Comment, Profile } from "../types";
 import { NodeContext } from "./NodeContext";
+import { Configuration } from "../Configuration";
 
 //
 
@@ -102,7 +103,7 @@ function NewCommentCard({ onChange }: { onChange: (updated: string | null) => vo
 }
 
 function CommentCard({ index, comment }: { index: number, comment: CommentData }): ReactNode {
-    const nodeService = NodeService.getInstance();
+    const nodeService = Configuration.getInstance().getNodeService();
     const auth = useAuthService();
 
     const [canEdit, setCanEdit] = useState<boolean>(false);
@@ -211,7 +212,7 @@ function CommentCard({ index, comment }: { index: number, comment: CommentData }
 
 
 export const CommentListCard: React.FC = () => {
-    const nodeService = NodeService.getInstance();
+    const nodeService = Configuration.getInstance().getNodeService();
     const notifications = useNotifications();
 
     const { node, setNode } = useContext(NodeContext);

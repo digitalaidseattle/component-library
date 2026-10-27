@@ -32,19 +32,20 @@ import {
   TransactionService
 } from '@digitalaidseattle/content-generation';
 import {
-  Configuration as GeminiConfiguration,
   GeminiAiService,
+  Configuration as GeminiConfiguration,
   GeminiContentService,
   GeminiProjectService
 } from '@digitalaidseattle/content-generation/gemini';
 
+import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/program-management";
 import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
-import { Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/program-management";
 import { NodeDao, ProfileDao, ProgramDao } from './pages/program-management';
 
 import "./App.css";
 import { Config } from './Config';
 import { routes } from './routes';
+import { VEProgramService } from './venture-evaluation/services/VEProgramService';
 
 const App: React.FC = () => {
 
@@ -85,9 +86,9 @@ const App: React.FC = () => {
 
     ProgramManagmentConfigucation.props(
       {
-        profileDao: ProfileDao.getInstance(),
-        programDao: ProgramDao.getInstance(),
-        nodeDao: NodeDao.getInstance(),
+        profileService: new ProfileService(ProfileDao.getInstance()),
+        programService: new VEProgramService(ProgramDao.getInstance()),
+        nodeService: new NodeService(NodeDao.getInstance())
       }
     )
 

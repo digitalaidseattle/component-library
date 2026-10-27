@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Breadcrumbs, Card, CardHeader, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import { ProjectOutlined } from "@ant-design/icons";
-import { ProgramService } from "../services";
+import { Configuration } from "../Configuration";
 import { Node, NodeWrapper } from "../types";
 import { NodeKanban } from "./NodeKanban";
 import { ProgramContext } from "./ProgramContext";
@@ -21,7 +21,7 @@ export const Kanban = ({ cardRenderer }: {
     ) => React.ReactNode
 }) => {
 
-    const service = ProgramService.getInstance();
+    const service = Configuration.getInstance().getProgramService();
 
     const { program } = React.useContext(ProgramContext);
     const [nodes, setNodes] = useState<Node[]>([]);

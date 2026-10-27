@@ -21,11 +21,11 @@ import { RefreshContext } from '@digitalaidseattle/core';
 import { NodeContext } from '../components/NodeContext';
 import { NodeDetailCard } from '../components/NodeDetailCard';
 import { ProgramContext } from '../components/ProgramContext';
-import { ProgramService } from '../services';
+import { Configuration } from '../Configuration';
 import { Node, Program } from '../types';
 
 export const NodePage = () => {
-  const service = ProgramService.getInstance();
+  const service = Configuration.getInstance().getProgramService();
 
   const [program, setProgram] = useState<Program>();
   const [node, setNode] = useState<Node>();

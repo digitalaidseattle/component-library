@@ -24,11 +24,11 @@ import {
     GridRowParams
 } from "@mui/x-data-grid";
 
-import { PlusCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { RefreshContext } from "@digitalaidseattle/core";
 import { Clipboard } from "@digitalaidseattle/mui";
+import { Configuration } from "../Configuration";
 import { useProfiles } from "../services";
-import { NodeService } from "../services/NodeService";
 import { Node, Profile } from "../types";
 import { ProgramContext } from "./ProgramContext";
 
@@ -43,7 +43,7 @@ type NodeListTableProps = {
 }
 //
 export const NodeListTable: React.FC<NodeListTableProps> = ({ nodes, onSelect, onAdd }) => {
-    const nodeService = NodeService.getInstance();
+    const nodeService = Configuration.getInstance().getNodeService();
     const navigate = useNavigate();
     const { refresh, setRefresh } = useContext(RefreshContext);
     const { data: profiles } = useProfiles();

@@ -26,13 +26,13 @@ import {
 import { PlusCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { ProgramDialog } from "../components";
-import { ProgramService } from "../services";
+import { Configuration } from "../Configuration";
 import { Profile, Program } from "../types";
 
 const DETAIL_PAGE = "programs";  // TODO consider making configurable
 //
 export const ProgamsListCard: React.FC = () => {
-    const service = ProgramService.getInstance();
+    const service = Configuration.getInstance().getProgramService();
 
     const [programs, setPrograms] = useState<Program[]>();
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 25 });

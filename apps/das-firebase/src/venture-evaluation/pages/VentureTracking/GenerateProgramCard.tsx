@@ -12,10 +12,12 @@ import {
 import { useContext, useEffect, useState } from "react";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
-import { Program } from "@digitalaidseattle/program-management";
-import { ProgramService } from "../../services/ProgramService";
+import { Configuration, Program } from "@digitalaidseattle/program-management";
+import { VEProgramService } from "../../services/VEProgramService";
 
 export const GenerateProgramCard: React.FC = ({ }) => {
+    const programService = Configuration.getInstance().getProgramService() as VEProgramService;
+
     const notifications = useNotifications();
     const { setLoading } = useContext(LoadingContext);
     const { refresh, setRefresh } = useContext(RefreshContext);
@@ -26,7 +28,7 @@ export const GenerateProgramCard: React.FC = ({ }) => {
 
     useEffect(() => {
         let active = true;
-        ProgramService.getInstance().findByOrganization()
+        programService.findByOrganization()
             .then(data => {
                 if (active) {
                     setPrograms(data);
@@ -39,12 +41,12 @@ export const GenerateProgramCard: React.FC = ({ }) => {
         return () => { active = false; };
     }, [refresh]);
 
-    const errors = ProgramService.getInstance().validate(name, prefix, programs);
+    const errors = programService.validate(name, prefix, programs);
 
     async function handleGenerate() {
         setLoading(true);
         try {
-            await ProgramService.getInstance().generateProgram(name, prefix);
+            await programService.generateProgram(name, prefix);
             notifications.success(`Program ${name.trim()} generated.`);
             setName('');
             setPrefix('');

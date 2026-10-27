@@ -6,7 +6,7 @@
 // material-ui
 import React, { useState } from "react";
 
-import { Node, NodeListTable, NodeService, ProgramContext } from "@digitalaidseattle/program-management";
+import { Configuration, Node, NodeListTable, ProgramContext } from "@digitalaidseattle/program-management";
 import {
     Card,
     CardHeader
@@ -14,13 +14,14 @@ import {
 
 //
 export const TaskList: React.FC = () => {
+    const nodeService = Configuration.getInstance().getNodeService();
 
     const { program } = React.useContext(ProgramContext);
     const [nodes, setNodes] = useState<Node[]>([]);
 
     React.useEffect(() => {
         if (program) {
-            NodeService.getInstance().findByProgramId(program.id)
+            nodeService.findByProgramId(program.id)
                 .then(all => {
                     setNodes(all
                         .filter(node => node.type === 'Task')

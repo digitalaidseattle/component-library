@@ -20,7 +20,7 @@ import {
 import { ProgramDialog } from "../components";
 import Outline from "../components/Outline";
 import { ProgramContext } from "../components/ProgramContext";
-import { ProgramService } from "../services";
+import { Configuration } from "../Configuration";
 import { Node, Program } from "../types";
 import { Kanban } from "./Kanban";
 import { Summary } from "./Summary";
@@ -28,7 +28,7 @@ import NodeDialog from "./NodeDialog";
 
 //
 export const ProgramDetailCard: React.FC = () => {
-    const service = ProgramService.getInstance();
+    const service = Configuration.getInstance().getProgramService();
     const notifications = useNotifications();
 
     const { program, setProgram } = React.useContext(ProgramContext);

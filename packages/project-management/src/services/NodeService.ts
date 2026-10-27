@@ -8,22 +8,11 @@
 import { DataAccessObject, getCoreServices, Identifier } from "@digitalaidseattle/core";
 import { Configuration } from "../Configuration";
 import { Node } from "../types";
-import { ProfileService } from "./ProfileService";
 
 
 export class NodeService {
 
-    private static instance: NodeService;
-
-    public static getInstance(): NodeService {
-        if (!NodeService.instance) {
-            NodeService.instance = new NodeService(Configuration.getInstance().nodeDao);
-        }
-        return NodeService.instance;
-    }
-
     dao: DataAccessObject<Node>;
-
     constructor(dao: DataAccessObject<Node>) {
         this.dao = dao;
     }
@@ -183,7 +172,7 @@ export class NodeService {
 
     async changeAssignment(node: Node, attribute: string, value: string | null): Promise<Node> {
         const user = await getCoreServices().authService?.getUser();
-        const assignee = value ? await ProfileService.getInstance().getById(value) : null;
+        const assignee = value ? await Configuration.getInstance().getProfileService().getById(value) : null;
         const newHistory = {
             user: user?.email!,
             description: assignee ? `Changed "Assignee" to "${assignee.name}".` : `Unassigned.`,

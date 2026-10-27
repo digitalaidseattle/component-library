@@ -10,10 +10,12 @@ import { useNavigate } from "react-router-dom";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
-import { Profile, Program } from "@digitalaidseattle/program-management";
-import { ProgramService } from "../../services/ProgramService";
+import { Configuration, Profile, Program } from "@digitalaidseattle/program-management";
+import { VEProgramService } from "../../services/VEProgramService";
 
 export const ProgramsTable: React.FC = ({ }) => {
+    const programService = Configuration.getInstance().getProgramService() as VEProgramService;
+
     const notifications = useNotifications();
     const { setLoading } = useContext(LoadingContext);
     const { refresh, setRefresh } = useContext(RefreshContext);
@@ -25,7 +27,7 @@ export const ProgramsTable: React.FC = ({ }) => {
     useEffect(() => {
         let active = true;
         setLoading(true);
-        ProgramService.getInstance().findByOrganization()
+        programService.findByOrganization()
             .then(data => {
                 if (active) {
                     setPrograms(data);
@@ -45,7 +47,7 @@ export const ProgramsTable: React.FC = ({ }) => {
         }
         setLoading(true);
         try {
-            await ProgramService.getInstance().deleteProgram(toDelete);
+            await programService.deleteProgram(toDelete);
             notifications.success(`Program ${toDelete.name} deleted.`);
             setRefresh(Date.now());
         } catch (err) {

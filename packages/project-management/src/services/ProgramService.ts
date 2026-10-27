@@ -8,18 +8,8 @@
 import { DataAccessObject, getCoreServices, Identifier, QueryModel } from "@digitalaidseattle/core";
 import { Configuration } from "../Configuration";
 import { Node, Program } from "../types";
-import { NodeService } from "./NodeService";
 
 export class ProgramService {
-
-    private static instance: ProgramService;
-
-    public static getInstance(): ProgramService {
-        if (!ProgramService.instance) {
-            ProgramService.instance = new ProgramService(Configuration.getInstance().programDao);
-        }
-        return ProgramService.instance;
-    }
 
     dao: DataAccessObject<Program>;
 
@@ -68,9 +58,12 @@ export class ProgramService {
 
     // returns a fully hydrated program with all nodes and their children
     async getById(id: Identifier): Promise<Program | null> {
+
+        const nodeService = Configuration.getInstance().getNodeService();
+
         const program = await this.dao.getById(id);
         if (program) {
-            const allNodes = await NodeService.getInstance().findByProgramId(program.id);
+            const allNodes = await nodeService.findByProgramId(program.id);
             program.nodes = allNodes.filter(node => !node.parent_id);
             for (const root of program.nodes) {
                 root.children = this.getChildren(root, allNodes);
@@ -112,7 +105,7 @@ export class ProgramService {
     }
 
     async createChild(program: Program, parentId?: string): Promise<Node> {
-        const nodeService = NodeService.getInstance();
+        const nodeService = Configuration.getInstance().getNodeService();
         if (!parentId) {
             return {
                 ...nodeService.empty(),
@@ -141,7 +134,8 @@ export class ProgramService {
 
     async insertNode(program: Program, node: Node): Promise<Program> {
         const authService = getCoreServices().authService;
-        const nodeService = NodeService.getInstance();
+        const nodeService = Configuration.getInstance().getNodeService();
+
         if (authService) {
             const user = await authService.getUser();
             if (user) {
@@ -185,11 +179,13 @@ export class ProgramService {
     }
 
     findNode(program: Program, nodeId: string): Node | undefined {
-        return NodeService.getInstance().findNodeById(program.nodes, nodeId);
+        const nodeService = Configuration.getInstance().getNodeService();
+        return nodeService.findNodeById(program.nodes, nodeId);
     }
 
     findNodeByNo(program: Program, nodeNo: string): Node | undefined {
-        return NodeService.getInstance().findNodeByNo(program.nodes, nodeNo);
+        const nodeService = Configuration.getInstance().getNodeService();
+        return nodeService.findNodeByNo(program.nodes, nodeNo);
     }
 
     // TODO consider moving this to a validation service

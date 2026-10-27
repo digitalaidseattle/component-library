@@ -7,11 +7,12 @@ import { Avatar, Card, CardActions, CardContent, CardHeader, Chip, IconButton, L
 import React, { useEffect } from "react";
 
 import { MoreOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
-import { Node, NodeKanbanProps, NodeService, Profile, ProgramContext } from '@digitalaidseattle/program-management';
+import { Configuration, Node, NodeKanbanProps, Profile, ProgramContext } from '@digitalaidseattle/program-management';
+import { useNavigate } from 'react-router-dom';
 
 export function KanbanCard({ node, onFocusChange }: NodeKanbanProps) {
+    const nodeService = Configuration.getInstance().getNodeService();
 
     const [assignee, setAssignee] = React.useState<Profile | null>(null);
 
@@ -48,7 +49,7 @@ export function KanbanCard({ node, onFocusChange }: NodeKanbanProps) {
     function changeAssignee(member: Profile | null) {
         setMemberAnchorEl(null);
         if (node && (member?.id ?? null) !== (node.assignee_id ?? null)) {
-            NodeService.getInstance()
+            nodeService
                 .changeAttribute(node, "assignee_id", (member?.id as string | undefined) ?? null)
                 .then(() => {
                     setAssignee(member);

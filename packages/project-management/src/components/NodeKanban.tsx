@@ -11,7 +11,7 @@ import { ArrowsAltOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined } f
 import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
 import { ConfirmationDialog } from '@digitalaidseattle/mui';
 import { useNavigate } from 'react-router-dom';
-import { ProgramService } from "../services";
+import { Configuration } from "../Configuration";
 import { NodeService } from '../services/NodeService';
 import { Node, NodeKanbanProps, NodeWrapper } from "../types";
 import NodeDialog from './NodeDialog';
@@ -19,6 +19,10 @@ import { NodeKanbanCard } from './NodeKanbanCard';
 import { ProgramContext } from "./ProgramContext";
 
 export function NodeKanban({ node, onFocusChange, opts }: NodeKanbanProps) {
+
+    const programService = Configuration.getInstance().getProgramService();
+    const nodeService = Configuration.getInstance().getNodeService();
+
     const { program } = React.useContext(ProgramContext);
     const { setRefresh } = React.useContext(RefreshContext);
 
@@ -66,13 +70,13 @@ export function NodeKanban({ node, onFocusChange, opts }: NodeKanbanProps) {
     };
 
     const handleStatusChange = (changes: Map<string, unknown>, element: NodeWrapper) => {
-        NodeService.getInstance()
+        nodeService
             .changeAttribute(element, "status", changes.get("containerId") as string)
             .then(updated => { console.log('handleStatusChange', updated), setRefresh(Date.now()) })
     }
 
     function handleAdd() {
-        ProgramService.getInstance()
+        programService
             .createChild(program, node?.id as string | undefined)
             .then(child => {
                 setNewNode(child);
@@ -83,7 +87,7 @@ export function NodeKanban({ node, onFocusChange, opts }: NodeKanbanProps) {
 
     function handleNodeChange(updated: Node | null) {
         if (updated !== null) {
-            ProgramService.getInstance()
+            programService
                 .insertNode(program, updated)
                 .then(() => {
                     notifications.success(`${updated.type} added.`);
@@ -96,7 +100,7 @@ export function NodeKanban({ node, onFocusChange, opts }: NodeKanbanProps) {
 
     function handleDeleteConfirm() {
         if (node) {
-            NodeService.getInstance()
+            nodeService
                 .deleteRecursive(node.id!)
                 .then(() => {
                     notifications.success(`${node.node_no} deleted.`);
@@ -115,7 +119,7 @@ export function NodeKanban({ node, onFocusChange, opts }: NodeKanbanProps) {
                 title={node && <Typography fontWeight={600}>{node.type}: {node.name}</Typography>}
                 action={
                     <Stack direction={'row'} >
-                        <Tooltip title={`Add ${ProgramService.getInstance().getChildType(program, node) ?? ''}`}>
+                        <Tooltip title={`Add ${programService.getChildType(program, node) ?? ''}`}>
                             <IconButton
                                 size='small'
                                 color='primary'

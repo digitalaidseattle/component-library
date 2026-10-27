@@ -16,34 +16,35 @@ import { PriorityEdit } from "./PriorityEdit";
 import { StatusEdit } from "./StatusEdit";
 import { TextEdit } from "./TextEdit";
 import { TagsEdit } from "./TagsEdit";
+import { Configuration } from "../../Configuration";
 //
 export const NodeAttributeEditor: React.FC = () => {
+    const nodeService = Configuration.getInstance().getNodeService();
 
     const { node } = React.useContext(NodeContext);
 
     async function handleAttributeChange(attribute: string, newStatus: string): Promise<void> {
-        NodeService.getInstance()
+        nodeService
             .changeAttribute(node, attribute, newStatus)
     }
 
     async function handleDateChange(attribute: string, newDate: Date): Promise<void> {
-        NodeService.getInstance()
+        nodeService
             .changeAttribute(node, attribute, newDate.toISOString())
     }
 
     async function handleAssignmentChange(attribute: string, newAssignee: string): Promise<void> {
-        NodeService.getInstance()
+        nodeService
             .changeAttribute(node, attribute, newAssignee)
     }
 
     async function handleTagsChange(attribute: string, newTags: string[]): Promise<void> {
-        NodeService.getInstance()
+        nodeService
             .changeTags(node, attribute, newTags)
     }
 
-
     async function handleOrderChange(attribute: string, value: string): Promise<void> {
-        NodeService.getInstance()
+        nodeService
             .changeOrder(node, attribute, Number(value))
     }
 
