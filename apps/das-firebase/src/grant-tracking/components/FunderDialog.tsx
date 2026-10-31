@@ -1,16 +1,14 @@
 /**
- *  taskDialog.tsx
+ *  RHFunderDialog.tsx
  *
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { InputForm, InputOption } from '@digitalaidseattle/mui';
-import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { FundersService } from '../services/fundersService';
 import { Funder } from '../types';
-
-// material-ui
 
 interface EntityDialogProps<T> {
     entity: T;
@@ -18,87 +16,42 @@ interface EntityDialogProps<T> {
     handleSuccess: (resp: T | null) => void;
 }
 
+const FUNDER_TYPES = [
+    'Funder Collaborative',
+    'Private Foundation',
+    'State/ Local Government',
+    'Fiscally sponsored',
+    'Public Foundation',
+    'Venture Philanthropy',
+    'Grant Facilitator'
+];
+
 export const FunderDialog: React.FC<EntityDialogProps<Funder>> = ({ open, entity, handleSuccess }) => {
     const fundersService = FundersService.getInstance();
 
-    const [dirty, setDirty] = useState<boolean>(false);
-    const [dialogTitle, setDialogTitle] = useState<string>('edit');
-    const [institution, setInstitution] = useState<Funder>(fundersService.empty());
+    const {
+        control,
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isDirty },
+    } = useForm<Funder>({
+        mode: 'onBlur',
+        reValidateMode: 'onChange',
+        defaultValues: entity ?? fundersService.empty()
+    });
 
     useEffect(() => {
-        setDirty(false);
-        setInstitution(Object.assign({}, entity));
-    }, [entity]);
-
-
-    useEffect(() => {
-        setDialogTitle(institution.id ? 'Update Funder' : 'Add Funder');
-    }, [institution]);
-
-
-    const onChange = (field: string, value: any) => {
-        // stringify & parse needed for string keys
-        const updatedChanges = JSON.parse(`{ "${field}" : ${JSON.stringify(value)} }`)
-        setInstitution({
-            ...institution,
-            ...updatedChanges
-        });
-        setDirty(true);
-    }
-
-    const handleSubmit = () => {
-        handleSuccess(institution);
-    }
-
-    const inputFields: InputOption[] = [
-        {
-            name: "name",
-            label: 'Name',
-            type: 'string',
-            disabled: false,
-        },
-        {
-            name: "type",
-            label: 'Type',
-            type: 'select',
-            disabled: false,
-            options: [
-                {
-                    label: 'Funder Collaborative',
-                    value: 'Funder Collaborative',
-                },
-                {
-                    label: 'Private Foundation',
-                    value: 'Private Foundation',
-                },
-                {
-                    label: 'State/ Local Government',
-                    value: 'State/ Local Government',
-                },
-                {
-                    label: 'Fiscally sponsored',
-                    value: 'Fiscally sponsored',
-                },
-                {
-                    label: 'Public Foundation',
-                    value: 'Public Foundation',
-                },
-                {
-                    label: 'Venture Philanthropy',
-                    value: 'Venture Philanthropy',
-                },
-                {
-                    label: 'Grant Facilitator',
-                    value: 'Grant Facilitator',
-                }]
-        },
-        {
-            name: "description",
-            label: 'Description',
-            type: 'string',
-            disabled: false,
+        if (open && entity) {
+            reset(entity);
         }
-    ]
+    }, [open, entity, reset]);
+
+    const dialogTitle = entity?.id ? 'Update Funder' : 'Add Funder';
+
+    const onSubmit: SubmitHandler<Funder> = (data: Funder) => {
+        handleSuccess({ ...entity, ...data });
+    };
 
     return (
         <Dialog
@@ -108,10 +61,43 @@ export const FunderDialog: React.FC<EntityDialogProps<Funder>> = ({ open, entity
             <DialogContent>
                 <Stack gap={2}>
                     <Typography variant='h4'>{dialogTitle}</Typography>
-                    <InputForm
-                        entity={institution}
-                        inputFields={inputFields}
-                        onChange={onChange}
+                    <TextField
+                        label='Name'
+                        {...register('name', {
+                            required: 'Name is required'
+                        })}
+                        required
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                    />
+                    <FormControl fullWidth>
+                        <InputLabel id='type-label'>Type</InputLabel>
+                        <Controller
+                            name='type'
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    {...field}
+                                    id='type'
+                                    labelId='type-label'
+                                    label='Type'
+                                    value={field.value ?? ''}
+                                >
+                                    <MenuItem value=''>
+                                        <em>&lt;Make Selection&gt;</em>
+                                    </MenuItem>
+                                    {FUNDER_TYPES.map(type => (
+                                        <MenuItem key={type} value={type}>{type}</MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                    </FormControl>
+                    <TextField
+                        label='Description'
+                        {...register('description')}
+                        multiline
+                        minRows={3}
                     />
                 </Stack>
             </DialogContent>
@@ -123,8 +109,8 @@ export const FunderDialog: React.FC<EntityDialogProps<Funder>> = ({ open, entity
                 <Button
                     variant='contained'
                     sx={{ color: 'text.success' }}
-                    onClick={handleSubmit}
-                    disabled={!dirty}>OK</Button>
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={!isDirty || Object.keys(errors).length > 0}>OK</Button>
             </DialogActions>
         </Dialog>
     )

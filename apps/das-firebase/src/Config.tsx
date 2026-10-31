@@ -38,36 +38,8 @@ export const Config: LayoutConfiguration = ({
         ]
     } as MenuItem,
     {
-        id: 'group-grants',
-        title: 'Grant Tracking (TEST)',
-        type: 'group',
-        children: [
-            {
-                id: 'GRNT-FND',
-                title: 'Funders',
-                type: 'item',
-                url: '/funders',
-                icon: <BankOutlined />,
-            } as MenuItem,
-            {
-                id: 'GRNT-PRG',
-                title: 'Grant Programs',
-                type: 'item',
-                url: '/grant-programs',
-                icon: <DollarOutlined />,
-            } as MenuItem,
-            {
-                id: 'GRNT-APPL',
-                title: 'Grant Applications',
-                type: 'item',
-                url: '/grant-applications',
-                icon: <FormOutlined />
-            } as MenuItem
-        ]
-    } as MenuItem,
-    {
         id: 'venture-evaluation',
-        title: 'Venture Evaluation (TEST)',
+        title: 'Venture Evaluation (BETA)',
         type: 'group',
         children: [
             {
@@ -85,7 +57,36 @@ export const Config: LayoutConfiguration = ({
                 icon: <CommentOutlined />,
             } as MenuItem,
         ]
-    } as MenuItem],
+    } as MenuItem,
+    {
+        id: 'group-grants',
+        title: 'Grant Tracking (TEST)',
+        type: 'group',
+        children: [
+            {
+                id: 'GRNT-FND',
+                title: 'Funders',
+                type: 'item',
+                url: '/grant-tracking/funders',
+                icon: <BankOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-PRG',
+                title: 'Grant Programs',
+                type: 'item',
+                url: '/grant-tracking/programs',
+                icon: <DollarOutlined />,
+            } as MenuItem,
+            {
+                id: 'GRNT-APPL',
+                title: 'Grant Applications',
+                type: 'item',
+                url: '/grant-tracking/applications',
+                icon: <FormOutlined />
+            } as MenuItem
+        ]
+    } as MenuItem
+    ],
     toolbarItems: [
         <Box key={1}><HelpButton /></Box>
     ],

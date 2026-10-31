@@ -30,13 +30,15 @@ export type ProgramAssessment = Entity & {
     grant_program_id: string;
     priority_score: number;
     notes: string[];
+    email: string; // consider profile_id as well
 }
 
-export type Application = Entity & {
+export type GrantApplication = Entity & {
     grant_program_id: string;
     priority_score: number;
     status: string;
     notes: string;
+    email: string;  // consider profile_id as well
 }
 
 export type ApplicationHistory = Entity & {

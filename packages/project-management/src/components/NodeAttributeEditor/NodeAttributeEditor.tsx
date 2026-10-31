@@ -7,16 +7,15 @@ import React from "react";
 
 import { Grid, Typography } from '@mui/material';
 
-import { NodeService } from "../../services/NodeService";
+import { Configuration } from "../../Configuration";
 import { NodeContext } from "../NodeContext";
 import { DateEdit } from "./DateEdit";
 import { MarkdownEdit } from "./MarkdownEdit";
 import { MemberEdit } from "./MemberEdit";
 import { PriorityEdit } from "./PriorityEdit";
 import { StatusEdit } from "./StatusEdit";
-import { TextEdit } from "./TextEdit";
 import { TagsEdit } from "./TagsEdit";
-import { Configuration } from "../../Configuration";
+import { TextEdit } from "./TextEdit";
 //
 export const NodeAttributeEditor: React.FC = () => {
     const nodeService = Configuration.getInstance().getNodeService();

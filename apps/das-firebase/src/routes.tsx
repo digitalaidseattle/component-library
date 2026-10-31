@@ -15,7 +15,9 @@ import {
   MinimalLayout,
 } from "@digitalaidseattle/mui";
 import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
+import { FunderPage } from './grant-tracking/pages/Funder';
 import { FundersPage } from './grant-tracking/pages/Funders';
+import { ProgramPage as GrantProgramPage } from './grant-tracking/pages/Program';
 import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
 import { GrantProgramsPage } from './grant-tracking/pages/Programs';
 import { VentureTrackingPage } from './venture-evaluation/pages/VentureTracking';
@@ -54,13 +56,26 @@ const routes: RouteObject[] = [
         path: "programs/:program_id/nodes/:node_no",
         element: <NodePage />,
       },
+
+    ]
+  },
+  {
+    path: "/grant-tracking",
+    element: <MainLayout sx={{ p: 1 }} />,
+    children: [
       {
         path: "funders",
         element: <FundersPage />,
+      }, {
+        path: "funders/:id",
+        element: <FunderPage />,
       },
       {
-        path: "grant-programs",
+        path: "programs",
         element: <GrantProgramsPage />,
+      }, {
+        path: "programs/:id",
+        element: <GrantProgramPage />,
       },
     ]
   },

@@ -14,6 +14,13 @@ import template from "../resources/template.json";
 
 export const ORG_NAME = "VentureEval";
 
+// left pads value with zeroes to length characters, e.g. zeroPad(7, 4) => "0007"
+// values with more digits than length are returned unpadded
+export function zeroPad(value: number, length: number): string {
+    const digits = Math.abs(Math.trunc(value)).toString().padStart(length, '0');
+    return value < 0 ? `-${digits}` : digits;
+}
+
 export class VEProgramService extends ProgramService {
 
     // private static instance: VEProgramService;
@@ -75,7 +82,9 @@ export class VEProgramService extends ProgramService {
     async generateProgram(programName: string, programPrefix: string, organization: string = ORG_NAME): Promise<Program> {
         const errors = this.validate(programName, programPrefix, await this.findByOrganization(organization));
         if (errors.name || errors.prefix) {
-            throw new Error([errors.name, errors.prefix].filter(Boolean).join(' '));
+            throw new Error([errors.name, errors.prefix]
+                .filter(Boolean)
+                .join(' '));
         }
         const { id, nodes, ...fields } = structuredClone(template) as unknown as Program;
         const name = programName.trim();
@@ -101,7 +110,7 @@ export class VEProgramService extends ProgramService {
                     id: undefined,
                     program_id: program.id!,
                     parent_id: parentId,
-                    node_no: `${prefix}-${taskNumber++}`,
+                    node_no: `${prefix}-${zeroPad(taskNumber++, 2)}`,
                     children: []
                 } as Node);
                 await insertNodes(children ?? [], inserted.id as Identifier);

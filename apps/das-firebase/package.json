@@ -17,6 +17,7 @@
     "@digitalaidseattle/mui": "1.0.45",
     "@digitalaidseattle/program-management": "1.0.0",
     "@digitalaidseattle/superhuman": "1.0.0",
+    "react-hook-form": "^7.85.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

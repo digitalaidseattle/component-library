@@ -10,9 +10,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Box, Card, CardHeader, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, ReactNode, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
+import { GrantProgramDialog } from "../../components/GrantProgramDialog";
 import { Toolbar } from "../../components/Toolbar";
 import { GrantProgramService } from "../../services/grantProgramService";
 import { GrantProgram } from '../../types';
@@ -24,12 +26,15 @@ export const GrantProgramsPage: React.FC = ({ }) => {
     const service = GrantProgramService.getInstance();
 
     const notifications = useNotifications();
+    const navigate = useNavigate();
     const { setLoading } = useContext(LoadingContext);
-    const { refresh } = useContext(RefreshContext);
+    const { refresh, setRefresh } = useContext(RefreshContext);
 
     const [programs, setPrograms] = useState<GrantProgram[]>([]);
     const [funder, setFunder] = useState<GrantProgram>(service.empty());
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+    const [program, setProgram] = useState<GrantProgram>(service.empty());
+    const [showDialog, setShowDialog] = useState<boolean>(false);
 
     useEffect(() => {
         let active = true;
@@ -49,24 +54,31 @@ export const GrantProgramsPage: React.FC = ({ }) => {
         return () => { active = false; };
     }, [refresh]);
 
-    const handleEditClick = (_id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
+    const handleEditClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
         return () => {
-            alert('Not ready')
+            navigate(`./${id}`);
         };
     }
 
-    // const handleSuccess = (changed: GrantProgram | null): void => {
-    //     if (changed) {
-    //         if (changed.id) {
-    //             service.update(changed.id, changed)
-    //             success('Funder updated!')
-    //         } else {
-    //             service.insert(changed)
-    //             success('Funder added!')
-    //         }
-    //     }
-    //     setShowDialog(false);
-    // }
+    async function handleSuccess(changed: GrantProgram | null): Promise<void> {
+        if (changed) {
+            try {
+                if (changed.id) {
+                    await service.update(changed.id, changed);
+                    notifications.success('Grant program updated!');
+                } else {
+                    await service.insert(changed);
+                    notifications.success('Grant program added!');
+                }
+                setRefresh(Date.now());
+            }
+            catch (err) {
+                console.error('Could not save grant program', err);
+                notifications.error('Sorry there was an error: ' + (err as Error).message);
+            }
+        }
+        setShowDialog(false);
+    }
 
     const handleDeleteClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
         return () => {
@@ -81,7 +93,8 @@ export const GrantProgramsPage: React.FC = ({ }) => {
     }
 
     const handleAdd = (): void => {
-        alert('Not ready')
+        setProgram(service.empty());
+        setShowDialog(true);
     }
 
 
@@ -165,10 +178,10 @@ export const GrantProgramsPage: React.FC = ({ }) => {
                     />
                 </Card>
             </Stack>
-            {/* <FunderDialog
-                entity={funder}
+            <GrantProgramDialog
+                entity={program}
                 open={showDialog}
-                handleSuccess={handleSuccess} /> */}
+                handleSuccess={handleSuccess} />
             <ConfirmationDialog
                 message={funder ? `Delete project ${funder.name}` : ''}
                 open={showDeleteDialog}

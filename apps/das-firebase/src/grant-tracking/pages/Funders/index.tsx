@@ -10,6 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Card, CardHeader, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, ReactNode, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { ConfirmationDialog } from "@digitalaidseattle/mui";
@@ -25,6 +26,7 @@ export const FundersPage: React.FC = ({ }) => {
     const fundersService = FundersService.getInstance();
 
     const notifications = useNotifications();
+    const navigate = useNavigate();
 
     const { setLoading } = useContext(LoadingContext);
     const { refresh, setRefresh } = useContext(RefreshContext);
@@ -54,11 +56,7 @@ export const FundersPage: React.FC = ({ }) => {
 
     const handleEditClick = (id: GridRowId): MouseEventHandler<HTMLButtonElement> | undefined => {
         return () => {
-            const found = funders.find(p => p.id?.toString() === id.toString());
-            if (found) {
-                setFunder(found);
-                setShowDialog(true);
-            }
+            navigate(`./${id}`);
         };
     }
 
