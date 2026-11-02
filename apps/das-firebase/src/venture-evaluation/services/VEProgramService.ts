@@ -22,6 +22,12 @@ export function zeroPad(value: number, length: number): string {
 }
 
 export class VEProgramService extends ProgramService {
+    static TASK_STATUSES = [
+        "To Do",
+        "In Progress",
+        "Done",
+        "Pause"
+    ];
 
     // private static instance: VEProgramService;
 

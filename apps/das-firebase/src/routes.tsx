@@ -15,6 +15,8 @@ import {
   MinimalLayout,
 } from "@digitalaidseattle/mui";
 import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
+import { GrantApplicationPage } from './grant-tracking/pages/Application';
+import { GrantApplicationsPage } from './grant-tracking/pages/Applications';
 import { FunderPage } from './grant-tracking/pages/Funder';
 import { FundersPage } from './grant-tracking/pages/Funders';
 import { ProgramPage as GrantProgramPage } from './grant-tracking/pages/Program';
@@ -76,6 +78,13 @@ const routes: RouteObject[] = [
       }, {
         path: "programs/:id",
         element: <GrantProgramPage />,
+      },
+      {
+        path: "applications",
+        element: <GrantApplicationsPage />,
+      }, {
+        path: "applications/:id",
+        element: <GrantApplicationPage />,
       },
     ]
   },

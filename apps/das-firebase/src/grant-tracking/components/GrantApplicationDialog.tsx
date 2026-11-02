@@ -8,7 +8,7 @@ import { Button, Dialog, DialogActions, DialogContent, MenuItem, Stack, TextFiel
 import React, { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GrantApplicationService } from '../services/grantApplicationService';
-import { GrantApplication } from '../types';
+import { GrantApplication, GrantProgram } from '../types';
 
 interface EntityDialogProps<T> {
     entity: T;
@@ -16,9 +16,13 @@ interface EntityDialogProps<T> {
     handleSuccess: (resp: T | null) => void;
 }
 
+interface GrantApplicationDialogProps extends EntityDialogProps<GrantApplication> {
+    programs?: GrantProgram[];  // when provided, the grant program can be selected
+}
+
 const STATUS_OPTIONS = ['To Apply', 'In Progress', 'Applied', 'Closed', 'Next Cycle', 'Declined'];
 
-export const GrantApplicationDialog: React.FC<EntityDialogProps<GrantApplication>> = ({ open, entity, handleSuccess }) => {
+export const GrantApplicationDialog: React.FC<GrantApplicationDialogProps> = ({ open, entity, handleSuccess, programs }) => {
     const applicationService = GrantApplicationService.getInstance();
 
     const {
@@ -56,6 +60,32 @@ export const GrantApplicationDialog: React.FC<EntityDialogProps<GrantApplication
             <DialogContent>
                 <Stack gap={2}>
                     <Typography variant='h4'>{dialogTitle}</Typography>
+                    {programs &&
+                        <Controller
+                            name='grant_program_id'
+                            control={control}
+                            rules={{ required: 'Grant program is required' }}
+                            render={({ field }) => (
+                                <TextField
+                                    select
+                                    id='grant_program_id'
+                                    label='Grant Program'
+                                    required
+                                    fullWidth
+                                    inputRef={field.ref}
+                                    onBlur={field.onBlur}
+                                    value={field.value ?? ''}
+                                    onChange={field.onChange}
+                                    error={!!errors.grant_program_id}
+                                    helperText={errors.grant_program_id?.message}
+                                >
+                                    {programs.map(program => (
+                                        <MenuItem key={program.id!.toString()} value={program.id!.toString()}>{program.name}</MenuItem>
+                                    ))}
+                                </TextField>
+                            )}
+                        />
+                    }
                     <TextField
                         label='Email'
                         type='email'
