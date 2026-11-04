@@ -23,6 +23,7 @@ import { ProgramPage as GrantProgramPage } from './grant-tracking/pages/Program'
 import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
 import { GrantProgramsPage } from './grant-tracking/pages/Programs';
 import { VentureTrackingPage } from './venture-evaluation/pages/VentureTracking';
+import { VentureDebriefPage } from './venture-evaluation/pages/VentureDebrief';
 import { VentureDebriefsPage } from './venture-evaluation/pages/VentureDebriefs';
 import { VentureTrackingDetails } from './venture-evaluation/pages/VentureTrackingDetails';
 
@@ -107,6 +108,10 @@ const routes: RouteObject[] = [
       {
         path: "debriefs",
         element: <VentureDebriefsPage />,
+      },
+      {
+        path: "debriefs/:id",
+        element: <VentureDebriefPage />,
       }
     ]
   },

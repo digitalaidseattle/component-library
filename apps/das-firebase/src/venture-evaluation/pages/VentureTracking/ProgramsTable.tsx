@@ -96,7 +96,7 @@ export const ProgramsTable: React.FC = ({ }) => {
             <DataGrid
                 rows={programs}
                 columns={columns}
-                pageSizeOptions={[5, 10, 100]}
+                pageSizeOptions={[5, 10, 25, 100]}
                 sx={{ border: 0, width: '100%', minWidth: 0 }}
             />
             <ConfirmationDialog
