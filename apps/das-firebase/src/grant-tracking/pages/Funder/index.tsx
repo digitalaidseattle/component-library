@@ -3,11 +3,11 @@
  * Display details of a funder and its grant programs
  */
 
-import { EditOutlined, HomeOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, FolderOpenOutlined, HomeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Breadcrumbs, Card, CardContent, CardHeader, Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { FunderDialog } from '../../components/FunderDialog';
@@ -39,6 +39,7 @@ export const FunderPage: React.FC = () => {
     const programService = GrantProgramService.getInstance();
 
     const notifications = useNotifications();
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const { setLoading } = useContext(LoadingContext);
@@ -112,6 +113,24 @@ export const FunderPage: React.FC = () => {
         setShowProgramDialog(false);
     }
 
+    const programColumns: GridColDef<GrantProgram>[] = [
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            getActions: ({ row }) => [
+                <GridActionsCellItem
+                    icon={<FolderOpenOutlined />}
+                    label="Open"
+                    onClick={() => navigate(`/grant-tracking/programs/${row.id}`)}
+                    color="inherit"
+                />
+            ]
+        },
+        ...PROGRAM_COLUMNS
+    ];
+
     function addProgramButton(): ReactNode {
         return <Tooltip title="Add grant program">
             <IconButton color="primary" size="small" onClick={handleAddProgram} aria-label="Add grant program">
@@ -151,7 +170,7 @@ export const FunderPage: React.FC = () => {
                 <CardHeader title="Grant Programs" />
                 <DataGrid
                     rows={programs}
-                    columns={PROGRAM_COLUMNS}
+                    columns={programColumns}
                     pageSizeOptions={[5, 10, 25, 100]}
                     sx={{ border: 0, width: '100%', minWidth: 0 }}
                     showToolbar={true}

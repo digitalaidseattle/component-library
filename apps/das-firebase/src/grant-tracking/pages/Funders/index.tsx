@@ -4,9 +4,8 @@
 */
 
 
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, FolderOpenOutlined, PlusOutlined } from "@ant-design/icons";
 
-import EditIcon from '@mui/icons-material/Edit';
 import { Card, CardHeader, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, ReactNode, useContext, useEffect, useState } from "react";
@@ -19,7 +18,6 @@ import { Toolbar } from "../../components/Toolbar";
 import { FundersService } from '../../services/fundersService';
 import { Funder } from '../../types';
 import { ResearchCard } from "./ResearchCard";
-import { UploadFundersCard } from "./UploadFundersCard";
 
 
 export const FundersPage: React.FC = ({ }) => {
@@ -127,7 +125,7 @@ export const FundersPage: React.FC = ({ }) => {
             getActions: ({ id }) => {
                 return [
                     <GridActionsCellItem
-                        icon={<EditIcon />}
+                        icon={<FolderOpenOutlined />}
                         label="Edit"
                         className="textPrimary"
                         onClick={handleEditClick(id)}
@@ -157,9 +155,9 @@ export const FundersPage: React.FC = ({ }) => {
             <CardHeader title="Funders"></CardHeader>
             <Stack gap={2}>
                 <Grid container spacing={2}>
-                    <Grid size={6}>
+                    {/* <Grid size={6}>
                         <UploadFundersCard />
-                    </Grid>
+                    </Grid> */}
                     <Grid size={6}>
                         <ResearchCard />
                     </Grid>

@@ -4,9 +4,8 @@
 */
 
 
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, FolderOpenOutlined, PlusOutlined } from "@ant-design/icons";
 
-import EditIcon from '@mui/icons-material/Edit';
 import { Card, CardHeader, IconButton, Stack, Tooltip } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, ReactNode, useContext, useEffect, useState } from "react";
@@ -135,7 +134,7 @@ export const GrantApplicationsPage: React.FC = ({ }) => {
             getActions: ({ id }) => {
                 return [
                     <GridActionsCellItem
-                        icon={<EditIcon />}
+                        icon={<FolderOpenOutlined />}
                         label="Edit"
                         className="textPrimary"
                         onClick={handleEditClick(id)}

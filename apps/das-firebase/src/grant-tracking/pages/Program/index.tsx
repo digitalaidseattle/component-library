@@ -3,11 +3,11 @@
  * Display details of a grant program
  */
 
-import { EditOutlined, HomeOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, FolderOpenOutlined, HomeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Box, Breadcrumbs, Card, CardContent, CardHeader, Grid, IconButton, Link, Stack, Tab, Tabs, Tooltip, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
 import { GrantApplicationDialog } from '../../components/GrantApplicationDialog';
@@ -52,6 +52,7 @@ export const ProgramPage: React.FC = () => {
     const assessmentService = ProgramAssessmentService.getInstance();
 
     const notifications = useNotifications();
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const { setLoading } = useContext(LoadingContext);
@@ -131,6 +132,24 @@ export const ProgramPage: React.FC = () => {
         }
         setShowApplicationDialog(false);
     }
+
+    const applicationColumns: GridColDef<GrantApplication>[] = [
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            getActions: ({ row }) => [
+                <GridActionsCellItem
+                    icon={<FolderOpenOutlined />}
+                    label="Open"
+                    onClick={() => navigate(`/grant-tracking/applications/${row.id}`)}
+                    color="inherit"
+                />
+            ]
+        },
+        ...APPLICATION_COLUMNS
+    ];
 
     function addApplicationButton(): ReactNode {
         return <Tooltip title="Add grant application">
@@ -231,7 +250,7 @@ export const ProgramPage: React.FC = () => {
                 {tab === 0 &&
                     <DataGrid
                         rows={applications}
-                        columns={APPLICATION_COLUMNS}
+                        columns={applicationColumns}
                         pageSizeOptions={[5, 10, 25, 100]}
                         sx={{ border: 0, width: '100%', minWidth: 0 }}
                         showToolbar={true}

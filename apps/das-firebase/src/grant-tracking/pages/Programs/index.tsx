@@ -4,10 +4,9 @@
 */
 
 
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, FolderOpenOutlined, PlusOutlined } from "@ant-design/icons";
 
-import EditIcon from '@mui/icons-material/Edit';
-import { Box, Card, CardHeader, Grid, IconButton, Stack, Tooltip } from "@mui/material";
+import { Card, CardHeader, IconButton, Stack, Tooltip } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { MouseEventHandler, ReactNode, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,6 @@ import { GrantProgramDialog } from "../../components/GrantProgramDialog";
 import { Toolbar } from "../../components/Toolbar";
 import { GrantProgramService } from "../../services/grantProgramService";
 import { GrantProgram } from '../../types';
-import { UploadProgramsCard } from "./UploadProgramsCard";
 
 
 
@@ -121,7 +119,7 @@ export const GrantProgramsPage: React.FC = ({ }) => {
             getActions: ({ id }) => {
                 return [
                     <GridActionsCellItem
-                        icon={<EditIcon />}
+                        icon={<FolderOpenOutlined />}
                         label="Edit"
                         className="textPrimary"
                         onClick={handleEditClick(id)}
@@ -152,14 +150,14 @@ export const GrantProgramsPage: React.FC = ({ }) => {
         <Card>
             <CardHeader title="Grant Programs"></CardHeader>
             <Stack gap={2}>
-                <Grid container spacing={2}>
+                {/* <Grid container spacing={2}>
                     <Grid size={6}>
                         <UploadProgramsCard />
                     </Grid>
                     <Grid size={6}>
                         <Box />
                     </Grid>
-                </Grid>
+                </Grid> */}
                 <Card>
                     <DataGrid
                         rows={programs}
