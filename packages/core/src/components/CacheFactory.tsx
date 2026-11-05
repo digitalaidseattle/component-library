@@ -39,9 +39,14 @@ export function useCachedResource<T>({
   );
   const [error, setError] = useState<Error | null>(null);
 
-  const mountedRef = useRef(true);
+  // Fix: Store fetcher in a ref so changes to inline functions don't trigger loops.
+  const fetcherRef = useRef(fetcher);
+  fetcherRef.current = fetcher;
 
+  // Fix: Re-enable mountedRef on remount.
+  const mountedRef = useRef(true);
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
       mountedRef.current = false;
     };
@@ -61,14 +66,22 @@ export function useCachedResource<T>({
       }
 
       if (!entry || forceRefresh || expired) {
-        const promise = fetcher().then((result) => {
+        const promise = fetcherRef.current().then((result) => {
           globalCache.set(key, {
             data: result,
             promise: null,
             timestamp: Date.now(),
           });
           return result;
-        });
+        })
+        .catch((err) => {
+            // Fix: Clear the failed promise so subsequent attempts can retry.
+            const failedEntry = globalCache.get(key);
+            if (failedEntry) {
+              failedEntry.promise = null;
+            }
+            throw err;
+          });
 
         entry = {
           data: entry?.data ?? null,
@@ -97,7 +110,8 @@ export function useCachedResource<T>({
         }
       }
     },
-    [key, fetcher, ttl]
+    // Fix: Fetcher removed from deps: fetcherRef handles updates safely.
+    [key, ttl]
   );
 
   useEffect(() => {
