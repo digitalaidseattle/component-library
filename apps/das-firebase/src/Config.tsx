@@ -1,6 +1,5 @@
 import {
     BankOutlined,
-    ClusterOutlined,
     CommentOutlined,
     DatabaseOutlined,
     DollarOutlined,
@@ -13,7 +12,7 @@ import logo from "./assets/logo-light-icon.svg";
 
 export const Config: LayoutConfiguration = ({
 
-    appName: 'DAS Firebase Example',
+    appName: 'DAS Firebase Applications',
     logoUrl: logo,
     drawerWidth: 240,
     menuItems: [{
@@ -27,14 +26,15 @@ export const Config: LayoutConfiguration = ({
                 type: 'item',
                 url: '/ai-projects',
                 icon: <FormOutlined />,
-            } as MenuItem,
-            {
-                id: 'programs',
-                title: 'Program Tracking',
-                type: 'item',
-                url: '/programs',
-                icon: <ClusterOutlined />
             } as MenuItem
+            // ,
+            // {
+            //     id: 'programs',
+            //     title: 'Program Tracking',
+            //     type: 'item',
+            //     url: '/programs',
+            //     icon: <ClusterOutlined />
+            // } as MenuItem
         ]
     } as MenuItem,
     {
@@ -60,7 +60,7 @@ export const Config: LayoutConfiguration = ({
     } as MenuItem,
     {
         id: 'group-grants',
-        title: 'Grant Tracking (TEST)',
+        title: 'Grant Tracking (BETA)',
         type: 'group',
         children: [
             {
