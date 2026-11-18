@@ -2,7 +2,7 @@ import React, { forwardRef, useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
-import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ActiveMenuItemContext } from '../../../ActiveMenuItemContext';
 import { DrawerOpenContext } from '../../../DrawerOpenContext';
@@ -19,8 +19,9 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ item, level }) => {
   const theme = useTheme();
   const { pathname } = useLocation();
+  const smallScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
-  const { drawerOpen } = useContext(DrawerOpenContext)
+  const { drawerOpen, setDrawerOpen } = useContext(DrawerOpenContext)
   const { activeMenuItem, setActiveMenuItem } = useContext(ActiveMenuItemContext);
 
   // active menu item on page load
@@ -44,6 +45,9 @@ const NavItem: React.FC<NavItemProps> = ({ item, level }) => {
 
   const itemHandler = (id: string) => {
     setActiveMenuItem(id);
+    if (smallScreen) {
+      setDrawerOpen(false);
+    }
   };
 
   const textColor = 'text.primary';

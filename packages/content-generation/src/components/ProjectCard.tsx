@@ -6,12 +6,12 @@
 
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
 import { SplitButton } from "@digitalaidseattle/mui";
 
-import { getContentGenerationServices } from "../services";
+import { Configuration } from "../services";
 import { TransactionService } from "../services/transactions";
 import { cloneProject } from "../services/transactions/CloneProject";
 import { Project, ProjectContent, ProjectOutput } from "../services/types";
@@ -40,8 +40,8 @@ const UI_CONSTANTS = {
 }
 
 const ProjectCard: React.FC = () => {
-  const aiService = getContentGenerationServices().aiService;
-  const projectService = getContentGenerationServices().projectService;
+  const aiService = Configuration.getInstance().aiService;
+  const projectService = Configuration.getInstance().projectService;
 
   const { id } = useParams<string>();
   const [project, setProject] = useState<Project>();

@@ -7,14 +7,14 @@
 
 import { getCoreServices } from "@digitalaidseattle/core";
 import { v4 as uuid } from 'uuid';
-import { getContentGenerationServices } from "../contentGenerationServices";
 import { Project } from "../types";
+import { Configuration } from "../Configuration";
 
 const DEFAULT_NAME = 'New Project';
 
 export async function createProject(): Promise<Project> {
     const authService = getCoreServices().authService!;
-    const projectService = getContentGenerationServices().projectService;
+    const projectService = Configuration.getInstance().projectService;
 
     const now = new Date();
     const user = await authService.getUser();

@@ -5,7 +5,7 @@
  *
  */
 
-import { getContentGenerationServices } from "../contentGenerationServices";
+import { Configuration } from "../Configuration";
 import { Project, ProjectContent } from "../types";
 
 async function validate(project: Project) {
@@ -18,9 +18,9 @@ async function validate(project: Project) {
 }
 
 export async function generateProjectContent(project: Project): Promise<ProjectContent> {
-    const aiService = getContentGenerationServices().aiService;
-    const contentService = getContentGenerationServices().projectContentService;
-    const transactionService = getContentGenerationServices().projectTransactionService;;
+    const aiService =   Configuration.getInstance().aiService;
+    const contentService =  Configuration.getInstance().projectContentService;
+    const transactionService = Configuration.getInstance().projectTransactionService;;
 
     await validate(project);
 

@@ -16,12 +16,12 @@ AI services use textual prompts to instruct its systems to generate content.  Th
 
 ### Add context files/text
 
-While optional, adding context files and/or text will help inform the AI service to adapt its responses to align with DAS's ibackground.  Text can include simple information like the url of DAS's website.  Files can include previous content examples.
+While optional, adding context files and/or text will help inform the AI service to adapt its responses to align with DAS's background.  Text can include simple information like the url of DAS's website.  Files can include previous content examples.
 
 ### Specify output
 
 If no output is  specified, the AI service will return content in the form of Markdown.  Otherwise the service will return structured JSON.  The structured response can be used for online forms which require sectioned answers to questions.
 
-### Generate then content.
+### Generate the content.
 
-The DAS content generation system can use one of many LLM models to generate the content.
+The DAS content generation system can use one of many Gemini models to generate the content.

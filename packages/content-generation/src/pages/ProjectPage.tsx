@@ -7,7 +7,7 @@
 import { HomeOutlined } from "@ant-design/icons";
 import { Box, Breadcrumbs, IconButton, Stack, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 
 import { HelpTopicContext, LoadingContext, useHelp } from "@digitalaidseattle/core";
 import { HelpDrawer, LoadingOverlay } from "@digitalaidseattle/mui";

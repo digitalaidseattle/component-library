@@ -4,12 +4,12 @@
  * @copyright 2025 Digital Aid Seattle
 */
 
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";
-import { Card, CardContent, CardHeader, IconButton, TextField } from "@mui/material";
+import { StableCursorTextField } from "@digitalaidseattle/mui";
+import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 import React, { useContext } from "react";
 import { AiProjectContext } from "./AiProjectContext";
-import { StableCursorTextField } from "@digitalaidseattle/mui";
 
 const HELP_TOPIC = "Template";
 const DEFAULT_PLACEHOLDER_TEXT = "Create a grant proposal.";
@@ -25,7 +25,7 @@ export const ProjectTemplateEditor = ({ title, onChange }: { title: string, onCh
                 slotProps={{ title: { fontWeight: 600, fontSize: 16 } }}
                 avatar={<IconButton
                     onClick={() => { setHelpTopic(HELP_TOPIC); setShowHelp(true) }}
-                    color="primary"><InfoCircleOutlined /></IconButton>} />
+                    color="primary"><QuestionCircleOutlined /></IconButton>} />
             <CardContent>
                 <StableCursorTextField
                     fullWidth={true}

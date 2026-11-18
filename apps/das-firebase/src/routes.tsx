@@ -14,8 +14,18 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
+import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
+import { GrantApplicationPage } from './grant-tracking/pages/Application';
+import { GrantApplicationsPage } from './grant-tracking/pages/Applications';
+import { FunderPage } from './grant-tracking/pages/Funder';
+import { FundersPage } from './grant-tracking/pages/Funders';
+import { ProgramPage as GrantProgramPage } from './grant-tracking/pages/Program';
 import { AiProjectsPage } from './pages/content-generation/AiProjectsPage';
-import InstitutionsPage from "./pages/institutions";
+import { GrantProgramsPage } from './grant-tracking/pages/Programs';
+import { VentureTrackingPage } from './venture-evaluation/pages/VentureTracking';
+import { VentureDebriefPage } from './venture-evaluation/pages/VentureDebrief';
+import { VentureDebriefsPage } from './venture-evaluation/pages/VentureDebriefs';
+import { VentureTrackingDetails } from './venture-evaluation/pages/VentureTrackingDetails';
 
 const routes: RouteObject[] = [
   {
@@ -27,10 +37,6 @@ const routes: RouteObject[] = [
         element: <AiProjectsPage />,
       },
       {
-        path: "institutions",
-        element: <InstitutionsPage />,
-      },
-      {
         path: "ai-projects/:id",
         element: <ProjectPage listPath={"ai-projects"} />,
       }, {
@@ -40,6 +46,72 @@ const routes: RouteObject[] = [
       {
         path: "privacy",
         element: <MarkdownPage filepath='privacy.md' />,
+      },
+      {
+        path: "programs",
+        element: <ProgramsPage />,
+      },
+      {
+        path: "programs/:id",
+        element: <ProgramPage />,
+      },
+      {
+        path: "programs/:program_id/nodes/:node_no",
+        element: <NodePage />,
+      },
+
+    ]
+  },
+  {
+    path: "/grant-tracking",
+    element: <MainLayout sx={{ p: 1 }} />,
+    children: [
+      {
+        path: "funders",
+        element: <FundersPage />,
+      }, {
+        path: "funders/:id",
+        element: <FunderPage />,
+      },
+      {
+        path: "programs",
+        element: <GrantProgramsPage />,
+      }, {
+        path: "programs/:id",
+        element: <GrantProgramPage />,
+      },
+      {
+        path: "applications",
+        element: <GrantApplicationsPage />,
+      }, {
+        path: "applications/:id",
+        element: <GrantApplicationPage />,
+      },
+    ]
+  },
+  {
+    path: "/venture-evaluation",
+    element: <MainLayout sx={{ p: 1 }} />,
+    children: [
+      {
+        path: 'programs',
+        element: <VentureTrackingPage />
+      },
+      {
+        path: "programs/:id",
+        element: <VentureTrackingDetails />,
+      },
+      {
+        path: "programs/:program_id/nodes/:node_no",
+        element: <NodePage />,
+      },
+      {
+        path: "debriefs",
+        element: <VentureDebriefsPage />,
+      },
+      {
+        path: "debriefs/:id",
+        element: <VentureDebriefPage />,
       }
     ]
   },

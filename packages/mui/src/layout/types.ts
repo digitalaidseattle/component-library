@@ -1,6 +1,6 @@
 import { ChipProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
-import { RouteObject } from "react-router";
+import { RouteObject } from "react-router-dom";
 
 export type MenuItem = {
     id: string,

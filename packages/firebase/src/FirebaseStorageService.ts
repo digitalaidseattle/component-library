@@ -6,16 +6,26 @@
  *
  */
 
-import { StorageService } from "@digitalaidseattle/core";
+import { StorageFile, StorageService } from "@digitalaidseattle/core";
 import { FirebaseApp } from "firebase/app";
 import { deleteObject, FirebaseStorage, getBytes, getDownloadURL, getMetadata, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { Configuration } from "./Configuration";
 
 export class FirebaseStorageService implements StorageService {
+
+    private static instance: FirebaseStorageService;
+
+    static getInstance(): FirebaseStorageService {
+        if (!FirebaseStorageService.instance) {
+            FirebaseStorageService.instance = new FirebaseStorageService(Configuration.getInstance().getClient());
+        }
+        return FirebaseStorageService.instance
+    }
 
     storage: FirebaseStorage;
     decoder: TextDecoder;
 
-    constructor(firebaseClient: FirebaseApp) {
+    private constructor(firebaseClient: FirebaseApp) {
         this.storage = getStorage(firebaseClient);
         this.decoder = new TextDecoder("utf-8");
     }
@@ -79,6 +89,10 @@ export class FirebaseStorageService implements StorageService {
             };
         }));
         return files;
+    }
+
+    uploadFile(file: StorageFile): Promise<any> {
+        throw new Error("Method not implemented.");
     }
 
     async upload(path: string, file: any): Promise<any> {

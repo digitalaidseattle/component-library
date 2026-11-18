@@ -8,6 +8,7 @@ export interface User {
         name: string;
         avatar_url: string;
         email: string;
+        roles: string[];
     }
 }
 
@@ -18,6 +19,7 @@ export type OAuthResponse = {
 }
 
 export interface AuthService {
+    isAuthorized(user: User, authorizedRoles: string[]): unknown;
 
     getProviders(): string[];
 
@@ -28,5 +30,6 @@ export interface AuthService {
     getUser(): Promise<User | null>;
 
     signInWith(provider: string): Promise<OAuthResponse>;
+
 
 }

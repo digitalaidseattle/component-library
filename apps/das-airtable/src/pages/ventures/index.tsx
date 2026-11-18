@@ -18,7 +18,7 @@ import {
 
 // project import
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { LoadingContext } from '@digitalaidseattle/core';
 
 import placeholder from '../../assets/project-image.png';

@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { Box, Button, Card, CardContent, CardMedia, Container, Typography } from '@mui/material';
@@ -22,7 +22,7 @@ const Error: React.FC = () => {
   const navigate = useNavigate();
 
   const returnHandler = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   return (

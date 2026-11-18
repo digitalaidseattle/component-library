@@ -8,14 +8,14 @@ import {
 import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
 
-import { File, SupabaseStorageService } from '@digitalaidseattle/supabase';
+import { getCoreServices } from '@digitalaidseattle/core';
 import FilesTable from './FilesTable';
 
 // ==============================|| UPLOAD PAGE ||============================== //
 
 const StorageExamplePage = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const storageService = new SupabaseStorageService();
+  const storageService = getCoreServices().storageService!;
 
   useEffect(() => {
     storageService!.list()
@@ -37,8 +37,8 @@ const StorageExamplePage = () => {
     const file = event.target.files[0];
     storageService.uploadFile(file)
       .then(() => {
-        const fileObject: File = getFile(uuid(), file.name, file.size, file.type);
-        setFiles([...files, fileObject]);
+        const fileObject = getFile(uuid(), file.name, file.size, file.type);
+        setFiles([...files, fileObject as unknown as File]);
       })
       .catch(err => alert(err));
   }

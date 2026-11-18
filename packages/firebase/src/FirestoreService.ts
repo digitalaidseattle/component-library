@@ -9,11 +9,15 @@ import {
     getDocs,
     getFirestore,
     setDoc,
-    updateDoc
+    updateDoc,
+    writeBatch
 } from "firebase/firestore";
 
 import { FirebaseApp } from "firebase/app";
 import { firebaseClient as defaultFirebaseClient } from "./firebaseClient";
+
+// Firestore allows at most 500 writes per batch
+const MAX_BATCH_SIZE = 500;
 
 class FirestoreService<T extends Entity> implements EntityService<T> {
     collectionName: string;
@@ -53,12 +57,23 @@ class FirestoreService<T extends Entity> implements EntityService<T> {
         }
     }
 
-    // Add a document to a collection
+    // Add documents to a collection, committing in batches of MAX_BATCH_SIZE
     async batchInsert(entities: T[], select?: string, mapper?: (json: any) => T, user?: User): Promise<T[]> {
         try {
-            const docRef = await addDoc(collection(this.db, this.collectionName), entities);
-            // FIXME add ID to docRef instead
-            return entities
+            const collectionRef = collection(this.db, this.collectionName);
+            const inserted: T[] = [];
+            for (let start = 0; start < entities.length; start += MAX_BATCH_SIZE) {
+                const batch = writeBatch(this.db);
+                for (const entity of entities.slice(start, start + MAX_BATCH_SIZE)) {
+                    // the id lives in the document path, not in the stored data
+                    const { id, ...data } = entity;
+                    const docRef = id ? doc(collectionRef, id as string) : doc(collectionRef);
+                    batch.set(docRef, data);
+                    inserted.push({ ...entity, id: docRef.id });
+                }
+                await batch.commit();
+            }
+            return inserted;
         } catch (e) {
             console.error("Error adding document: ", e);
             throw e;

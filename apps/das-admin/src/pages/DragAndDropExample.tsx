@@ -17,8 +17,6 @@ const categories: DDCategory<string>[] = [
     { label: 'Completed', value: 'completed' },
 ]
 
-
-
 const items: Map<DDCategory<string>, TicketWrapper[]> = new Map<DDCategory<string>, TicketWrapper[]>([
     [
         categories[0], // 'In Progress' category object

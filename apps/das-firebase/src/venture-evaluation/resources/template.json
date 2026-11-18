@@ -1,0 +1,647 @@
+{
+    "id": null,
+    "organization": "",
+    "status": "Under Evaluation",
+    "name": "new venture",
+    "description": "",
+    "prefix": "",
+    "next_task_number": 0,
+    "node_types": [
+        "Phase",
+        "Task"
+    ],
+    "node_statuses": [
+        "To Do",
+        "In Progress",
+        "Done",
+        "Pause"
+    ],
+    "members": [],
+    "nodes": [
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Setup",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 1,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "00",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Set up this Task Group",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "1. Add the three Evaluators and Squad PjM\n2. Add the link to the google drive folder for this evaluation",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Partner PoC"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "01",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Create Channel in DAS Venture Slack",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "1. Create a slack channel for this Evaluation in the DAS Ventures workspace (NOT in the Cadre workspace)\n2. Name the channel v_name-of-venture (good examples would be v_culturous-exchange, v_seattle-humane)\n3. Add Evaluators to the slack channel: PdM, SA, UxR, and PjM",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 2
+                },
+                {
+                    "id": null,
+                    "node_no": "01",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Add PjM to the Evaluation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "1. In the Squad Needs section, select the correct Venture, Add a role for Project Manager. Add the person to the PjM role you just created. \n2. Add the PjM to the google shared drive for the evaluation.\n3. Add PjM to this taskgroup as a Responsible person.\n4. Add the PjM to the venture Slack channel\n5. Share the link to the Evaluation Contributor Tool with the PjM (note it is currently in development)",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Partner PoC"
+                    ],
+                    "order": 3
+                },
+                {
+                    "id": null,
+                    "node_no": "01",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Create a central place to take collaborative notes",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Create a central Gdoc to take collaborative notes \n1. The document should be created in the Google Drive Folder for this Painpoint\n2. Ensure each internal evaluators are aware of the expectation of collaborative note-taking during the call. \n3. Populate the note taking location with the Venture Evaluation Rubric / Checklist",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 4
+                },
+                {
+                    "id": null,
+                    "node_no": "02",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "PjM Orientation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Introduce the PjM to the team in the slack channel for this evaluation (v_name-of-evaluation)\n\nFamiliarize yourself with our workflow, roles, and work products:\nVenture Evaluation Workflow here (Miro).\nEvaluator Role Expectations here.\nVenture Charter example here.\nVenture Charter Template here.\nVenture Evaluation Principles here.\nVenture Evaluation Tool here. (Intended for Contributors to access Evaluation Taskgroups)\n\nNote: The latest Onboarding Documentation can be found in GitBook but contributors may or may not have access?",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 5
+                }
+            ],
+            "comments": [],
+            "history": []
+        },
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Cursory",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 2,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "03",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Cursory evaluation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Consider the Painpoint against our Venture Evaluation Criteria \n\nAdd notes to the Collaborative Notes document (in the gdrive, linked in the header for this taskgroup)\n\nCompose questions for the Painpoint Discovery Call with the Partner, and include those questions on the Collaborative Notes document.\n\n0. You may want to review the Partner Overview for additional context about this Partner (link in the header)\n1. Review the Painpoint Notes in the Partner Interface (link in the header)\n2. Review any documents or meeting recordings in the gdrive folder for this painpoint (link in the header)\n3. Review any notes from the Painpoint Meeting. You can find the meeting by going to the Partner Interface (link in the header) and scrolling down to the Meetings section.\n\nAC: All your relevant thoughts are in comments in the Collaborative Notes document, and you have indicated whether the Evaluation should proceed with a Discovery call.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "03",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Cursory evaluation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Consider the Painpoint against our Venture Evaluation Criteria \n\nAdd notes to the Collaborative Notes document (in the gdrive, linked in the header for this taskgroup)\n\nCompose questions for the Painpoint Discovery Call with the Partner, and include those questions on the Collaborative Notes document.\n\n0. You may want to review the Partner Overview for additional context about this Partner (link in the header)\n1. Review the Painpoint Notes in the Partner Interface (link in the header)\n2. Review any documents or meeting recordings in the gdrive folder for this painpoint (link in the header)\n3. Review any notes from the Painpoint Meeting. You can find the meeting by going to the Partner Interface (link in the header) and scrolling down to the Meetings section.\n\nAC: All your relevant thoughts are in comments in the Collaborative Notes document",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Sol. Arch."
+                    ],
+                    "order": 2
+                },
+                {
+                    "id": null,
+                    "node_no": "03",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Cursory evaluation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Consider the Painpoint against our Venture Evaluation Criteria \n\nAdd notes to the Collaborative Notes document (in the gdrive, linked in the header for this taskgroup)\n\nCompose questions for the Painpoint Discovery Call with the Partner, and include those questions on the Collaborative Notes document.\n\n0. You may want to review the Partner Overview for additional context about this Partner (link in the header)\n1. Review the Painpoint Notes in the Partner Interface (link in the header)\n2. Review any documents or meeting recordings in the gdrive folder for this painpoint (link in the header)\n3. Review any notes from the Painpoint Meeting. You can find the meeting by going to the Partner Interface (link in the header) and scrolling down to the Meetings section.\n\nAC: All your relevant thoughts are in comments in the Collaborative Notes document",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Research"
+                    ],
+                    "order": 3
+                }
+            ],
+            "comments": [],
+            "history": []
+        },
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Draft Charter",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 3,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "04",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Charter Creation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Charter\n1. Duplicate template Charter and place in correct folder for this painpoint consideration.\n2. Update the Authors section to include the Evaluators.\n3. Copy the link to the Charter doc and paste it into the URL Planting section toward the bottom of this taskgroup.\n\nProduct Requirements Document\n1. Duplicate the Template PRD and place in correct folder for this painpoint consideration.\n2. Update the Authors section to include the Evaluators.\n\nAC: buttons labeled Charter for this Painpoint lead to the correct blank Charter",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "05",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Draft Portion of Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Charter document for this evaluation is linked in the header of this taskgroup.\n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: PdM sections of the Charter are complete",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 2
+                },
+                {
+                    "id": null,
+                    "node_no": "05",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Draft Portion of Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Charter document for this evaluation is linked in the header of this taskgroup.\n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: User Researcher sections of the Charter are complete",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Research"
+                    ],
+                    "order": 3
+                },
+                {
+                    "id": null,
+                    "node_no": "05",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Draft Portion of Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Charter document for this evaluation is linked in the header of this taskgroup. \n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: Solutions Architect sections of the Charter are complete",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Soln. Arch."
+                    ],
+                    "order": 4
+                },
+                {
+                    "id": null,
+                    "node_no": "06",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Create PSI (Problem, Solution, Impact) Statement",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Create the Problem statement that appears on the DAS website. \n\nAC: Problem field in the Structuring The Venture section of the Venture Details in airtable.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 5
+                },
+                {
+                    "id": null,
+                    "node_no": "07",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Generate Approx. Squad Makeup",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Create approximate squad makeup, focusing on creating an initial list of ideal expertise/skills members of the squad might hold.On this taskgroup page, select the painpoint from the dropdown then add proposed squad members to the squad need section. \n\nAll squads should include a User Researcher and a Product Manager\n\nAC: Squad makeup of AirTable partner page, set to WIP",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Soln. Arch."
+                    ],
+                    "order": 6
+                }
+            ],
+            "comments": [],
+            "history": []
+        },
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Discovery",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 4,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "04",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Synthesize cursory evaluations",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Ensure all three independent evaluations have occurred. \nEnsure there is alignment on the go/no go decision. Hold a synchronous meeting if need be.\n\nIf the decision is to reject the painpoint,\n0. In the Collaborative Notes, summarize the reasons why the venture was not a good fit. \n1. In the Partner Relationships Slack channel, notify Partner Relationships team of the decision to decline the Venture and provide a summary of the reason(s) why. This will likely be a 2-3 sentence summary of the reasons listed in Collaborative Notes, excluding any internal deliberations, and cleaned up to be Partner-facing. Request that Partner Relationships communicate the rejection to the Partner.\n2. Mark this task as Delivered\n3. FIRST: Select the partner from the dropdown in the Staffing Needs section. THEN In the Update Venture Status section of this taskgroup, fill in the Reason for Declining Venture field, check the confirmation checkbox, and click the Decline Venture button.\n\nIf the decision is to proceed with evaluating the painpoint,\n1. Notify the PjM that the Evaluation will proceed, and that they should move forward with scheduling a Painpoint Discovery meeting with the Partner\n3. Mark this task Delivered and move onto the next task.\n\nAC: Shared decision amongst the Evaluators to proceed with the Evaluation or to decline the Venture",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "04",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Schedule Painpoint Discovery meeting with partner",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Coordinate scheduling of call.\nAdjust the due dates for the \"Engage in Initial Pain Point...\" tasks for the team to the date of the call.\n\nNote: notes during the call should be included in the Collaborative Notes document so that all questions and comments are easily accessible in one place. If desired, notes can be copied into the meeting notes in airtable.\n\nAC:\nCall on all attendees' calendars with video call link. From DAS, attendees should be Evaluators (Contributor PjM and Cadre Research, PdM, & Sol. Arch.)",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PjM / PdM"
+                    ],
+                    "order": 2
+                }
+            ],
+            "comments": [],
+            "history": []
+        },
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Finalize Charter",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 5,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "09",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Finalize Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Charter completed to satisfaction.\n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: Signoff from the other two evaluators",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "09",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Finalize Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Make sure that the research sections of the Charter are up to date and fully consistent with other areas.\n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: no discrepancies between the research findings and the final Charter.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Research"
+                    ],
+                    "order": 2
+                },
+                {
+                    "id": null,
+                    "node_no": "09",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Finalize Charter",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Make sure that the Soln. Arch. sections of Charter are up to date.\n\nAny information gathered in Discovery that does not  belong in the Charter (such as hosting requirements, user stories, or feature requests) may be added to the appropriate section in the Product Requirements Document\n\nAC: no discrepancies between the evaluation findings and the final Charter.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Soln. Arch."
+                    ],
+                    "order": 3
+                },
+                {
+                    "id": null,
+                    "node_no": "09",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Enable squad PdM",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Send squad PdM role to HR for recruiting\n\nAC: Squad PdM role is \"Moved to recruiting\"",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Any"
+                    ],
+                    "order": 4
+                }
+            ],
+            "comments": [],
+            "history": []
+        },
+        {
+            "id": null,
+            "node_no": "",
+            "program_id": "",
+            "parent_id": "",
+            "name": "Kickoff",
+            "type": "Phase",
+            "status": "To Do",
+            "priority": "",
+            "due_date": "",
+            "description": "",
+            "assignee_id": null,
+            "order": 6,
+            "children": [
+                {
+                    "id": null,
+                    "node_no": "10",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Handoff Eval Charter to Squad PdM",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "1. Evaluators (PdM and UxR) synchronously hand off the venture to the Squad (PdM, PjM, and UxR) in a video call. Solutions Architect should be included at your discretion. You can use the Squad Handoff Call Example Agenda\n2. Alert Client of the handoff.\n\nAC: Squad PdM, PjM, and UxR have taken responsibility for the Venture. Client has been informed that we have approved their venture, and that it is being handed off to a Squad.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PjM"
+                    ],
+                    "order": 1
+                },
+                {
+                    "id": null,
+                    "node_no": "10",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Activate Venture",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Click Activate Venture Button toward the bottom of this Task Group.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PdM"
+                    ],
+                    "order": 2
+                },
+                {
+                    "id": null,
+                    "node_no": "10",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "PdM Orientation",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Introduce the PdM to the team in the slack channel for this evaluation (v_name-of-evaluation)\n\nFamiliarize yourself with our workflow, roles, and work products:\nVenture Evaluation Workflow here (Miro).\nEvaluator Role Expectations here.\nVenture Charter example here.\nVenture Charter Template here.\nVenture Evaluation Principles here.\nVenture Evaluation Tool here. (Intended for Contributors to access Evaluation Taskgroups)\n\nNote: The latest Onboarding Documentation can be found in GitBook but contributors may or may not have access?",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PjM"
+                    ],
+                    "order": 3
+                },
+                {
+                    "id": null,
+                    "node_no": "11",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Schedule Introduction call with Partner and PdM",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Schedule a video call to introduce the Squad PdM to the Partner. \nIn the scheduling email, be sure to share that the Venture has been officially approved and is ready to move into the execution phase.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "PjM"
+                    ],
+                    "order": 4
+                },
+                {
+                    "id": null,
+                    "node_no": "11",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Enable venture squad list",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Allow activation of recruiting\n\nAC: Venture record contains list of required roles",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "tags": [
+                        "Any"
+                    ],
+                    "order": 5
+                },
+                {
+                    "id": null,
+                    "node_no": "",
+                    "program_id": "",
+                    "parent_id": "",
+                    "name": "Create tasks for Followup Survey and Retro",
+                    "type": "Task",
+                    "status": "To Do",
+                    "priority": "",
+                    "due_date": "",
+                    "description": "Create tasks for yourself separate from this task group\n(note: see team gdrive for documentation) \n\nTask 1\nName:\nSend Survey\n\nDescription:\nSend the post-handoff survey to the Squad PdM and Squad PjM.\n\nTask 2\nName:\nSchedule Followup Call (if needed)\n\nDescription:\nDetermine if a followup call is needed. If the survey respondents identify significant issues with the handoff, major discrepancies between the Charter and the Venture as it is being executed, or if clarification is needed on survey responses that cannot be done via Slack, schedule a followup call to discuss.\n\nTask 3\nName:\nSchedule a retro\n\nDescription:\nSchedule a retrospective with the team of Evaluators (PdM, Solutions Architect, User Researcher). Notify the whole Venture Evaluation Team through Slack in case any others want to attend. \nOutcomes of the Retro should be shared with the team via slack and/or in the next team call.",
+                    "assignee_id": null,
+                    "children": [],
+                    "comments": [],
+                    "history": [],
+                    "order": 6
+                }
+            ],
+            "comments": [],
+            "history": []
+        }
+    ]
+}

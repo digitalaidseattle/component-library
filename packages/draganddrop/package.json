@@ -1,6 +1,6 @@
 {
   "name": "@digitalaidseattle/draganddrop",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Drag And Drop Component used in DAS Ventures",
   "repository": "null//github.com/null/github.com/tree/master/packages/draganddrop",
   "main": "dist/digitalaidseattle-draganddrop.cjs.js",
@@ -15,8 +15,8 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^7.3.5",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "typescript": "^5.5.4"
   },
   "scripts": {

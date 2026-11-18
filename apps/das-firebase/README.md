@@ -1,7 +1,7 @@
-# DAS Firebase Example
+# DAS Firebase
 
-This project demonstrates integration with  Firebase
+This project hosts applications hosted on the Firebase platform
 
-1. Authentication
-2. Firestore
+1. Grant Tracking
+2. Venture Evaluation
 

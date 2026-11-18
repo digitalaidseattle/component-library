@@ -35,9 +35,8 @@ import {
 // third-party
 
 // project import
-import { useNotifications } from '@digitalaidseattle/core';
+import { useNotifications, PageInfo, QueryModel } from '@digitalaidseattle/core';
 import { ConfirmationDialog, InputFormDialog, InputOption } from '@digitalaidseattle/mui';
-import { PageInfo, QueryModel } from '@digitalaidseattle/supabase';
 import { TicketsDAO } from '../api/TicketsDAO';
 import TicketContact from '../components/TicketContact';
 import TicketLink from '../components/TicketLink';

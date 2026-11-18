@@ -7,13 +7,13 @@
 
 import { getCoreServices } from "@digitalaidseattle/core";
 import { Project, ProjectContext } from "../types";
-import { getContentGenerationServices } from "..";
+import { Configuration } from "..";
 import { v4 as uuid } from 'uuid';
 
 const DEFAULT_FOLDER = import.meta.env.VITE_FIREBASE_STORAGE_FOLDER;
 
 async function validate(project: Project) {
-    const projectService = getContentGenerationServices().projectService!;
+    const projectService = Configuration.getInstance().projectService!;
 
     if ((project.name ?? "").trim().length === 0) {
         throw new Error("Name is required.");
@@ -63,8 +63,8 @@ async function organizeContextsFiles(project: Project): Promise<ProjectContext[]
 
 export async function saveProject(project: Project): Promise<Project> {
     const authService = getCoreServices().authService!;
-    const aiService = getContentGenerationServices().aiService;
-    const projectService = getContentGenerationServices().projectService;
+    const aiService = Configuration.getInstance().aiService;
+    const projectService = Configuration.getInstance().projectService;
 
     await validate(project);
 

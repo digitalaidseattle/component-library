@@ -10,8 +10,11 @@
  */
 
 import React from "react";
-import { Alert, AlertColor, Snackbar } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Alert, AlertColor, Card, CardContent, CardHeader, IconButton, Snackbar, Typography } from "@mui/material";
 import { useNotifications } from "@digitalaidseattle/core";
+import { DownCircleOutlined, DownOutlined } from "@ant-design/icons";
+
+const LABEL_DETAILS_TITLE = "Details...";
 
 const Notification: React.FC<{ delay?: number }> = (props) => {
     const DEFAULT_DELAY = 5000;
@@ -26,9 +29,30 @@ const Notification: React.FC<{ delay?: number }> = (props) => {
             <Alert
                 onClose={displayOptions.handleClose}
                 severity={displayOptions.severity as AlertColor}
-                variant="filled"
                 sx={{ width: '100%' }}>
-                {displayOptions.message}
+                <Typography fontWeight={500} fontSize={14}>{displayOptions.message}</Typography>
+                {displayOptions.details &&
+                    <Accordion
+                        slotProps={{ heading: { component: 'h6' } }}
+                        sx={{
+                            bgcolor: "inherit",
+                            color: "inherit",
+                            boxShadow: "none",
+                            borderColor: "currentColor"
+                        }}
+                    >
+                        <AccordionSummary
+                            aria-controls='details-content'
+                            id='details-content'
+                            expandIcon={<DownCircleOutlined />}
+                        >
+                            <Typography component="span">{LABEL_DETAILS_TITLE}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            {displayOptions.details}
+                        </AccordionDetails>
+                    </Accordion>
+                }
             </Alert>
         </Snackbar>
     );

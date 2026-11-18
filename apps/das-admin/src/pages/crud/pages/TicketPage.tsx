@@ -5,7 +5,7 @@
 
 // react
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 // material-ui
 import { Breadcrumbs, Button, Card, CardContent, CardHeader, Link, Stack, Typography } from '@mui/material';

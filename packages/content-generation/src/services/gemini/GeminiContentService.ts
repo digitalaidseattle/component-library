@@ -1,9 +1,15 @@
-import { FirestoreService } from "@digitalaidseattle/firebase";
-import { ProjectContentService } from "../contentGenerationServices";
-import { ProjectContent } from "../types";
-import { getFirebaseApp, getGeminiConfiguration } from "./GeminiConfiguration";
+/**
+ * GeminiContentService.ts
+ * 
+ * @copyright Digital Aid Seattle 2026
+ */
 
-export class GeminiContentService extends FirestoreService<ProjectContent> implements ProjectContentService {
+import { Configuration, FirestoreService } from "@digitalaidseattle/firebase";
+import { ProjectContent } from "../types";
+import {  } from "./Configuration";
+import { ProjectContentService } from "../Configuration";
+
+export class GeminiContentService extends FirestoreService<ProjectContent> implements ProjectContentService{
 
   private static instance: GeminiContentService;
 
@@ -15,7 +21,11 @@ export class GeminiContentService extends FirestoreService<ProjectContent> imple
   }
 
   constructor() {
-    super("content", getFirebaseApp());
+    super("content", Configuration.getInstance().getClient());
+  }
+
+  mapJson(json: any): ProjectContent {
+    return json;
   }
 
   // Default shape for a new proposal

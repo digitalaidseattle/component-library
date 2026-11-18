@@ -1,5 +1,6 @@
 import {
     CalendarOutlined,
+    ClusterOutlined,
     DatabaseOutlined,
     DragOutlined,
     GlobalOutlined,
@@ -68,6 +69,13 @@ export const Config: LayoutConfiguration = ({
                 type: 'item',
                 url: '/crud-example',
                 icon: <DatabaseOutlined />
+            } as MenuItem,
+            {
+                id: 'programs',
+                title: 'Program Tracking',
+                type: 'item',
+                url: '/programs',
+                icon: <ClusterOutlined />
             } as MenuItem
         ]
     } as MenuItem,
