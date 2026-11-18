@@ -149,7 +149,7 @@ export const DebriefForm: React.FC<{
                             name="outcome"
                             control={control}
                             render={({ field }) =>
-                                <RadioField label="Outcome" value={field.value} onChange={field.onChange} options={['Go', 'No-go']} />
+                                <RadioField label="Outcome" value={field.value} onChange={field.onChange} options={['Go', 'No-go', 'Partner Declined']} />
                             } />
                     </Grid>
                     <Grid size={{ xs: 12, md: 6 }}>
@@ -316,15 +316,24 @@ export const DebriefForm: React.FC<{
                             } />
                     </Grid>
                     <Grid size={12}>
-                        <TextField
-                            fullWidth
-                            multiline
-                            minRows={2}
-                            label="Past evaluations reviewed"
-                            helperText={options.past_evaluations.length > 0
-                                ? `List card names / links. Existing debriefs: ${options.past_evaluations.join(', ')}`
-                                : 'List card names / links.'}
-                            {...register('past_evaluations_reviewed')} />
+                        <Controller
+                            name="past_evaluations_reviewed"
+                            control={control}
+                            render={({ field }) =>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    minRows={2}
+                                    label="Past evaluations reviewed"
+                                    helperText={options.past_evaluations.length > 0
+                                        ? `List card names / links. Existing debriefs: ${options.past_evaluations.join(', ')}`
+                                        : 'List card names / links.'}
+                                    name={field.name}
+                                    inputRef={field.ref}
+                                    value={field.value ?? ''}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur} />
+                            } />
                     </Grid>
                     <Grid size={12}>
                         <Controller
@@ -335,14 +344,23 @@ export const DebriefForm: React.FC<{
                             } />
                     </Grid>
                     <Grid size={12}>
-                        <TextField
-                            fullWidth
-                            multiline
-                            minRows={2}
-                            label={watch('applicable') === 'No'
-                                ? 'Why nothing applied (new domain, no precedent, etc.)'
-                                : 'What was reused and how it changed this evaluation'}
-                            {...register('applicability_notes')} />
+                        <Controller
+                            name="applicability_notes"
+                            control={control}
+                            render={({ field }) =>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    minRows={2}
+                                    label={watch('applicable') === 'No'
+                                        ? 'Why nothing applied (new domain, no precedent, etc.)'
+                                        : 'What was reused and how it changed this evaluation'}
+                                    name={field.name}
+                                    inputRef={field.ref}
+                                    value={field.value ?? ''}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur} />
+                            } />
                     </Grid>
                 </Grid>
             </Section>
