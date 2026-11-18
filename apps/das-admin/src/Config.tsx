@@ -47,13 +47,13 @@ export const Config: LayoutConfiguration = ({
                 url: '/maps',
                 icon: <GlobalOutlined />
             } as MenuItem,
-            {
-                id: 'calendar-example-page',
-                title: 'Calendar Example',
-                type: 'item',
-                url: '/calendar-example',
-                icon: <CalendarOutlined />
-            } as MenuItem,
+            // {
+            //     id: 'calendar-example-page',
+            //     title: 'Calendar Example',
+            //     type: 'item',
+            //     url: '/calendar-example',
+            //     icon: <CalendarOutlined />
+            // } as MenuItem,
 
             {
                 id: 'storage-example-page',

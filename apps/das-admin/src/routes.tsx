@@ -9,7 +9,6 @@ import {
   Box
 } from '@mui/material';
 import { DragAndDropExample } from "./pages/DragAndDropExample";
-import CalendarPage from "./pages/calendar/CalendarPage";
 import TicketPage from "./pages/crud/pages/TicketPage";
 import TicketsGrid from "./pages/crud/pages/TicketsPage";
 import ExcelPage from "./pages/excel/ExcelPage";
@@ -42,10 +41,6 @@ const routes = [
       {
         path: "profile",
         element: <Box># The Applicants page is under construction.</Box>,
-      },
-      {
-        path: "calendar-example",
-        element: <CalendarPage />
       },
       {
         path: "excel-example",
