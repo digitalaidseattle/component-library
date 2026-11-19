@@ -8,12 +8,12 @@ import {
     TableOutlined,
     UploadOutlined
 } from '@ant-design/icons';
-import logo from "./assets/logo-light-icon.svg";
 import packageJson from "../package.json";
+import logo from "./assets/logo-light-icon.svg";
 
 import { LayoutConfiguration, MenuItem } from "@digitalaidseattle/mui";
-import Notification from "./Notification";
 import { Link } from 'react-router-dom';
+import Notification from "./Notification";
 
 export const Config: LayoutConfiguration = ({
 

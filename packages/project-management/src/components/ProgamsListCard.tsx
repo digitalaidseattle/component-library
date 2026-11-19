@@ -34,7 +34,7 @@ const DETAIL_PAGE = "programs";  // TODO consider making configurable
 export const ProgamsListCard: React.FC = () => {
     const service = Configuration.getInstance().getProgramService();
 
-    const [programs, setPrograms] = useState<Program[]>();
+    const [programs, setPrograms] = useState<Program[]>([]);
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 25 });
     const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'prefix', sort: 'asc' }]);
     const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });

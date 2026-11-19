@@ -30,11 +30,13 @@ export class VolunteerDao extends SuperhumanDao<Volunteer> {
                 {
                     mapper: (json) => {
                         const values = json.values;
+                        const role = values["Role"] ? values["Role"].name : "";
+                        const picUrl = (values["Pic"] && values["Pic"].length > 0) ? values["Pic"][0].url : "";
                         return {
                             id: json.id,
                             name: SuperhumanDao.removeBackTicks(values["Name"]),
-                            role: values["Role"] ? values["Role"].name : "",
-                            url: values["Pic"] ? values["Pic"][0].url : "",
+                            role: role,
+                            url: picUrl,
                             location: SuperhumanDao.removeBackTicks(values["Location"]),
                             status: SuperhumanDao.removeBackTicks(values["Status"])
                         } as Volunteer
