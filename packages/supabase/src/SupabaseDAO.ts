@@ -42,14 +42,9 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
         return opts ? opts.select ?? this.select : this.select;
     }
 
-    getMapper(opts: DataAccessOptions<T>): (json: any) => T {
-        return opts ? opts.mapper ?? this.mapper : this.mapper;
-    }
-
     async find(queryModel: QueryModel, opts?: DataAccessOptions<T>): Promise<PageInfo<T>> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
 
             let query: any = this.client
                 .from(this.tableName)
@@ -104,7 +99,7 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
 
             return query.then((resp: any) => {
                 return {
-                    rows: resp.data.map((json: any) => mapper(json)),
+                    rows: resp.data.map((json: any) => this.mapJson(json, opts)),
                     totalRowCount: resp.count,
                 };
             })
@@ -116,7 +111,6 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
 
     async getAll(opts?: DataAccessOptions<T>): Promise<T[]> {
         const select = this.getSelect(opts!);
-        const mapper = this.getMapper(opts!);
         const count = opts ? opts.count : undefined;
 
         let query = this.client
@@ -126,14 +120,13 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
             query = query.limit(count)
         }
         return query.then((resp: any) =>
-            (resp.data ?? []).map((json: any) => mapper(json))
+            (resp.data ?? []).map((json: any) => this.mapJson(json, opts))
         )
     }
 
     async getById(entityId: Identifier, opts?: DataAccessOptions<T>): Promise<T> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
 
             const { data, error } = await this.client.from(this.tableName)
                 .select(select)
@@ -143,7 +136,7 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
                 console.error('Unexpected error during select', error);
                 throw new Error('Unexpected error during select');
             }
-            return mapper(data);
+            return this.mapJson(data, opts);
         } catch (err) {
             console.error('Unexpected error during select:', err);
             throw err;
@@ -153,13 +146,13 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
     async batchInsert(entities: T[], opts?: DataAccessOptions<T>): Promise<T[]> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
+            const toInsert = entities.map(ent => this.mapEntity(ent));
 
             return await this.client
                 .from(this.tableName)
-                .insert(entities)
+                .insert(toInsert)
                 .select(select ?? this.select)
-                .then((resp: any) => (resp.data ?? []).map((json: any) => mapper(json)))
+                .then((resp: any) => (resp.data ?? []).map((json: any) => this.mapJson(json, opts)))
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
@@ -169,14 +162,14 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
     async insert(entity: T, opts?: DataAccessOptions<T>): Promise<T> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
+            const json = this.mapEntity(entity);
 
             return await this.client
                 .from(this.tableName)
-                .insert([entity])
+                .insert([json])
                 .select(select)
                 .single()
-                .then((resp: any) => mapper(resp.data))
+                .then((resp: any) => this.mapJson(resp.data, opts))
         } catch (err) {
             console.error('Unexpected error during insertion:', err);
             throw err;
@@ -186,11 +179,11 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
     async update(entityId: Identifier, updatedFields: Partial<T>, opts?: DataAccessOptions<T>): Promise<T> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
+            const json = this.mapEntity(updatedFields);
 
             const { data, error } = await this.client
                 .from(this.tableName)
-                .update(updatedFields)
+                .update(json)
                 .eq('id', entityId)
                 .select(select)
                 .single();
@@ -198,7 +191,7 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
                 console.error('Failed to update entity', error);
                 throw new Error('Failed to update entity');
             }
-            return mapper(data);
+            return this.mapJson(data, opts);
         } catch (err) {
             console.error('Unexpected error during update:', err);
             throw err;
@@ -224,26 +217,31 @@ abstract class SupabaseDAO<T extends Entity> implements DataAccessObject<T> {
     async upsert(entity: T, opts?: DataAccessOptions<T>): Promise<T> {
         try {
             const select = this.getSelect(opts!);
-            const mapper = this.getMapper(opts!);
+            const json = this.mapEntity(entity);
 
             const { data, error } = await this.client
                 .from(this.tableName)
-                .upsert([entity])
+                .upsert([json])
                 .select(select)
                 .single();
             if (error) {
                 console.error('Failed to upsert entity', error);
                 throw new Error('Failed to upsert entity');
             }
-            return mapper(data);
+            return this.mapJson(data, opts);
         } catch (err) {
             console.error('Error inserting entity:', err);
             throw err;
         }
     }
 
-    mapJson(json: any): T {
-        return this.mapper(json);
+    mapJson(json: any, opts?: DataAccessOptions<T>): T {
+        const mapper = opts ? opts.mapper ?? this.mapper : this.mapper;
+        return mapper(json);
+    }
+
+    mapEntity(entity: Partial<T>): any {
+        return { ...entity };
     }
 
 }
