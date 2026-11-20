@@ -6,20 +6,17 @@
  */
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { SxProps, Theme} from '@mui/material/styles'
 
 // material-ui
 
 interface ConfirmationDialogProps {
     title?: string;
     message: string;
-    confirmText?: string;
-    confirmColor?: string;
-    confirmBackColor?: string;
-    confirmBackColorOpen?: string;
-    cancelText?: string;
-    cancelColor?: string;
-    cancelBackColor?: string;
-    cancelBackColorOpen?: string;
+    confirmText? : string;
+    confirmSx?: SxProps<Theme>;
+    cancelText? : string;
+    cancelSx?: SxProps<Theme>;
     open: boolean;
     handleConfirm: () => void;
     handleCancel: () => void;
@@ -28,17 +25,13 @@ interface ConfirmationDialogProps {
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
      title,
      message, 
-     confirmText = 'OK', 
-     confirmColor = 'text.success', 
-     confirmBackColor = 'grey.100', 
-     confirmBackColorOpen = 'grey.300',
-     cancelText = 'Cancel', 
-     cancelColor = 'text.secondary',   
-     cancelBackColor = 'grey.100', 
-     cancelBackColorOpen = 'grey.300', 
      open, 
      handleConfirm, 
-     handleCancel 
+     handleCancel,
+     confirmText = 'OK',
+     cancelText = 'Cancel',
+     confirmSx = [],
+     cancelSx = []
     }) => {
 
     const [dialogTitle] = useState<string>(title ?? 'Confirm');
@@ -57,11 +50,23 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: cancelColor, bgcolor: open ? cancelBackColorOpen : cancelBackColor, borderColor: cancelColor }}
+                    sx={[
+                        {
+                            color: 'text.secondary',
+                            bgcolor: open ? 'grey.300' : 'grey.100'
+                        },
+                        ...(Array.isArray(cancelSx) ? cancelSx : [cancelSx]),
+                    ]}
                     onClick={() => handleCancel()}>{cancelText}</Button>
                 <Button
                     variant='outlined'
-                    sx={{ color: confirmColor, bgcolor: open ? confirmBackColorOpen : confirmBackColor, borderColor: confirmColor }}
+                    sx={[
+                        {
+                            color: 'text.secondary',
+                            bgcolor: open ? 'grey.300' : 'grey.100'
+                        },
+                        ...(Array.isArray(confirmSx) ? confirmSx : [confirmSx]),
+                    ]}
                     onClick={handleConfirm}>{confirmText}</Button>
             </DialogActions>
         </Dialog>
