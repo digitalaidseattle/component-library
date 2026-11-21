@@ -9,7 +9,7 @@
   "dependencies": {
     "@babel/runtime": "^7.25.0",
     "@digitalaidseattle/core": "^1.0.19",
-    "@digitalaidseattle/program-management": "^1.0.0"
+    "@digitalaidseattle/project-management": "^1.0.0"
   },
   "scripts": {
     "postbuild": "cp src/*.css dist/"
