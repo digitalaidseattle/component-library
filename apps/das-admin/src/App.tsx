@@ -10,7 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   AuthServiceProvider,
   RefreshContextProvider,
-  setCoreServices,
+  Configuration as CoreConfiguration,
   StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
@@ -71,7 +71,7 @@ const App: React.FC = () => {
       }
     )
 
-    setCoreServices({
+    CoreConfiguration.props({
       authService: FirebaseAuthService.getInstance(),
       storageService: FirebaseStorageService.getInstance()
     })
@@ -79,8 +79,8 @@ const App: React.FC = () => {
   }
 
   return (initialized &&
-    <AuthServiceProvider authService={FirebaseAuthService.getInstance()} >
-      <StorageServiceProvider storageService={FirebaseStorageService.getInstance()} >
+    <AuthServiceProvider authService={CoreConfiguration.getInstance().authService!} >
+      <StorageServiceProvider storageService={CoreConfiguration.getInstance().storageService!} >
         <RefreshContextProvider>
           <UserContextProvider>
             <LayoutConfigurationProvider configuration={Config}>

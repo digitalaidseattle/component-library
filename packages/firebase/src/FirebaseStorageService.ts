@@ -25,7 +25,7 @@ export class FirebaseStorageService implements StorageService {
     storage: FirebaseStorage;
     decoder: TextDecoder;
 
-    private constructor(firebaseClient: FirebaseApp) {
+    constructor(firebaseClient: FirebaseApp) {
         this.storage = getStorage(firebaseClient);
         this.decoder = new TextDecoder("utf-8");
     }
