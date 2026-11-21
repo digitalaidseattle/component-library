@@ -10,7 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   AuthServiceProvider,
   RefreshContextProvider,
-  setCoreServices,
+  Configuration as CoreConfiguration,
   StorageServiceProvider,
   UserContextProvider
 } from "@digitalaidseattle/core";
@@ -26,7 +26,7 @@ import {
   Configuration as FirebaseConfiguration,
   FirebaseStorageService
 } from '@digitalaidseattle/firebase';
-import { Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/program-management";
+import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation, ProgramService } from "@digitalaidseattle/program-management";
 import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
 
 import { Config } from './Config';
@@ -65,13 +65,13 @@ const App: React.FC = () => {
 
     ProgramManagmentConfigucation.props(
       {
-        profileDao: ProfileDao.getInstance(),
-        programDao: ProgramDao.getInstance(),
-        nodeDao: NodeDao.getInstance(),
+        programService: new ProgramService(ProgramDao.getInstance()),
+        nodeService: new NodeService(NodeDao.getInstance()),
+        profileService: new ProfileService(ProfileDao.getInstance())
       }
     )
 
-    setCoreServices({
+    CoreConfiguration.props({
       authService: FirebaseAuthService.getInstance(),
       storageService: FirebaseStorageService.getInstance()
     })
@@ -79,8 +79,8 @@ const App: React.FC = () => {
   }
 
   return (initialized &&
-    <AuthServiceProvider authService={FirebaseAuthService.getInstance()} >
-      <StorageServiceProvider storageService={FirebaseStorageService.getInstance()} >
+    <AuthServiceProvider authService={CoreConfiguration.getInstance().authService!} >
+      <StorageServiceProvider storageService={CoreConfiguration.getInstance().storageService!} >
         <RefreshContextProvider>
           <UserContextProvider>
             <LayoutConfigurationProvider configuration={Config}>

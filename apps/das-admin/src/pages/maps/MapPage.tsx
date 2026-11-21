@@ -95,6 +95,7 @@ const MapPage = () => {
           setVolunteers(
             resp
               .filter(v => v.status === 'Active')
+              .filter(v => v.name !== '') // handle bad data
               .sort((p1, p2) => p1.name.localeCompare(p2.name)));
           setInitialized(true);
         });
