@@ -5,7 +5,7 @@
  *
  */
 import { Configuration, FirestoreDao } from "@digitalaidseattle/firebase";
-import { Program } from "@digitalaidseattle/program-management";
+import { Program } from "@digitalaidseattle/project-management";
 
 export class ProgramDao extends FirestoreDao<Program> {
     private static instance: ProgramDao;

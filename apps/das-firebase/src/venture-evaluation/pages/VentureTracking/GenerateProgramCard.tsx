@@ -12,7 +12,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 
 import { LoadingContext, RefreshContext, useNotifications } from "@digitalaidseattle/core";
-import { Configuration, Program } from "@digitalaidseattle/program-management";
+import { Configuration, Program } from "@digitalaidseattle/project-management";
 import { VEProgramService } from "../../services/VEProgramService";
 
 export const GenerateProgramCard: React.FC = ({ }) => {

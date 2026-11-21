@@ -4,7 +4,7 @@ import {
 import {
     Node,
     NodeService
-} from "@digitalaidseattle/program-management";
+} from "@digitalaidseattle/project-management";
  
 export class VENodeService extends NodeService {
 

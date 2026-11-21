@@ -22,7 +22,7 @@ import {
   Configuration,
   Program,
   ProgramContext
-} from '@digitalaidseattle/program-management';
+} from '@digitalaidseattle/project-management';
 import { DetailCard } from './DetailCard';
 
 export const VentureTrackingDetails = () => {
