@@ -6,21 +6,33 @@
  */
 import { Button, Dialog, DialogActions, DialogContent, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { SxProps, Theme} from '@mui/material/styles'
 
 // material-ui
 
 interface ConfirmationDialogProps {
     title?: string;
     message: string;
+    confirmText? : string;
+    confirmSx?: SxProps<Theme>;
+    cancelText? : string;
+    cancelSx?: SxProps<Theme>;
     open: boolean;
     handleConfirm: () => void;
     handleCancel: () => void;
 }
 
-const iconBackColorOpen = 'grey.300';
-const iconBackColor = 'grey.100';
-
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message, open, handleConfirm, handleCancel }) => {
+const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+     title,
+     message, 
+     open, 
+     handleConfirm, 
+     handleCancel,
+     confirmText = 'OK',
+     cancelText = 'Cancel',
+     confirmSx = [],
+     cancelSx = []
+    }) => {
 
     const [dialogTitle] = useState<string>(title ?? 'Confirm');
 
@@ -38,12 +50,24 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ title, message,
             <DialogActions>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.secondary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-                    onClick={() => handleCancel()}>Cancel</Button>
+                    sx={[
+                        {
+                            color: 'text.secondary',
+                            bgcolor: open ? 'grey.300' : 'grey.100'
+                        },
+                        ...(Array.isArray(cancelSx) ? cancelSx : [cancelSx]),
+                    ]}
+                    onClick={() => handleCancel()}>{cancelText}</Button>
                 <Button
                     variant='outlined'
-                    sx={{ color: 'text.success', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-                    onClick={handleConfirm}>OK</Button>
+                    sx={[
+                        {
+                            color: 'text.secondary',
+                            bgcolor: open ? 'grey.300' : 'grey.100'
+                        },
+                        ...(Array.isArray(confirmSx) ? confirmSx : [confirmSx]),
+                    ]}
+                    onClick={handleConfirm}>{confirmText}</Button>
             </DialogActions>
         </Dialog>
     )
