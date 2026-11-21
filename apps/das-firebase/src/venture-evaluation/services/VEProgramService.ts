@@ -7,7 +7,7 @@ import {
     Node,
     Program,
     ProgramService
-} from "@digitalaidseattle/program-management";
+} from "@digitalaidseattle/project-management";
 
 import template from "../resources/template.json";
 

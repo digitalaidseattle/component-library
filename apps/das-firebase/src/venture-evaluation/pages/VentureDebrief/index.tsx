@@ -17,7 +17,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import { HelpTopicContext, LoadingContext, useHelp, useNotifications } from "@digitalaidseattle/core";
-import { Configuration, Program } from "@digitalaidseattle/program-management";
+import { Configuration, Program } from "@digitalaidseattle/project-management";
 import { VEProgramService } from "../../services/VEProgramService";
 import { VentureDebriefService } from "../../services/VentureDebriefService";
 import { VentureDebrief } from "../../types";

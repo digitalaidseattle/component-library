@@ -5,7 +5,7 @@
  *
  */
 
-import { Profile } from "@digitalaidseattle/program-management";
+import { Profile } from "@digitalaidseattle/project-management";
 import { SuperhumanDao } from "@digitalaidseattle/superhuman";
 
 export class ProfileDao extends SuperhumanDao<Profile> {

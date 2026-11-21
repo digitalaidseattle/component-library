@@ -14,7 +14,7 @@ import {
   MarkdownPage,
   MinimalLayout,
 } from "@digitalaidseattle/mui";
-import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/program-management';
+import { NodePage, ProgramPage, ProgramsPage } from '@digitalaidseattle/project-management';
 import { GrantApplicationPage } from './grant-tracking/pages/Application';
 import { GrantApplicationsPage } from './grant-tracking/pages/Applications';
 import { FunderPage } from './grant-tracking/pages/Funder';

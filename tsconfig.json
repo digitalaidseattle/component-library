@@ -32,7 +32,7 @@
       "path": "./packages/superhuman"
     },
     {
-      "path": "./packages/program-management"
+      "path": "./packages/project-management"
     }
   ],
   "compilerOptions": {
@@ -160,8 +160,8 @@
       "@digitalaidseattle/superhuman": [
         "packages/superhuman/src"
       ],
-      "@digitalaidseattle/program-management": [
-        "packages/program-management/src"
+      "@digitalaidseattle/project-management": [
+        "packages/project-management/src"
       ]
     }
   }

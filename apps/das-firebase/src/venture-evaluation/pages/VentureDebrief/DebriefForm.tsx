@@ -20,7 +20,7 @@ import { useContext, useMemo } from "react";
 import { Controller, useFieldArray, UseFormReturn } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 
-import { Program } from "@digitalaidseattle/program-management";
+import { Program } from "@digitalaidseattle/project-management";
 import { VentureDebrief } from "../../types";
 import { ChipsField, RadioField, Section, StringListField, SuggestField } from "../../../components/Fields";
 import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";

@@ -26,7 +26,7 @@ import {
   Configuration as FirebaseConfiguration,
   FirebaseStorageService
 } from '@digitalaidseattle/firebase';
-import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation, ProgramService } from "@digitalaidseattle/program-management";
+import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation, ProgramService } from "@digitalaidseattle/project-management";
 import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
 
 import { Config } from './Config';

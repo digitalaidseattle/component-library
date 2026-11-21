@@ -38,7 +38,7 @@ import {
   GeminiProjectService
 } from '@digitalaidseattle/content-generation/gemini';
 
-import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/program-management";
+import { NodeService, ProfileService, Configuration as ProgramManagmentConfigucation } from "@digitalaidseattle/project-management";
 import { Configuration as SuperhumanConfiguration } from "@digitalaidseattle/superhuman";
 import { NodeDao, ProfileDao, ProgramDao } from './pages/program-management';
 

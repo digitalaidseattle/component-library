@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { PlusCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNotifications } from "@digitalaidseattle/core";
 import { TabbedPanels } from "@digitalaidseattle/mui";
-import { Configuration, Kanban, Node, NodeWrapper, Program, ProgramContext, ProgramDialog } from "@digitalaidseattle/program-management";
+import { Configuration, Kanban, Node, NodeWrapper, Program, ProgramContext, ProgramDialog } from "@digitalaidseattle/project-management";
 import {
     Card,
     CardHeader,

@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 
 import { MoreOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { RefreshContext, useNotifications } from '@digitalaidseattle/core';
-import { Configuration, Node, NodeKanbanProps, Profile, ProgramContext } from '@digitalaidseattle/program-management';
+import { Configuration, Node, NodeKanbanProps, Profile, ProgramContext } from '@digitalaidseattle/project-management';
 import { useNavigate } from 'react-router-dom';
 
 export function KanbanCard({ node, onFocusChange }: NodeKanbanProps) {

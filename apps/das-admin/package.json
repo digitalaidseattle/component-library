@@ -19,7 +19,7 @@
     "@digitalaidseattle/mui": "1.0.46",
     "@digitalaidseattle/profile-management": "1.0.0",
     "@digitalaidseattle/profile-management-supabase": "1.0.0",
-    "@digitalaidseattle/program-management": "1.0.0",
+    "@digitalaidseattle/project-management": "1.0.0",
     "@digitalaidseattle/supabase": "1.0.26",
     "@digitalaidseattle/superhuman": "1.0.0",
     "file-saver": "^2.0.5",

@@ -6,7 +6,7 @@
 // material-ui
 import React, { useState } from "react";
 
-import { Configuration, Node, NodeListTable, ProgramContext } from "@digitalaidseattle/program-management";
+import { Configuration, Node, NodeListTable, ProgramContext } from "@digitalaidseattle/project-management";
 import {
     Card,
     CardHeader
