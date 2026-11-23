@@ -26,11 +26,17 @@ import { VentureTrackingPage } from './venture-evaluation/pages/VentureTracking'
 import { VentureDebriefPage } from './venture-evaluation/pages/VentureDebrief';
 import { VentureDebriefsPage } from './venture-evaluation/pages/VentureDebriefs';
 import { VentureTrackingDetails } from './venture-evaluation/pages/VentureTrackingDetails';
+import { AuthGate } from '@digitalaidseattle/core';
+
+const AUTHORIZED_OOMAINS = ['digitalaidseattle.org'];
 
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <MainLayout sx={{ p: 1 }} />,
+    element:
+      <AuthGate authorizedDomains={AUTHORIZED_OOMAINS}>
+        <MainLayout sx={{ p: 1 }} />
+      </AuthGate>,
     children: [
       {
         path: "",
@@ -64,7 +70,10 @@ const routes: RouteObject[] = [
   },
   {
     path: "/grant-tracking",
-    element: <MainLayout sx={{ p: 1 }} />,
+    element:
+      <AuthGate authorizedDomains={AUTHORIZED_OOMAINS}>
+        <MainLayout sx={{ p: 1 }} />
+      </AuthGate>,
     children: [
       {
         path: "funders",
@@ -91,7 +100,10 @@ const routes: RouteObject[] = [
   },
   {
     path: "/venture-evaluation",
-    element: <MainLayout sx={{ p: 1 }} />,
+    element:
+      <AuthGate authorizedDomains={AUTHORIZED_OOMAINS}>
+        <MainLayout sx={{ p: 1 }} />
+      </AuthGate>,
     children: [
       {
         path: 'programs',

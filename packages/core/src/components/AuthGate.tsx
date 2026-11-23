@@ -11,7 +11,31 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuthService, User } from "@digitalaidseattle/core";
 
-export const AuthGate: React.FC<{ authorizedRoles: string[], children: React.ReactNode }> = ({ authorizedRoles, children }) => {
+/**
+ * Returns true if the user's email belongs to one of the authorized domains.
+ * If authorizedDomains is undefined, every user is allowed.
+ * Matching is case-insensitive and tolerates a leading "@" (e.g. "@example.org").
+ */
+function isEnabledDomain(user: User, authorizedDomains: string[] | undefined): boolean {
+  if (authorizedDomains === undefined) {
+    return true;
+  }
+  const email = (user.email ?? user.user_metadata?.email ?? "").trim().toLowerCase();
+  const at = email.lastIndexOf("@");
+  if (at < 0) {
+    return false;
+  }
+  const domain = email.slice(at + 1);
+  const response = authorizedDomains.some(d => d.trim().toLowerCase().replace(/^@/, "") === domain);
+  console.log(response, domain, authorizedDomains)
+  return response
+}
+
+export const AuthGate: React.FC<{
+  authorizedRoles?: string[],
+  authorizedDomains?: string[],
+  children: React.ReactNode
+}> = ({ authorizedRoles, authorizedDomains, children }) => {
 
   const authService = useAuthService();
   const navigate = useNavigate();
@@ -29,8 +53,13 @@ export const AuthGate: React.FC<{ authorizedRoles: string[], children: React.Rea
           navigate("/login?code=Unauthenticated");
           return;
         }
-        if (!authService.isAuthorized(user, authorizedRoles)) {
-          navigate("/error?code=AccessDenied");
+        if (isEnabledDomain(user, authorizedDomains)) {
+          if (authorizedRoles && !authService.isAuthorized(user, authorizedRoles)) {
+            navigate("/error?code=AccessDenied");
+            return;
+          }
+        } else {
+          navigate("/login?code=AccessDenied");
           return;
         }
         setChecking(false);
@@ -47,3 +76,5 @@ export const AuthGate: React.FC<{ authorizedRoles: string[], children: React.Rea
     </>
   );
 }
+
+
