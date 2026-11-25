@@ -1,19 +1,8 @@
-import { Group, GroupDao, MembershipsDao, Profile } from "../api/types";
-import { getConfiguration } from "./Configuration";
+import { Identifier } from "@digitalaidseattle/core";
+import { Group, GroupDao, Membership, MembershipsDao, Profile } from "../api/types";
 import { v4 as uuid } from 'uuid';
 
 export class GroupService {
-
-    private static instance: GroupService;
-
-    static getInstance() {
-        if (!GroupService.instance) {
-            GroupService.instance = new GroupService(
-                getConfiguration().groupDao,
-                getConfiguration().membershipDao);
-        }
-        return GroupService.instance;
-    }
 
     dao: GroupDao;
     membershipDao: MembershipsDao;
@@ -29,8 +18,17 @@ export class GroupService {
             name: '',
             description: '',
             type: 'none',
-            pic_url: null
+            pic_url: null,
+            status: 'active'
         }
+    }
+
+    async getAll(): Promise<Group[]> {
+        return this.dao.getAll();
+    }
+
+    async getById(id: Identifier): Promise<Group | null> {
+        return this.dao.getById(id);
     }
 
     async save(group: Group): Promise<Group> {
@@ -42,10 +40,15 @@ export class GroupService {
         return this.dao.delete(group.id!);
     }
 
-    async addProfiles(group: Group, profiles: Profile[], roles?: string[]): Promise<Group> {
-        const currentMemberIds = group.members!.map(m => m.id);
+    async getMemberships(group: Group): Promise<Membership[]> {
+        return this.membershipDao.findByGroupId(group.id!);
+    }
+
+    async addProfiles(group: Group, profiles: Profile[], roles?: string[]): Promise<Group | null> {
+        const current = await this.membershipDao.findByGroupId(group.id!);
+        const currentMemberIds = current.map(m => m.profile_id);
         const memberships = profiles
-            .filter(p => !currentMemberIds.includes(p.id))
+            .filter(p => !currentMemberIds.includes(p.id!))
             .map(p => (
                 {
                     id: uuid(),
@@ -54,16 +57,20 @@ export class GroupService {
                     roles: roles ?? []
                 }
             ));
-        this.membershipDao.batchInsert(memberships);
+        if (memberships.length > 0) {
+            await this.membershipDao.batchInsert(memberships);
+        }
         return this.dao.getById(group.id!);
     }
 
-    async removeProfiles(group: Group, profiles: Profile[]): Promise<Group> {
-        profiles.forEach(async p => {
+    async removeProfiles(group: Group, profiles: Profile[]): Promise<Group | null> {
+        // TODO implement a deleteByGroupAndProfile(group, p)
+        await Promise.all(profiles.map(async p => {
             const membership = await this.membershipDao.findByGroupAndProfile(group, p);
-            await this.membershipDao.delete(membership.id!);
-            // TODO implement a deleteByGroupAndProfile(group, p)
-        })
+            if (membership) {
+                await this.membershipDao.delete(membership.id!);
+            }
+        }));
         return this.dao.getById(group.id!);
     }
 }

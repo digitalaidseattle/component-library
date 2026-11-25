@@ -7,12 +7,12 @@ import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from "@mui
 import { useNavigate } from "react-router-dom";
 
 import { LoadingContext, useNotifications } from "@digitalaidseattle/core";
-import { getConfiguration, ProfileService } from "../services";
+import { Configuration } from "../services";
 import { Profile } from "../api";
 
 export const ProfilesListCard: React.FC<{ detailPath?: string }> = ({ detailPath = "profile" }) => {
 
-    const profileService = ProfileService.getInstance();
+    const profileService = Configuration.getInstance().getProfileService();
 
     const notifications = useNotifications();
     const navigate = useNavigate();

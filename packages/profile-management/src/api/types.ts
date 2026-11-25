@@ -1,9 +1,11 @@
 /**
  * types.ts
- * 
+ *
  * @copyright 2025 Digital Aid Seattle
 */
 import { DataAccessObject, DataAccessOptions, Entity, Identifier } from "@digitalaidseattle/core";
+
+export type Status = 'active' | 'inactive';
 
 export type Profile = Entity & {
     name: string,
@@ -13,6 +15,8 @@ export type Profile = Entity & {
     phone: string,
     location: string,
     pic_url: string | null,
+    status: Status,
+    auth_id?: string | null,
 
     addresses?: Address[];
 }
@@ -22,6 +26,7 @@ export type Group = Entity & {
     type: string;
     description: string;
     pic_url: string | null,
+    status: Status,
 
     members?: Profile[];
     addresses?: Address[];
@@ -51,8 +56,9 @@ export interface ProfileDao extends DataAccessObject<Profile> { };
 export interface GroupDao extends DataAccessObject<Group> { };
 
 export interface MembershipsDao extends DataAccessObject<Membership> {
-    findGroupsByProfileId(arg0: Identifier, opts?: DataAccessOptions<Membership>): Group[] | PromiseLike<Group[]>;
-    findByGroupAndProfile(group: Group, profile: Profile, opts?: DataAccessOptions<Membership>): Promise<Membership>;
+    findByGroupId(groupId: Identifier, opts?: DataAccessOptions<Membership>): Promise<Membership[]>;
+    findGroupsByProfileId(profileId: Identifier, opts?: DataAccessOptions<Membership>): Promise<Group[]>;
+    findByGroupAndProfile(group: Group, profile: Profile, opts?: DataAccessOptions<Membership>): Promise<Membership | null>;
 };
 
-export interface AddressDao extends DataAccessObject<Membership> { };
+export interface AddressDao extends DataAccessObject<Address> { };

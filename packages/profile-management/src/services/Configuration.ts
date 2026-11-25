@@ -1,21 +1,46 @@
-import { AddressDao, GroupDao, MembershipsDao, ProfileDao } from "../api/types";
+/**
+ *  Configuration.ts
+ *
+ *  @copyright 2026 Digital Aid Seattle
+ *
+ */
+import { GroupService } from "./GroupServices";
+import { ProfileService } from "./ProfileService";
 
-export interface Configuration {
-  profileDao: ProfileDao;
-  groupDao: GroupDao;
-  membershipDao: MembershipsDao;
-  addressDao: AddressDao;
+export type ConfigurationProps = {
+    profileService: ProfileService;
+    groupService: GroupService;
 }
 
-let configuration: Configuration;
+export class Configuration {
 
-export function setConfiguration(config: Configuration) {
-  configuration = config;
-}
+    private static instance: Configuration;
 
-export function getConfiguration() {
-  if (!configuration) {
-    throw new Error('System needs to be configured.');
-  }
-  return configuration;
+    public static getInstance(): Configuration {
+        if (!Configuration.instance) {
+            throw new Error('Profile Management System needs to be configured.');
+        }
+        return Configuration.instance;
+    }
+
+    static props(props: ConfigurationProps) {
+        Configuration.instance = new Configuration(props);
+    }
+
+    profileService: ProfileService;
+    groupService: GroupService;
+
+    private constructor(props: ConfigurationProps) {
+        this.profileService = props.profileService;
+        this.groupService = props.groupService;
+    }
+
+    getProfileService(): ProfileService {
+        return this.profileService;
+    }
+
+    getGroupService(): GroupService {
+        return this.groupService;
+    }
+
 }

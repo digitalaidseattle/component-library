@@ -1,22 +1,8 @@
 import { Identifier } from "@digitalaidseattle/core";
-import { Address, AddressDao, Group, GroupDao, MembershipsDao, Profile, ProfileDao } from "../api/types";
-import { getConfiguration } from "./Configuration";
+import { Address, AddressDao, Group, MembershipsDao, Profile, ProfileDao } from "../api/types";
 import { v4 as uuid } from 'uuid';
 
 export class ProfileService {
-
-    private static instance: ProfileService;
-
-    static getInstance() {
-        if (!ProfileService.instance) {
-            ProfileService.instance = new ProfileService(
-                getConfiguration().profileDao,
-                getConfiguration().addressDao,
-                getConfiguration().membershipDao,
-            );
-        }
-        return ProfileService.instance;
-    }
 
     dao: ProfileDao;
     addressDao: AddressDao;
@@ -33,11 +19,12 @@ export class ProfileService {
             id: uuid(),
             name: '',
             first_name: '',
-            last_name: 'none',
+            last_name: '',
             email: '',
             phone: '',
             location: '',
-            pic_url: ''
+            pic_url: null,
+            status: 'active'
         }
     }
 
@@ -45,8 +32,17 @@ export class ProfileService {
         return this.dao.getAll();
     }
 
-    create(): Promise<Profile> {
-        throw new Error("Method not implemented.");
+    async getAllActive(): Promise<Profile[]> {
+        return this.getAll()
+            .then(profiles => profiles.filter(p => p.status === 'active'));
+    }
+
+    async getById(id: Identifier): Promise<Profile | null> {
+        return this.dao.getById(id);
+    }
+
+    async create(profile: Profile = this.empty()): Promise<Profile> {
+        return this.dao.insert(profile);
     }
 
     async save(profile: Profile): Promise<Profile> {
@@ -58,11 +54,12 @@ export class ProfileService {
         return this.dao.delete(id);
     }
 
-    async addAddress(profile: Profile, address: Address): Promise<Profile> {
+    async addAddress(profile: Profile, address: Address): Promise<Profile | null> {
+        await this.addressDao.insert({ ...address, profile_id: profile.id! });
         return this.dao.getById(profile.id!);
     }
 
-    async removeAddress(profile: Profile, address: Address): Promise<Profile> {
+    async removeAddress(profile: Profile, address: Address): Promise<Profile | null> {
         await this.addressDao.delete(address.id!);
         return this.dao.getById(profile.id!);
     }

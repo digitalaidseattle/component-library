@@ -1,18 +1,15 @@
 {
   "name": "@digitalaidseattle/profile-management-supabase",
   "version": "1.0.0",
-  "description": "Profile management module",
+  "description": "Supabase data access for the profile management module",
   "repository": "null//github.com/null/github.com/tree/master/packages/profile-management-supabase",
   "main": "dist/digitalaidseattle-profile-management-supabase.cjs.js",
   "module": "dist/digitalaidseattle-profile-management-supabase.esm.js",
   "types": "dist/declarations/src/index.d.ts",
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@digitalaidseattle/core": "^1.0.19",
-    "@digitalaidseattle/project-management": "^1.0.0"
-  },
-  "scripts": {
-    "postbuild": "cp src/*.css dist/"
+    "@digitalaidseattle/core": "1.0.24",
+    "@digitalaidseattle/profile-management": "1.0.0"
   },
   "files": [
     "dist"
