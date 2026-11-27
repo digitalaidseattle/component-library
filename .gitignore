@@ -108,5 +108,5 @@ dist
 # TernJS port file
 .tern-port
 packages/firebase/.env.example
-apps/das-firebase/.firebase/hosting.ZGlzdA.cache
 apps/das-admin/.env.production
+apps/das-firebase/.firebase/*

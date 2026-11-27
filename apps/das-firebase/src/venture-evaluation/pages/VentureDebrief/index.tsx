@@ -17,19 +17,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import { HelpTopicContext, LoadingContext, useHelp, useNotifications } from "@digitalaidseattle/core";
-import { Configuration, Program } from "@digitalaidseattle/project-management";
-import { VEProgramService } from "../../services/VEProgramService";
-import { VentureDebriefService } from "../../services/VentureDebriefService";
-import { VentureDebrief } from "../../types";
-import { DebriefForm } from "./DebriefForm";
-import { ProjectHelpUtils } from "../../services/ProjectHelpUtils";
 import { HelpDrawer } from "@digitalaidseattle/mui";
+import { ProjectHelpUtils } from "../../services/ProjectHelpUtils";
+import { VentureDao } from "../../services/VentureDao";
+import { VentureDebriefService } from "../../services/VentureDebriefService";
+import { Venture, VentureDebrief } from "../../types";
+import { DebriefForm } from "./DebriefForm";
 
 const helpFilePath = './debrief.md'
 
 export const VentureDebriefPage: React.FC = () => {
     const debriefService = VentureDebriefService.getInstance();
-    const programService = Configuration.getInstance().getProgramService() as VEProgramService;
+    const ventureDao = VentureDao.getInstance();
 
     const { showHelp } = useHelp();
     const [helpTopic, setHelpTopic] = useState<string | undefined>('default');
@@ -41,7 +40,7 @@ export const VentureDebriefPage: React.FC = () => {
 
     const { setLoading } = useContext(LoadingContext);
 
-    const [programs, setPrograms] = useState<Program[]>([]);
+    const [ventures, setVentures] = useState<Venture[]>([]);
     const [debriefs, setDebriefs] = useState<VentureDebrief[]>([]);
 
     const form = useForm<VentureDebrief>({
@@ -63,13 +62,13 @@ export const VentureDebriefPage: React.FC = () => {
         let active = true;
         setLoading(true);
         Promise.all([
-            programService.findByOrganization(),
+            ventureDao.getAll(),
             debriefService.getAll(),
             isNew ? Promise.resolve(debriefService.empty()) : debriefService.getById(id)
         ])
-            .then(([allPrograms, allDebriefs, found]) => {
+            .then(([allVentures, allDebriefs, found]) => {
                 if (active) {
-                    setPrograms(allPrograms);
+                    setVentures(allVentures);
                     setDebriefs(allDebriefs.map(debrief => debriefService.normalize(debrief)));
                     reset(isNew ? found : debriefService.normalize({ ...found, id }));
                 }
@@ -141,7 +140,7 @@ export const VentureDebriefPage: React.FC = () => {
                             Keep it skimmable, not exhaustive.
                         </Typography>
 
-                        <DebriefForm form={form} programs={programs} debriefs={debriefs} debriefId={id} />
+                        <DebriefForm form={form} ventures={ventures} debriefs={debriefs} debriefId={id} />
 
                         <Stack direction="row" justifyContent="flex-end">
                             {saveButtons}

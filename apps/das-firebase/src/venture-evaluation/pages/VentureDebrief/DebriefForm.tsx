@@ -20,10 +20,9 @@ import { useContext, useMemo } from "react";
 import { Controller, useFieldArray, UseFormReturn } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 
-import { Program } from "@digitalaidseattle/project-management";
-import { VentureDebrief } from "../../types";
-import { ChipsField, RadioField, Section, StringListField, SuggestField } from "../../../components/Fields";
 import { HelpTopicContext, useHelp } from "@digitalaidseattle/core";
+import { ChipsField, RadioField, Section, StringListField, SuggestField } from "../../../components/Fields";
+import { Venture, VentureDebrief } from "../../types";
 
 const SIGN_OFFS: { name: keyof VentureDebrief['sign_off'], label: string }[] = [
     { name: 'uxr', label: 'UXR' },
@@ -39,10 +38,10 @@ function vocabulary(debriefs: VentureDebrief[], pick: (debrief: VentureDebrief) 
 
 export const DebriefForm: React.FC<{
     form: UseFormReturn<VentureDebrief>,
-    programs: Program[],
+    ventures: Venture[],
     debriefs: VentureDebrief[],
     debriefId?: string
-}> = ({ form, programs, debriefs, debriefId }) => {
+}> = ({ form, ventures, debriefs, debriefId }) => {
     const { setHelpTopic } = useContext(HelpTopicContext);
     const { setShowHelp } = useHelp();
 
@@ -69,6 +68,11 @@ export const DebriefForm: React.FC<{
         past_evaluations: debriefs.filter(d => d.id !== debriefId).map(d => d.venture_name),
     }), [debriefs, debriefId]);
 
+    // distinct, sorted venture titles, trimmed to the text before the first hyphen
+    const ventureTitles = useMemo(() => {
+        const titles = ventures.flatMap(v => v.title ? [v.title.split('-')[0].trim()] : []).filter(Boolean);
+        return [...new Set(titles)].sort((a, b) => a.localeCompare(b));
+    }, [ventures]);
 
     function renderHelpButton(helpTopic: string) {
         return (
@@ -80,7 +84,7 @@ export const DebriefForm: React.FC<{
     }
     // links the debrief to the evaluation program with a matching name
     function changeVentureName(name: string) {
-        const program = programs.find(p => p.name?.trim().toLowerCase() === name.trim().toLowerCase());
+        const program = ventures.find(v => v.title?.trim().toLowerCase() === name.trim().toLowerCase());
         setValue('venture_name', name, { shouldDirty: true, shouldValidate: !!errors.venture_name });
         setValue('program_id', program ? program.id!.toString() : null, { shouldDirty: true });
     }
@@ -101,7 +105,7 @@ export const DebriefForm: React.FC<{
                                     required
                                     value={field.value}
                                     onChange={changeVentureName}
-                                    options={programs.map(p => p.name ?? '')}
+                                    options={ventureTitles}
                                     error={errors.venture_name?.message} />
                             } />
                         {programId &&
